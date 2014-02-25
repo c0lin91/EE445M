@@ -1,4 +1,0 @@
-This is nonsense placed in
-a nonsense file to see if I
-can get this stupid git
-stuff to work.
