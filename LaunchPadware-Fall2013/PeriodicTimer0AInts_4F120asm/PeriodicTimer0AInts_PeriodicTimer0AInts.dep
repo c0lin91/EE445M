@@ -1,0 +1,5 @@
+Dependencies for Project 'PeriodicTimer0AInts', Target 'PeriodicTimer0AInts': (DO NOT MODIFY !)
+F (.\Startup.s)(0x519B02A7)(--cpu Cortex-M4 --pd "__EVAL SETA 1" -g --apcs=interwork -I D:\Keil\ARM\RV31\Inc -I D:\Keil\ARM\CMSIS\Include -I D:\Keil\ARM\Inc\Luminary --list "Startup.lst" --xref -o "Startup.o" --depend "Startup.d")
+F (.\Timer0A.s)(0x519B02A7)(--cpu Cortex-M4 --pd "__EVAL SETA 1" -g --apcs=interwork -I D:\Keil\ARM\RV31\Inc -I D:\Keil\ARM\CMSIS\Include -I D:\Keil\ARM\Inc\Luminary --list "Timer0A.lst" --xref -o "Timer0A.o" --depend "Timer0A.d")
+F (.\PeriodicTimer0AInts.s)(0x519B02A7)(--cpu Cortex-M4 --pd "__EVAL SETA 1" -g --apcs=interwork -I D:\Keil\ARM\RV31\Inc -I D:\Keil\ARM\CMSIS\Include -I D:\Keil\ARM\Inc\Luminary --list "PeriodicTimer0AInts.lst" --xref -o "PeriodicTimer0AInts.o" --depend "PeriodicTimer0AInts.d")
+F (.\PLL.s)(0x51917990)(--cpu Cortex-M4 --pd "__EVAL SETA 1" -g --apcs=interwork -I D:\Keil\ARM\RV31\Inc -I D:\Keil\ARM\CMSIS\Include -I D:\Keil\ARM\Inc\Luminary --list "PLL.lst" --xref -o "PLL.o" --depend "PLL.d")

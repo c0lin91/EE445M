@@ -1,0 +1,1 @@
+-c --cpu Cortex-M4 -D__EVAL -g -O0 --apcs=interwork -I.. -I..\..\.. -I D:\Keil\ARM\RV31\Inc -I D:\Keil\ARM\CMSIS\Include -I D:\Keil\ARM\Inc\Luminary -o "ssd2119.o" --omf_browse "ssd2119.crf" --depend "ssd2119.d" "SSD2119.c"

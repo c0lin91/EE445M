@@ -1,0 +1,290 @@
+
+
+
+ARM Macro Assembler    Page 1 
+
+
+    1 00000000         ;*****Your name goes here*******
+    2 00000000         ; -5 points if you do not add your name
+    3 00000000         
+    4 00000000         ;This is Exam2_BCD  
+    5 00000000         ;EE319K Fall 2013
+    6 00000000         ;November 7, 2013
+    7 00000000         ;You edit this file only
+    8 00000000                 AREA             Data, ALIGN=4
+    9 00000000         
+   10 00000000         
+   11 00000000                 AREA             |.text|, CODE, READONLY, ALIGN=
+2
+   12 00000000                 THUMB
+   13 00000000         
+   14 00000000         ;***** PosOrNeg subroutine*********************
+   15 00000000         ;Determines if the given BCD number in R0 is a positive 
+                       or negative number 
+   16 00000000         ;Input:   R0 has a number in 3-digit 16-bit signed BCD f
+                       ormat
+   17 00000000         ;Output:  R0 returned as +1 if the number was positive a
+                       nd -1 if the number was negative
+   18 00000000         ;Invariables: You must not permanently modify registers 
+                       R4 to R11, and LR
+   19 00000000         ;AAPCS rules: You must push and pop an even number of re
+                       gisters
+   20 00000000         ;Error conditions: none, all inputs will be valid BCD nu
+                       mbers
+   21 00000000                 EXPORT           PosOrNeg
+   22 00000000         PosOrNeg
+   23 00000000         ; put your code here
+   24 00000000 F44F 4100       MOV              R1, #0x8000
+   25 00000004 EA00 0001       AND              R0, R1
+   26 00000008 EA4F 30D0       LSR              R0, #15
+   27 0000000C F04F 31FF       MOV              R1, #-1
+   28 00000010 FB00 F001       MUL              R0, R1
+   29 00000014 2800            CMP              R0, #0
+   30 00000016 D101            BNE              Done
+   31 00000018 F04F 0001       MOV              R0, #1
+   32 0000001C         Done
+   33 0000001C 4770            BX               LR
+   34 0000001E         
+   35 0000001E         ;***** BCD2Dec subroutine*********************
+   36 0000001E         ; Converts a 3-digit 16-bit signed number in BCD format 
+                       into a 
+   37 0000001E         ; regular binary representation
+   38 0000001E         ; Note that BCD is positional number system with each su
+                       ccesive nibble
+   39 0000001E         ; having a place value that is a power of 10.
+   40 0000001E         ;Input:   R0 has a number in 3-digit signed BCD format
+   41 0000001E         ;Output:  R0 has the signed 32-bit binary-encoded value 
+                       of the input
+   42 0000001E         ;Invariables: You must not permanently modify registers 
+                       R4 to R11, and LR
+   43 0000001E         ;AARP rules: You must push and pop an even number of reg
+                       isters
+   44 0000001E         ;Error conditions: none, all inputs will be valid BCD nu
+                       mbers
+   45 0000001E                 EXPORT           BCD2Dec
+   46 0000001E         BCD2Dec
+
+
+
+ARM Macro Assembler    Page 2 
+
+
+   47 0000001E         ; put your code here
+   48 0000001E F04F 0100       MOV              R1, #0      ; Clear R1 so I can
+                                                             keep my result in 
+                                                            here
+   49 00000022         
+   50 00000022 F000 020F       AND              R2, R0, #0x000F 
+                                                            ; R2 has the input
+   51 00000026 4411            ADD              R1, R2
+   52 00000028         
+   53 00000028 F000 02F0       AND              R2, R0, #0x00F0
+   54 0000002C EA4F 1212       LSR              R2, #4
+   55 00000030 F04F 030A       MOV              R3, #10
+   56 00000034 FB02 F203       MUL              R2, R3
+   57 00000038 4411            ADD              R1, R2
+   58 0000003A         
+   59 0000003A F400 6270       AND              R2, R0, #0x0F00
+   60 0000003E EA4F 2212       LSR              R2, #8
+   61 00000042 F04F 0364       MOV              R3, #100
+   62 00000046 FB02 F203       MUL              R2, R3
+   63 0000004A 4411            ADD              R1, R2
+   64 0000004C         
+   65 0000004C B506            PUSH             {R1, R2, LR}
+   66 0000004E F7FF FFFE       BL               PosOrNeg
+   67 00000052 E8BD 4006       POP              {R1, R2, LR}
+   68 00000056         
+   69 00000056 FB00 F001       MUL              R0, R1
+   70 0000005A 4770            BX               LR
+   71 0000005C         
+   72 0000005C         ;***** BCDMul subroutine*********************
+   73 0000005C         ; Multiplies two 3-digit 16-bit signed numbers in BCD fo
+                       rmat 
+   74 0000005C         ; and returns the result in regular binary representatio
+                       n
+   75 0000005C         ;Input:   R0, R1 have numbers in 3-digit 16-bit signed B
+                       CD format
+   76 0000005C         ;Output:  R0 has the signed 32-bit product of the two in
+                       put numbers
+   77 0000005C         ;Invariables: You must not permanently modify registers 
+                       R4 to R11, and LR
+   78 0000005C         ;AAPCS rules: You must push and pop an even number of re
+                       gisters
+   79 0000005C         ;Error conditions: none, all inputs will be valid BCD nu
+                       mbers. No overflow can occur
+   80 0000005C         ;Here are the test cases:
+   81 0000005C                 EXPORT           BCDMul
+   82 0000005C         BCDMul
+   83 0000005C         ; put your code here
+   84 0000005C B500            PUSH             {LR}
+   85 0000005E B402            PUSH             {R1}
+   86 00000060 F7FF FFFE       BL               BCD2Dec
+   87 00000064 BC02            POP              {R1}
+   88 00000066 4602            MOV              R2, R0
+   89 00000068 4608            MOV              R0, R1
+   90 0000006A B406            PUSH             {R1, R2}
+   91 0000006C F7FF FFFE       BL               BCD2Dec
+   92 00000070 BC06            POP{R1,          R2}
+   93 00000072 FB00 F002       MUL              R0, R2
+   94 00000076 F85D EB04       POP              {LR}
+   95 0000007A 4770            BX               LR
+
+
+
+ARM Macro Assembler    Page 3 
+
+
+   96 0000007C         
+   97 0000007C         ;***** DotProduct subroutine*********************
+   98 0000007C         ; Computes the dot product of two BCD-encoded arrays of 
+                       numbers.
+   99 0000007C         ; The inputs are two pointers to arrays of 3-digit signe
+                       d BCD numbers
+  100 0000007C         ; and the size of the two arrays.
+  101 0000007C         ;Input:   R0 has address of the first array A
+  102 0000007C         ;         R1 has address of the second array B
+  103 0000007C         ;         R2=n is the size of both arrays
+  104 0000007C         ;Output:  R0 has the binary-encoded result of computing 
+                       the dot product
+  105 0000007C         ;         A[0]*BB[0] + AA[1]*BB[1] + ...+AA[n-1]*BB[n-1]
+                       
+  106 0000007C         ;Invariables: You must not permanently modify registers 
+                       R4 to R11, and LR
+  107 0000007C         ;AAPCS rules: You must push and pop an even number of re
+                       gisters
+  108 0000007C         ;If the arrays are empty, return 0
+  109 0000007C         ;Error conditions: all numbers will be valid
+  110 0000007C                 EXPORT           DotProduct
+  111 0000007C         DotProduct
+  112 0000007C         ; put your code here
+  113 0000007C B530            PUSH             {R4, R5, LR}
+  114 0000007E 4603            MOV              R3, R0
+  115 00000080 460C            MOV              R4, R1
+  116 00000082 F04F 0500       MOV              R5, #0
+  117 00000086         
+  118 00000086 2A00            CMP              R2, #0
+  119 00000088 D00C            BEQ              Dot_Done
+  120 0000008A         again
+  121 0000008A 8818            LDRH             R0, [R3]
+  122 0000008C 8821            LDRH             R1, [R4]
+  123 0000008E         
+  124 0000008E B43C            PUSH             {R2, R3, R4, R5}
+  125 00000090 F7FF FFFE       BL               BCDMul
+  126 00000094 BC3C            POP              {R2, R3, R4, R5}
+  127 00000096 4405            ADD              R5, R5, R0
+  128 00000098         
+  129 00000098 F103 0302       ADD              R3, #2
+  130 0000009C F104 0402       ADD              R4, #2
+  131 000000A0 3A01            SUBS             R2, #1
+  132 000000A2 D1F2            BNE              again
+  133 000000A4         
+  134 000000A4         Dot_Done
+  135 000000A4         ; R5 is the result 
+  136 000000A4         
+  137 000000A4 4628            MOV              R0, R5
+  138 000000A6         
+  139 000000A6 E8BD 4030       POP              {R4, R5, LR}
+  140 000000AA         
+  141 000000AA 4770            BX               LR
+  142 000000AC                 ALIGN
+  143 000000AC                 END
+Command Line: --debug --xref --cpu=Cortex-M3 --apcs=interwork --depend=.\exam2.
+d -o.\exam2.o -IC:\Keil\ARM\RV31\INC -IC:\Keil\ARM\CMSIS\Include -IC:\Keil\ARM\
+Inc\Luminary --predefine="__EVAL SETA 1" --list=.\exam2.lst Exam2.s
+
+
+
+ARM Macro Assembler    Page 1 Alphabetic symbol ordering
+Relocatable symbols
+
+Data 00000000
+
+Symbol: Data
+   Definitions
+      At line 8 in file Exam2.s
+   Uses
+      None
+Comment: Data unused
+1 symbol
+
+
+
+ARM Macro Assembler    Page 1 Alphabetic symbol ordering
+Relocatable symbols
+
+.text 00000000
+
+Symbol: .text
+   Definitions
+      At line 11 in file Exam2.s
+   Uses
+      None
+Comment: .text unused
+BCD2Dec 0000001E
+
+Symbol: BCD2Dec
+   Definitions
+      At line 46 in file Exam2.s
+   Uses
+      At line 45 in file Exam2.s
+      At line 86 in file Exam2.s
+      At line 91 in file Exam2.s
+
+BCDMul 0000005C
+
+Symbol: BCDMul
+   Definitions
+      At line 82 in file Exam2.s
+   Uses
+      At line 81 in file Exam2.s
+      At line 125 in file Exam2.s
+
+Done 0000001C
+
+Symbol: Done
+   Definitions
+      At line 32 in file Exam2.s
+   Uses
+      At line 30 in file Exam2.s
+Comment: Done used once
+DotProduct 0000007C
+
+Symbol: DotProduct
+   Definitions
+      At line 111 in file Exam2.s
+   Uses
+      At line 110 in file Exam2.s
+Comment: DotProduct used once
+Dot_Done 000000A4
+
+Symbol: Dot_Done
+   Definitions
+      At line 134 in file Exam2.s
+   Uses
+      At line 119 in file Exam2.s
+Comment: Dot_Done used once
+PosOrNeg 00000000
+
+Symbol: PosOrNeg
+   Definitions
+      At line 22 in file Exam2.s
+   Uses
+      At line 21 in file Exam2.s
+      At line 66 in file Exam2.s
+
+
+
+ARM Macro Assembler    Page 2 Alphabetic symbol ordering
+Relocatable symbols
+
+
+again 0000008A
+
+Symbol: again
+   Definitions
+      At line 120 in file Exam2.s
+   Uses
+      At line 132 in file Exam2.s
+Comment: again used once
+8 symbols
+340 symbols in table

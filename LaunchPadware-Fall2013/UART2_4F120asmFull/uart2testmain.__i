@@ -1,0 +1,5 @@
+-c --cpu Cortex-M4.fp -g -O0 --apcs=interwork --signed_chars 
+-I C:\Keil\ARM\RV31\INC 
+-I C:\Keil\ARM\CMSIS\Include 
+-I C:\Keil\ARM\Inc\Luminary 
+-o "uart2testmain.o" --omf_browse "uart2testmain.crf" --depend "uart2testmain.d" "UART2TestMain.c"

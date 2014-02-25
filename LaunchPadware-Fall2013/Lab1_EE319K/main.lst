@@ -1,0 +1,160 @@
+
+
+
+ARM Macro Assembler    Page 1 
+
+
+    1 00000000         ;****************** main.s ***************
+    2 00000000         ; Program written by: Your Names
+    3 00000000         ; Date Created: 8/25/2013 
+    4 00000000         ; Last Modified: 8/25/2013 
+    5 00000000         ; Section 1-2pm     TA: Saugata Bhattacharyya
+    6 00000000         ; Lab number: 1
+    7 00000000         ; Brief description of the program
+    8 00000000         ; The overall objective of this system is a digital lock
+                       
+    9 00000000         ; Hardware connections
+   10 00000000         ;  PE3 is switch input  (1 means switch is not pressed, 
+                       0 means switch is pressed)
+   11 00000000         ;  PE4 is switch input  (1 means switch is not pressed, 
+                       0 means switch is pressed)
+   12 00000000         ;  PE2 is LED output (0 means door is locked, 1 means do
+                       or is unlocked) 
+   13 00000000         ; The specific operation of this system is to 
+   14 00000000         ;   unlock if both switches are pressed
+   15 00000000         
+   16 00000000 400243FC 
+                       GPIO_PORTE_DATA_R
+                               EQU              0x400243FC
+   17 00000000 40024400 
+                       GPIO_PORTE_DIR_R
+                               EQU              0x40024400
+   18 00000000 40024420 
+                       GPIO_PORTE_AFSEL_R
+                               EQU              0x40024420
+   19 00000000 4002451C 
+                       GPIO_PORTE_DEN_R
+                               EQU              0x4002451C
+   20 00000000 40024528 
+                       GPIO_PORTE_AMSEL_R
+                               EQU              0x40024528
+   21 00000000 4002452C 
+                       GPIO_PORTE_PCTL_R
+                               EQU              0x4002452C
+   22 00000000 400FE108 
+                       SYSCTL_RCGC2_R
+                               EQU              0x400FE108
+   23 00000000         
+   24 00000000                 AREA             |.text|, CODE, READONLY, ALIGN=
+2
+   25 00000000                 THUMB
+   26 00000000                 EXPORT           Start
+   27 00000000         Start
+   28 00000000         
+   29 00000000         loop
+   30 00000000         
+   31 00000000 E7FE            B                loop
+   32 00000002         
+   33 00000002         
+   34 00000002 00 00           ALIGN                        ; make sure the end
+                                                             of this section is
+                                                             aligned
+   35 00000004                 END                          ; end of file
+Command Line: --debug --xref --cpu=Cortex-M4 --apcs=interwork --depend=main.d -
+omain.o -ID:\Keil\ARM\RV31\INC -ID:\Keil\ARM\CMSIS\Include -ID:\Keil\ARM\Inc\Lu
+minary --predefine="__EVAL SETA 1" --list=main.lst main.s
+
+
+
+ARM Macro Assembler    Page 1 Alphabetic symbol ordering
+Relocatable symbols
+
+.text 00000000
+
+Symbol: .text
+   Definitions
+      At line 24 in file main.s
+   Uses
+      None
+Comment: .text unused
+Start 00000000
+
+Symbol: Start
+   Definitions
+      At line 27 in file main.s
+   Uses
+      At line 26 in file main.s
+Comment: Start used once
+loop 00000000
+
+Symbol: loop
+   Definitions
+      At line 29 in file main.s
+   Uses
+      At line 31 in file main.s
+Comment: loop used once
+3 symbols
+
+
+
+ARM Macro Assembler    Page 1 Alphabetic symbol ordering
+Absolute symbols
+
+GPIO_PORTE_AFSEL_R 40024420
+
+Symbol: GPIO_PORTE_AFSEL_R
+   Definitions
+      At line 18 in file main.s
+   Uses
+      None
+Comment: GPIO_PORTE_AFSEL_R unused
+GPIO_PORTE_AMSEL_R 40024528
+
+Symbol: GPIO_PORTE_AMSEL_R
+   Definitions
+      At line 20 in file main.s
+   Uses
+      None
+Comment: GPIO_PORTE_AMSEL_R unused
+GPIO_PORTE_DATA_R 400243FC
+
+Symbol: GPIO_PORTE_DATA_R
+   Definitions
+      At line 16 in file main.s
+   Uses
+      None
+Comment: GPIO_PORTE_DATA_R unused
+GPIO_PORTE_DEN_R 4002451C
+
+Symbol: GPIO_PORTE_DEN_R
+   Definitions
+      At line 19 in file main.s
+   Uses
+      None
+Comment: GPIO_PORTE_DEN_R unused
+GPIO_PORTE_DIR_R 40024400
+
+Symbol: GPIO_PORTE_DIR_R
+   Definitions
+      At line 17 in file main.s
+   Uses
+      None
+Comment: GPIO_PORTE_DIR_R unused
+GPIO_PORTE_PCTL_R 4002452C
+
+Symbol: GPIO_PORTE_PCTL_R
+   Definitions
+      At line 21 in file main.s
+   Uses
+      None
+Comment: GPIO_PORTE_PCTL_R unused
+SYSCTL_RCGC2_R 400FE108
+
+Symbol: SYSCTL_RCGC2_R
+   Definitions
+      At line 22 in file main.s
+   Uses
+      None
+Comment: SYSCTL_RCGC2_R unused
+7 symbols
+341 symbols in table

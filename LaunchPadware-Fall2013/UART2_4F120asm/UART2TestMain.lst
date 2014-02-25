@@ -1,0 +1,315 @@
+
+
+
+ARM Macro Assembler    Page 1 
+
+
+    1 00000000         ; UART2TestMain.s
+    2 00000000         ; Runs on LM4F120 at 50 MHz
+    3 00000000         ; Tests the UART0 to implement bidirectional data transf
+                       er to and from a
+    4 00000000         ; computer running PuTTY.  This time, interrupts and FIF
+                       Os
+    5 00000000         ; are used.
+    6 00000000         ; This file is named "UART2" because it is the second UA
+                       RT example.
+    7 00000000         ; It is not related to the UART2 module on the microcont
+                       roller.
+    8 00000000         ; Daniel Valvano
+    9 00000000         ; May 15, 2013
+   10 00000000         
+   11 00000000         ;  This example accompanies the book
+   12 00000000         ;  "Embedded Systems: Real Time Interfacing to Arm Corte
+                       x M Microcontrollers",
+   13 00000000         ;  ISBN: 978-1463590154, Jonathan Valvano, copyright (c)
+                        2013
+   14 00000000         ;  Program 5.11 Section 5.6, Program 3.10
+   15 00000000         ;
+   16 00000000         ;Copyright 2013 by Jonathan W. Valvano, valvano@mail.ute
+                       xas.edu
+   17 00000000         ;   You may use, edit, run or distribute this file
+   18 00000000         ;   as long as the above copyright notice remains
+   19 00000000         ;THIS SOFTWARE IS PROVIDED "AS IS".  NO WARRANTIES, WHET
+                       HER EXPRESS, IMPLIED
+   20 00000000         ;OR STATUTORY, INCLUDING, BUT NOT LIMITED TO, IMPLIED WA
+                       RRANTIES OF
+   21 00000000         ;MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE AP
+                       PLY TO THIS SOFTWARE.
+   22 00000000         ;VALVANO SHALL NOT, IN ANY CIRCUMSTANCES, BE LIABLE FOR 
+                       SPECIAL, INCIDENTAL,
+   23 00000000         ;OR CONSEQUENTIAL DAMAGES, FOR ANY REASON WHATSOEVER.
+   24 00000000         ;For more information about my classes, my research, and
+                        my books, see
+   25 00000000         ;http://users.ece.utexas.edu/~valvano/
+   26 00000000         
+   27 00000000         ; U0Rx (VCP receive) connected to PA0
+   28 00000000         ; U0Tx (VCP transmit) connected to PA1
+   29 00000000         
+   30 00000000         ; standard ASCII symbols
+   31 00000000 0000000D 
+                       CR      EQU              0x0D
+   32 00000000 0000000A 
+                       LF      EQU              0x0A
+   33 00000000 00000008 
+                       BS      EQU              0x08
+   34 00000000 0000001B 
+                       ESC     EQU              0x1B
+   35 00000000 00000020 
+                       SPA     EQU              0x20
+   36 00000000 0000007F 
+                       DEL     EQU              0x7F
+   37 00000000         
+   38 00000000         ; functions in PLL.s
+   39 00000000                 IMPORT           PLL_Init
+   40 00000000         
+   41 00000000         ; functions UART2.s
+
+
+
+ARM Macro Assembler    Page 2 
+
+
+   42 00000000                 IMPORT           UART_Init
+   43 00000000                 IMPORT           UART_InChar
+   44 00000000                 IMPORT           UART_OutChar
+   45 00000000         
+   46 00000000                 AREA             DATA, ALIGN=2
+   47 00000000         
+   48 00000000                 AREA             |.text|, CODE, READONLY, ALIGN=
+2
+   49 00000000                 THUMB
+   50 00000000                 EXPORT           Start
+   51 00000000         
+   52 00000000                 ALIGN                        ; make sure the end
+                                                             of this section is
+                                                             aligned
+   53 00000000         
+   54 00000000         ;---------------------OutCRLF---------------------
+   55 00000000         ; Output a CR,LF to UART to go to a new line
+   56 00000000         ; Input: none
+   57 00000000         ; Output: none
+   58 00000000         OutCRLF
+   59 00000000 B500            PUSH             {LR}        ; save current valu
+                                                            e of LR
+   60 00000002 F04F 000D       MOV              R0, #CR     ; R0 = CR (<carriag
+                                                            e return>)
+   61 00000006 F7FF FFFE       BL               UART_OutChar ; send <carriage r
+                                                            eturn> to the UART
+   62 0000000A F04F 000A       MOV              R0, #LF     ; R0 = LF (<line fe
+                                                            ed>)
+   63 0000000E F7FF FFFE       BL               UART_OutChar ; send <line feed>
+                                                             to the UART
+   64 00000012 BD00            POP              {PC}        ; restore previous 
+                                                            value of LR into PC
+                                                             (return)
+   65 00000014         
+   66 00000014         Start
+   67 00000014 F7FF FFFE       BL               PLL_Init    ; set system clock 
+                                                            to 50 MHz
+   68 00000018 F7FF FFFE       BL               UART_Init   ; initialize UART
+   69 0000001C F7FF FFF0       BL               OutCRLF     ; go to a new line
+   70 00000020         ; print the uppercase alphabet
+   71 00000020 F04F 0441       MOV              R4, #'A'    ; R4 = 'A'
+   72 00000024         uppercaseLoop
+   73 00000024 4620            MOV              R0, R4      ; R0 = R4
+   74 00000026 F7FF FFFE       BL               UART_OutChar ; send the charact
+                                                            er (R4) to the UART
+                                                            
+   75 0000002A F104 0401       ADD              R4, R4, #1  ; R4 = R4 + 1 (go t
+                                                            o the next characte
+                                                            r in the alphabet)
+   76 0000002E 2C5A            CMP              R4, #'Z'    ; is R4 (character)
+                                                             <= 'Z'?
+   77 00000030 D9F8            BLS              uppercaseLoop ; if so, skip to 
+                                                            'uppercaseLoop'
+   78 00000032 F7FF FFE5       BL               OutCRLF     ; go to a new line
+   79 00000036 F04F 003E       MOV              R0, #'>'    ; R0 = '>'
+   80 0000003A F7FF FFFE       BL               UART_OutChar ; send the charact
+                                                            er ('>') to the UAR
+                                                            T
+   81 0000003E         loop
+
+
+
+ARM Macro Assembler    Page 3 
+
+
+   82 0000003E         ; echo each input
+   83 0000003E         
+   84 0000003E F7FF FFFE       BL               UART_InChar ; input a charactur
+                                                            e
+   85 00000042 F7FF FFFE       BL               UART_OutChar ; echo the charact
+                                                            er back to the UART
+                                                            
+   86 00000046         
+   87 00000046 E7FA            B                loop
+   88 00000048         
+   89 00000048                 ALIGN                        ; make sure the end
+                                                             of this section is
+                                                             aligned
+   90 00000048                 END                          ; end of file
+Command Line: --debug --xref --cpu=Cortex-M4 --apcs=interwork --depend=UART2Tes
+tMain.d -oUART2TestMain.o -IC:\Keil\ARM\RV31\INC -IC:\Keil\ARM\CMSIS\Include -I
+C:\Keil\ARM\Inc\Luminary --list=UART2TestMain.lst UART2TestMain.s
+
+
+
+ARM Macro Assembler    Page 1 Alphabetic symbol ordering
+Relocatable symbols
+
+DATA 00000000
+
+Symbol: DATA
+   Definitions
+      At line 46 in file UART2TestMain.s
+   Uses
+      None
+Comment: DATA unused
+1 symbol
+
+
+
+ARM Macro Assembler    Page 1 Alphabetic symbol ordering
+Relocatable symbols
+
+.text 00000000
+
+Symbol: .text
+   Definitions
+      At line 48 in file UART2TestMain.s
+   Uses
+      None
+Comment: .text unused
+OutCRLF 00000000
+
+Symbol: OutCRLF
+   Definitions
+      At line 58 in file UART2TestMain.s
+   Uses
+      At line 69 in file UART2TestMain.s
+      At line 78 in file UART2TestMain.s
+
+Start 00000014
+
+Symbol: Start
+   Definitions
+      At line 66 in file UART2TestMain.s
+   Uses
+      At line 50 in file UART2TestMain.s
+Comment: Start used once
+loop 0000003E
+
+Symbol: loop
+   Definitions
+      At line 81 in file UART2TestMain.s
+   Uses
+      At line 87 in file UART2TestMain.s
+Comment: loop used once
+uppercaseLoop 00000024
+
+Symbol: uppercaseLoop
+   Definitions
+      At line 72 in file UART2TestMain.s
+   Uses
+      At line 77 in file UART2TestMain.s
+Comment: uppercaseLoop used once
+5 symbols
+
+
+
+ARM Macro Assembler    Page 1 Alphabetic symbol ordering
+Absolute symbols
+
+BS 00000008
+
+Symbol: BS
+   Definitions
+      At line 33 in file UART2TestMain.s
+   Uses
+      None
+Comment: BS unused
+CR 0000000D
+
+Symbol: CR
+   Definitions
+      At line 31 in file UART2TestMain.s
+   Uses
+      At line 60 in file UART2TestMain.s
+Comment: CR used once
+DEL 0000007F
+
+Symbol: DEL
+   Definitions
+      At line 36 in file UART2TestMain.s
+   Uses
+      None
+Comment: DEL unused
+ESC 0000001B
+
+Symbol: ESC
+   Definitions
+      At line 34 in file UART2TestMain.s
+   Uses
+      None
+Comment: ESC unused
+LF 0000000A
+
+Symbol: LF
+   Definitions
+      At line 32 in file UART2TestMain.s
+   Uses
+      At line 62 in file UART2TestMain.s
+Comment: LF used once
+SPA 00000020
+
+Symbol: SPA
+   Definitions
+      At line 35 in file UART2TestMain.s
+   Uses
+      None
+Comment: SPA unused
+6 symbols
+
+
+
+ARM Macro Assembler    Page 1 Alphabetic symbol ordering
+External symbols
+
+PLL_Init 00000000
+
+Symbol: PLL_Init
+   Definitions
+      At line 39 in file UART2TestMain.s
+   Uses
+      At line 67 in file UART2TestMain.s
+Comment: PLL_Init used once
+UART_InChar 00000000
+
+Symbol: UART_InChar
+   Definitions
+      At line 43 in file UART2TestMain.s
+   Uses
+      At line 84 in file UART2TestMain.s
+Comment: UART_InChar used once
+UART_Init 00000000
+
+Symbol: UART_Init
+   Definitions
+      At line 42 in file UART2TestMain.s
+   Uses
+      At line 68 in file UART2TestMain.s
+Comment: UART_Init used once
+UART_OutChar 00000000
+
+Symbol: UART_OutChar
+   Definitions
+      At line 44 in file UART2TestMain.s
+   Uses
+      At line 61 in file UART2TestMain.s
+      At line 63 in file UART2TestMain.s
+      At line 74 in file UART2TestMain.s
+      At line 80 in file UART2TestMain.s
+      At line 85 in file UART2TestMain.s
+
+4 symbols
+346 symbols in table

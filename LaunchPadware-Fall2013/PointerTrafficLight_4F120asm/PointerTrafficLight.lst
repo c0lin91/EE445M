@@ -1,0 +1,546 @@
+
+
+
+ARM Macro Assembler    Page 1 
+
+
+    1 00000000         ; PointerTrafficLight.s
+    2 00000000         ; Runs on LM4F120
+    3 00000000         ; Use a pointer implementation of a Moore finite state m
+                       achine to operate
+    4 00000000         ; a traffic light.
+    5 00000000         ; Daniel Valvano
+    6 00000000         ; April 30, 2013
+    7 00000000         
+    8 00000000         ;  This example accompanies the book
+    9 00000000         ;  "Embedded Systems: Introduction to ARM Cortex M Micro
+                       controllers",
+   10 00000000         ;  ISBN: 978-1469998749, Jonathan Valvano, copyright (c)
+                        2013
+   11 00000000         ;  Program 6.8, Example 6.4
+   12 00000000         ;  "Embedded Systems: Real Time Interfacing to ARM Corte
+                       x M Microcontrollers",
+   13 00000000         ;  ISBN: 978-1463590154, Jonathan Valvano, copyright (c)
+                        2013
+   14 00000000         ;  Program 3.1, Example 3.1
+   15 00000000         ;
+   16 00000000         ;Copyright 2013 by Jonathan W. Valvano, valvano@mail.ute
+                       xas.edu
+   17 00000000         ;   You may use, edit, run or distribute this file
+   18 00000000         ;   as long as the above copyright notice remains
+   19 00000000         ;THIS SOFTWARE IS PROVIDED "AS IS".  NO WARRANTIES, WHET
+                       HER EXPRESS, IMPLIED
+   20 00000000         ;OR STATUTORY, INCLUDING, BUT NOT LIMITED TO, IMPLIED WA
+                       RRANTIES OF
+   21 00000000         ;MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE AP
+                       PLY TO THIS SOFTWARE.
+   22 00000000         ;VALVANO SHALL NOT, IN ANY CIRCUMSTANCES, BE LIABLE FOR 
+                       SPECIAL, INCIDENTAL,
+   23 00000000         ;OR CONSEQUENTIAL DAMAGES, FOR ANY REASON WHATSOEVER.
+   24 00000000         ;For more information about my classes, my research, and
+                        my books, see
+   25 00000000         ;http://users.ece.utexas.edu/~valvano/
+   26 00000000         
+   27 00000000         ; east facing red light connected to PB5
+   28 00000000         ; east facing yellow light connected to PB4
+   29 00000000         ; east facing green light connected to PB3
+   30 00000000         ; north facing red light connected to PB2
+   31 00000000         ; north facing yellow light connected to PB1
+   32 00000000         ; north facing green light connected to PB0
+   33 00000000         ; north facing car detector connected to PE1 (1=car pres
+                       ent)
+   34 00000000         ; east facing car detector connected to PE0 (1=car prese
+                       nt)
+   35 00000000         
+   36 00000000                 IMPORT           PLL_Init
+   37 00000000                 IMPORT           SysTick_Init
+   38 00000000                 IMPORT           SysTick_Wait10ms
+   39 00000000         
+   40 00000000 400050FC 
+                       LIGHT   EQU              0x400050FC  ; port B bits 5-0
+   41 00000000 40005400 
+                       GPIO_PORTB_DIR_R
+                               EQU              0x40005400
+   42 00000000 40005420 
+                       GPIO_PORTB_AFSEL_R
+
+
+
+ARM Macro Assembler    Page 2 
+
+
+                               EQU              0x40005420
+   43 00000000 4000551C 
+                       GPIO_PORTB_DEN_R
+                               EQU              0x4000551C
+   44 00000000 40005528 
+                       GPIO_PORTB_AMSEL_R
+                               EQU              0x40005528
+   45 00000000 4000552C 
+                       GPIO_PORTB_PCTL_R
+                               EQU              0x4000552C
+   46 00000000 4002400C 
+                       SENSOR  EQU              0x4002400C  ; port E bits 1-0
+   47 00000000 40024400 
+                       GPIO_PORTE_DIR_R
+                               EQU              0x40024400
+   48 00000000 40024420 
+                       GPIO_PORTE_AFSEL_R
+                               EQU              0x40024420
+   49 00000000 4002451C 
+                       GPIO_PORTE_DEN_R
+                               EQU              0x4002451C
+   50 00000000 40024528 
+                       GPIO_PORTE_AMSEL_R
+                               EQU              0x40024528
+   51 00000000 4002452C 
+                       GPIO_PORTE_PCTL_R
+                               EQU              0x4002452C
+   52 00000000 400FE108 
+                       SYSCTL_RCGC2_R
+                               EQU              0x400FE108
+   53 00000000 00000010 
+                       SYSCTL_RCGC2_GPIOE
+                               EQU              0x00000010  ; port E Clock Gati
+                                                            ng Control
+   54 00000000 00000002 
+                       SYSCTL_RCGC2_GPIOB
+                               EQU              0x00000002  ; port B Clock Gati
+                                                            ng Control
+   55 00000000         
+   56 00000000                 AREA             |.text|, CODE, READONLY, ALIGN=
+2
+   57 00000000                 THUMB
+   58 00000000                 EXPORT           Start
+   59 00000000         ;Linked data structure
+   60 00000000         ;Put in ROM
+   61 00000000 00000000 
+                       OUT     EQU              0           ;offset for output
+   62 00000000 00000004 
+                       WAIT    EQU              4           ;offset for time
+   63 00000000 00000008 
+                       NEXT    EQU              8           ;offset for next
+   64 00000000 00000021 
+                       goN     DCD              0x21        ;North green, East 
+                                                            red
+   65 00000004 00000BB8        DCD              3000        ;30 sec
+   66 00000008 00000000 
+              00000000 
+              00000000 
+              00000000         DCD              goN,waitN,goN,waitN
+
+
+
+ARM Macro Assembler    Page 3 
+
+
+   67 00000018 00000022 
+                       waitN   DCD              0x22        ;North yellow, East
+                                                             red
+   68 0000001C 000001F4        DCD              500         ;5 sec
+   69 00000020 00000000 
+              00000000 
+              00000000 
+              00000000         DCD              goE,goE,goE,goE
+   70 00000030 0000000C 
+                       goE     DCD              0x0C        ;North red, East gr
+                                                            een
+   71 00000034 00000BB8        DCD              3000        ;30 sec
+   72 00000038 00000000 
+              00000000 
+              00000000 
+              00000000         DCD              goE,goE,waitE,waitE
+   73 00000048 00000014 
+                       waitE   DCD              0x14        ;North red, East ye
+                                                            llow
+   74 0000004C 000001F4        DCD              500         ;5 sec
+   75 00000050 00000000 
+              00000000 
+              00000000 
+              00000000         DCD              goN,goN,goN,goN
+   76 00000060         
+   77 00000060         Start
+   78 00000060 F7FF FFFE       BL               PLL_Init    ; 50 MHz clock
+   79 00000064 F7FF FFFE       BL               SysTick_Init ; enable SysTick
+   80 00000068         
+   81 00000068 4923            LDR              R1, =SYSCTL_RCGC2_R
+   82 0000006A 6808            LDR              R0, [R1]
+   83 0000006C F040 0012       ORR              R0, R0, #(SYSCTL_RCGC2_GPIOB+SY
+SCTL_RCGC2_GPIOE) 
+                                                            ; activate port B a
+                                                            nd port E
+   84 00000070 6008            STR              R0, [R1]
+   85 00000072 BF00            NOP
+   86 00000074 BF00            NOP                          ; allow time to fin
+                                                            ish activating
+   87 00000076 4921            LDR              R1, =GPIO_PORTB_PCTL_R
+   88 00000078 6808            LDR              R0, [R1]
+   89 0000007A F000 407F       BIC              R0, R0, #0x00FFFFFF 
+                                                            ; clear bits
+   90 0000007E 6008            STR              R0, [R1]
+   91 00000080 491F            LDR              R1, =GPIO_PORTB_AMSEL_R
+   92 00000082 6808            LDR              R0, [R1]
+   93 00000084 F020 003F       BIC              R0, R0, #0x3F ; no analog PB5-0
+                                                            
+   94 00000088 6008            STR              R0, [R1]
+   95 0000008A 491E            LDR              R1, =GPIO_PORTB_DIR_R
+   96 0000008C 6808            LDR              R0, [R1]
+   97 0000008E F040 003F       ORR              R0, R0, #0x3F ; PB5-0 output
+   98 00000092 6008            STR              R0, [R1]
+   99 00000094 491C            LDR              R1, =GPIO_PORTB_AFSEL_R
+  100 00000096 6808            LDR              R0, [R1]
+  101 00000098 F020 003F       BIC              R0, R0, #0x3F ; no alt funct
+  102 0000009C 6008            STR              R0, [R1]
+  103 0000009E 491B            LDR              R1, =GPIO_PORTB_DEN_R
+  104 000000A0 6808            LDR              R0, [R1]
+
+
+
+ARM Macro Assembler    Page 4 
+
+
+  105 000000A2 F040 003F       ORR              R0, R0, #0x3F ; enable PB5-0
+  106 000000A6 6008            STR              R0, [R1]
+  107 000000A8         
+  108 000000A8 4919            LDR              R1, =GPIO_PORTE_PCTL_R
+  109 000000AA 6808            LDR              R0, [R1]
+  110 000000AC F020 00FF       BIC              R0, R0, #0x000000FF 
+                                                            ; clear bits
+  111 000000B0 6008            STR              R0, [R1]
+  112 000000B2 4918            LDR              R1, =GPIO_PORTE_AMSEL_R
+  113 000000B4 6808            LDR              R0, [R1]
+  114 000000B6 F020 0003       BIC              R0, R0, #0x03 ; no analog PE1-0
+                                                            
+  115 000000BA 6008            STR              R0, [R1]
+  116 000000BC 4916            LDR              R1, =GPIO_PORTE_DIR_R
+  117 000000BE 6808            LDR              R0, [R1]
+  118 000000C0 F020 0003       BIC              R0, R0, #0x03 ; PE1-0 input
+  119 000000C4 6008            STR              R0, [R1]
+  120 000000C6 4915            LDR              R1, =GPIO_PORTE_AFSEL_R
+  121 000000C8 6808            LDR              R0, [R1]
+  122 000000CA F020 0003       BIC              R0, R0, #0x03 ; no alt funct
+  123 000000CE 6008            STR              R0, [R1]
+  124 000000D0 4913            LDR              R1, =GPIO_PORTE_DEN_R
+  125 000000D2 6808            LDR              R0, [R1]
+  126 000000D4 F040 0003       ORR              R0, R0, #0x03 ; enable PE1-0
+  127 000000D8 6008            STR              R0, [R1]
+  128 000000DA         
+  129 000000DA 4C12            LDR              R4, =goN    ; state pointer
+  130 000000DC 4D12            LDR              R5, =SENSOR ; 0x4002400C
+  131 000000DE 4E13            LDR              R6, =LIGHT  ; 0x400050FC
+  132 000000E0 6820    FSM     LDR              R0, [R4, #OUT] ; output value
+  133 000000E2 6030            STR              R0, [R6]    ; set lights
+  134 000000E4 6860            LDR              R0, [R4, #WAIT] ; time delay
+  135 000000E6 F7FF FFFE       BL               SysTick_Wait10ms
+  136 000000EA 6828            LDR              R0, [R5]    ; read input
+  137 000000EC EA4F 0080       LSL              R0, R0, #2  ; 4 bytes/address
+  138 000000F0 F100 0008       ADD              R0, R0, #NEXT ; 8,12,16,20
+  139 000000F4 5824            LDR              R4, [R4, R0] ; go to next state
+                                                            
+  140 000000F6 E7F3            B                FSM
+  141 000000F8         
+  142 000000F8                 ALIGN                        ; make sure the end
+                                                             of this section is
+                                                             aligned
+  143 000000F8                 END                          ; end of file
+              400FE108 
+              4000552C 
+              40005528 
+              40005400 
+              40005420 
+              4000551C 
+              4002452C 
+              40024528 
+              40024400 
+              40024420 
+              4002451C 
+              00000000 
+              4002400C 
+              400050FC 
+Command Line: --debug --xref --cpu=Cortex-M4 --apcs=interwork --depend=PointerT
+
+
+
+ARM Macro Assembler    Page 5 
+
+
+rafficLight.d -oPointerTrafficLight.o -ID:\Keil\ARM\RV31\Inc -ID:\Keil\ARM\CMSI
+S\Include -ID:\Keil\ARM\Inc\Luminary --predefine="__EVAL SETA 1" --list=Pointer
+TrafficLight.lst PointerTrafficLight.s
+
+
+
+ARM Macro Assembler    Page 1 Alphabetic symbol ordering
+Relocatable symbols
+
+.text 00000000
+
+Symbol: .text
+   Definitions
+      At line 56 in file PointerTrafficLight.s
+   Uses
+      None
+Comment: .text unused
+FSM 000000E0
+
+Symbol: FSM
+   Definitions
+      At line 132 in file PointerTrafficLight.s
+   Uses
+      At line 140 in file PointerTrafficLight.s
+Comment: FSM used once
+Start 00000060
+
+Symbol: Start
+   Definitions
+      At line 77 in file PointerTrafficLight.s
+   Uses
+      At line 58 in file PointerTrafficLight.s
+Comment: Start used once
+goE 00000030
+
+Symbol: goE
+   Definitions
+      At line 70 in file PointerTrafficLight.s
+   Uses
+      At line 69 in file PointerTrafficLight.s
+      At line 69 in file PointerTrafficLight.s
+      At line 69 in file PointerTrafficLight.s
+      At line 69 in file PointerTrafficLight.s
+      At line 72 in file PointerTrafficLight.s
+      At line 72 in file PointerTrafficLight.s
+
+goN 00000000
+
+Symbol: goN
+   Definitions
+      At line 64 in file PointerTrafficLight.s
+   Uses
+      At line 66 in file PointerTrafficLight.s
+      At line 66 in file PointerTrafficLight.s
+      At line 75 in file PointerTrafficLight.s
+      At line 75 in file PointerTrafficLight.s
+      At line 75 in file PointerTrafficLight.s
+      At line 75 in file PointerTrafficLight.s
+      At line 129 in file PointerTrafficLight.s
+
+waitE 00000048
+
+Symbol: waitE
+   Definitions
+      At line 73 in file PointerTrafficLight.s
+   Uses
+      At line 72 in file PointerTrafficLight.s
+      At line 72 in file PointerTrafficLight.s
+
+
+
+ARM Macro Assembler    Page 2 Alphabetic symbol ordering
+Relocatable symbols
+
+
+waitN 00000018
+
+Symbol: waitN
+   Definitions
+      At line 67 in file PointerTrafficLight.s
+   Uses
+      At line 66 in file PointerTrafficLight.s
+      At line 66 in file PointerTrafficLight.s
+
+7 symbols
+
+
+
+ARM Macro Assembler    Page 1 Alphabetic symbol ordering
+Absolute symbols
+
+GPIO_PORTB_AFSEL_R 40005420
+
+Symbol: GPIO_PORTB_AFSEL_R
+   Definitions
+      At line 42 in file PointerTrafficLight.s
+   Uses
+      At line 99 in file PointerTrafficLight.s
+Comment: GPIO_PORTB_AFSEL_R used once
+GPIO_PORTB_AMSEL_R 40005528
+
+Symbol: GPIO_PORTB_AMSEL_R
+   Definitions
+      At line 44 in file PointerTrafficLight.s
+   Uses
+      At line 91 in file PointerTrafficLight.s
+Comment: GPIO_PORTB_AMSEL_R used once
+GPIO_PORTB_DEN_R 4000551C
+
+Symbol: GPIO_PORTB_DEN_R
+   Definitions
+      At line 43 in file PointerTrafficLight.s
+   Uses
+      At line 103 in file PointerTrafficLight.s
+Comment: GPIO_PORTB_DEN_R used once
+GPIO_PORTB_DIR_R 40005400
+
+Symbol: GPIO_PORTB_DIR_R
+   Definitions
+      At line 41 in file PointerTrafficLight.s
+   Uses
+      At line 95 in file PointerTrafficLight.s
+Comment: GPIO_PORTB_DIR_R used once
+GPIO_PORTB_PCTL_R 4000552C
+
+Symbol: GPIO_PORTB_PCTL_R
+   Definitions
+      At line 45 in file PointerTrafficLight.s
+   Uses
+      At line 87 in file PointerTrafficLight.s
+Comment: GPIO_PORTB_PCTL_R used once
+GPIO_PORTE_AFSEL_R 40024420
+
+Symbol: GPIO_PORTE_AFSEL_R
+   Definitions
+      At line 48 in file PointerTrafficLight.s
+   Uses
+      At line 120 in file PointerTrafficLight.s
+Comment: GPIO_PORTE_AFSEL_R used once
+GPIO_PORTE_AMSEL_R 40024528
+
+Symbol: GPIO_PORTE_AMSEL_R
+   Definitions
+      At line 50 in file PointerTrafficLight.s
+   Uses
+      At line 112 in file PointerTrafficLight.s
+Comment: GPIO_PORTE_AMSEL_R used once
+GPIO_PORTE_DEN_R 4002451C
+
+Symbol: GPIO_PORTE_DEN_R
+
+
+
+ARM Macro Assembler    Page 2 Alphabetic symbol ordering
+Absolute symbols
+
+   Definitions
+      At line 49 in file PointerTrafficLight.s
+   Uses
+      At line 124 in file PointerTrafficLight.s
+Comment: GPIO_PORTE_DEN_R used once
+GPIO_PORTE_DIR_R 40024400
+
+Symbol: GPIO_PORTE_DIR_R
+   Definitions
+      At line 47 in file PointerTrafficLight.s
+   Uses
+      At line 116 in file PointerTrafficLight.s
+Comment: GPIO_PORTE_DIR_R used once
+GPIO_PORTE_PCTL_R 4002452C
+
+Symbol: GPIO_PORTE_PCTL_R
+   Definitions
+      At line 51 in file PointerTrafficLight.s
+   Uses
+      At line 108 in file PointerTrafficLight.s
+Comment: GPIO_PORTE_PCTL_R used once
+LIGHT 400050FC
+
+Symbol: LIGHT
+   Definitions
+      At line 40 in file PointerTrafficLight.s
+   Uses
+      At line 131 in file PointerTrafficLight.s
+Comment: LIGHT used once
+NEXT 00000008
+
+Symbol: NEXT
+   Definitions
+      At line 63 in file PointerTrafficLight.s
+   Uses
+      At line 138 in file PointerTrafficLight.s
+Comment: NEXT used once
+OUT 00000000
+
+Symbol: OUT
+   Definitions
+      At line 61 in file PointerTrafficLight.s
+   Uses
+      At line 132 in file PointerTrafficLight.s
+Comment: OUT used once
+SENSOR 4002400C
+
+Symbol: SENSOR
+   Definitions
+      At line 46 in file PointerTrafficLight.s
+   Uses
+      At line 130 in file PointerTrafficLight.s
+Comment: SENSOR used once
+SYSCTL_RCGC2_GPIOB 00000002
+
+Symbol: SYSCTL_RCGC2_GPIOB
+   Definitions
+      At line 54 in file PointerTrafficLight.s
+   Uses
+
+
+
+ARM Macro Assembler    Page 3 Alphabetic symbol ordering
+Absolute symbols
+
+      At line 83 in file PointerTrafficLight.s
+Comment: SYSCTL_RCGC2_GPIOB used once
+SYSCTL_RCGC2_GPIOE 00000010
+
+Symbol: SYSCTL_RCGC2_GPIOE
+   Definitions
+      At line 53 in file PointerTrafficLight.s
+   Uses
+      At line 83 in file PointerTrafficLight.s
+Comment: SYSCTL_RCGC2_GPIOE used once
+SYSCTL_RCGC2_R 400FE108
+
+Symbol: SYSCTL_RCGC2_R
+   Definitions
+      At line 52 in file PointerTrafficLight.s
+   Uses
+      At line 81 in file PointerTrafficLight.s
+Comment: SYSCTL_RCGC2_R used once
+WAIT 00000004
+
+Symbol: WAIT
+   Definitions
+      At line 62 in file PointerTrafficLight.s
+   Uses
+      At line 134 in file PointerTrafficLight.s
+Comment: WAIT used once
+18 symbols
+
+
+
+ARM Macro Assembler    Page 1 Alphabetic symbol ordering
+External symbols
+
+PLL_Init 00000000
+
+Symbol: PLL_Init
+   Definitions
+      At line 36 in file PointerTrafficLight.s
+   Uses
+      At line 78 in file PointerTrafficLight.s
+Comment: PLL_Init used once
+SysTick_Init 00000000
+
+Symbol: SysTick_Init
+   Definitions
+      At line 37 in file PointerTrafficLight.s
+   Uses
+      At line 79 in file PointerTrafficLight.s
+Comment: SysTick_Init used once
+SysTick_Wait10ms 00000000
+
+Symbol: SysTick_Wait10ms
+   Definitions
+      At line 38 in file PointerTrafficLight.s
+   Uses
+      At line 135 in file PointerTrafficLight.s
+Comment: SysTick_Wait10ms used once
+3 symbols
+361 symbols in table

@@ -1,0 +1,11 @@
+lcdtestmain.o: LCDTestMain.c
+lcdtestmain.o: lm4f120h5qr.h
+lcdtestmain.o: SSD2119.h
+lcdtestmain.o: PLL.h
+lcdtestmain.o: systick.h
+lcdtestmain.o: adc.h
+lcdtestmain.o: random.h
+lcdtestmain.o: FPU.h
+lcdtestmain.o: LCDTests.h
+lcdtestmain.o: D:\Keil\ARM\RV31\Inc\math.h
+lcdtestmain.o: images.h

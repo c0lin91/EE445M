@@ -1,0 +1,403 @@
+
+
+
+ARM Macro Assembler    Page 1 
+
+
+    1 00000000         ; PeriodicSysTickInts.s
+    2 00000000         ; Runs on LM4F120
+    3 00000000         ; Use the SysTick timer to request interrupts at a parti
+                       cular period.
+    4 00000000         ; Daniel Valvano
+    5 00000000         ; November 6, 2012
+    6 00000000         
+    7 00000000         ;  This example accompanies the book
+    8 00000000         ;   "Embedded Systems: Introduction to ARM Cortex M Micr
+                       ocontrollers"
+    9 00000000         ;   ISBN: 978-1469998749, Jonathan Valvano, copyright (c
+                       ) 2013
+   10 00000000         ;   Volume 1, Program 9.7
+   11 00000000         
+   12 00000000         ;   "Embedded Systems: Real Time Interfacing to ARM Cort
+                       ex M Microcontrollers",
+   13 00000000         ;   ISBN: 978-1463590154, Jonathan Valvano, copyright (c
+                       ) 2013
+   14 00000000         ;   Volume 2, Program 5.12, section 5.7
+   15 00000000         ;
+   16 00000000         ;Copyright 2013 by Jonathan W. Valvano, valvano@mail.ute
+                       xas.edu
+   17 00000000         ;   You may use, edit, run or distribute this file
+   18 00000000         ;   as long as the above copyright notice remains
+   19 00000000         ;THIS SOFTWARE IS PROVIDED "AS IS".  NO WARRANTIES, WHET
+                       HER EXPRESS, IMPLIED
+   20 00000000         ;OR STATUTORY, INCLUDING, BUT NOT LIMITED TO, IMPLIED WA
+                       RRANTIES OF
+   21 00000000         ;MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE AP
+                       PLY TO THIS SOFTWARE.
+   22 00000000         ;VALVANO SHALL NOT, IN ANY CIRCUMSTANCES, BE LIABLE FOR 
+                       SPECIAL, INCIDENTAL,
+   23 00000000         ;OR CONSEQUENTIAL DAMAGES, FOR ANY REASON WHATSOEVER.
+   24 00000000         ;For more information about my classes, my research, and
+                        my books, see
+   25 00000000         ;http://users.ece.utexas.edu/~valvano/
+   26 00000000         
+   27 00000000         ; oscilloscope or LED connected to PF2 for period measur
+                       ement
+   28 00000000         
+   29 00000000                 IMPORT           PLL_Init
+   30 00000000                 IMPORT           SysTick_Init
+   31 00000000         
+   32 00000000 40025010 
+                       GPIO_PORTF2
+                               EQU              0x40025010
+   33 00000000 40025400 
+                       GPIO_PORTF_DIR_R
+                               EQU              0x40025400
+   34 00000000 40025420 
+                       GPIO_PORTF_AFSEL_R
+                               EQU              0x40025420
+   35 00000000 4002551C 
+                       GPIO_PORTF_DEN_R
+                               EQU              0x4002551C
+   36 00000000 40025528 
+                       GPIO_PORTF_AMSEL_R
+                               EQU              0x40025528
+   37 00000000 4002552C 
+
+
+
+ARM Macro Assembler    Page 2 
+
+
+                       GPIO_PORTF_PCTL_R
+                               EQU              0x4002552C
+   38 00000000 400FE108 
+                       SYSCTL_RCGC2_R
+                               EQU              0x400FE108
+   39 00000000 00000020 
+                       SYSCTL_RCGC2_GPIOF
+                               EQU              0x00000020  ; port F Clock Gati
+                                                            ng Control
+   40 00000000         
+   41 00000000                 AREA             DATA, ALIGN=4
+   42 00000000 00 00 00 
+              00       Counts  SPACE            4           ; records number of
+                                                             SysTick interrupts
+                                                            
+   43 00000004                 EXPORT           Counts      ; global only for o
+                                                            bservation using de
+                                                            bugger
+   44 00000004                 ALIGN                        ; make sure the end
+                                                             of this section is
+                                                             aligned
+   45 00000004         
+   46 00000004                 AREA             |.text|, CODE, READONLY, ALIGN=
+2
+   47 00000000                 THUMB
+   48 00000000                 EXPORT           SysTick_Handler
+   49 00000000                 EXPORT           Start
+   50 00000000         SysTick_Handler
+   51 00000000         ; toggle LED
+   52 00000000 491C            LDR              R1, =GPIO_PORTF2 ; R1 = &GPIO_P
+                                                            ORTF2 (pointer)
+   53 00000002 6808            LDR              R0, [R1]    ; R0 = [R1] = GPIO_
+                                                            PORTF2 (value)
+   54 00000004 F080 0004       EOR              R0, R0, #0x04 ; R0 = R0^0x04 (t
+                                                            oggle PF2)
+   55 00000008 6008            STR              R0, [R1]    ; [R1] = R0
+   56 0000000A         ; increment Counts
+   57 0000000A 491B            LDR              R1, =Counts ; R1 = &Counts (poi
+                                                            nter)
+   58 0000000C 6808            LDR              R0, [R1]    ; R0 = [R1] = Count
+                                                            s (value)
+   59 0000000E F100 0001       ADD              R0, R0, #1  ; R0 = R0 + 1 (Coun
+                                                            ts = Counts + 1)
+   60 00000012 6008            STR              R0, [R1]    ; [R1] = R0 (overfl
+                                                            ows after 49 days)
+   61 00000014 4770            BX               LR          ; return from inter
+                                                            rupt
+   62 00000016         
+   63 00000016         Start
+   64 00000016 F7FF FFFE       BL               PLL_Init    ; 50 MHz clock
+   65 0000001A         ; activate clock for Port F
+   66 0000001A 4918            LDR              R1, =SYSCTL_RCGC2_R ; R1 = &SYS
+                                                            CTL_RCGC2_R (pointe
+                                                            r)
+   67 0000001C 6808            LDR              R0, [R1]    ; R0 = [R1] = SYSCT
+                                                            L_RCGC2_R (value)
+   68 0000001E F040 0020       ORR              R0, R0, #SYSCTL_RCGC2_GPIOF ; R
+                                                            0 = R0|SYSCTL_RCGC2
+                                                            _GPIOF
+
+
+
+ARM Macro Assembler    Page 3 
+
+
+   69 00000022 6008            STR              R0, [R1]    ; [R1] = R0
+   70 00000024 BF00            NOP
+   71 00000026 BF00            NOP                          ; allow time to fin
+                                                            ish activating
+   72 00000028         ; set direction register
+   73 00000028 4915            LDR              R1, =GPIO_PORTF_DIR_R ; R1 = &G
+                                                            PIO_PORTF_DIR_R (po
+                                                            inter)
+   74 0000002A 6808            LDR              R0, [R1]    ; R0 = [R1] = GPIO_
+                                                            PORTF_DIR_R (value)
+                                                            
+   75 0000002C F040 0004       ORR              R0, R0, #0x04 ; R0 = R0|0x04 (m
+                                                            ake PF2 output)
+   76 00000030 6008            STR              R0, [R1]    ; [R1] = R0
+   77 00000032         ; regular port function
+   78 00000032 4914            LDR              R1, =GPIO_PORTF_AFSEL_R ; R1 = 
+                                                            &GPIO_PORTF_AFSEL_R
+                                                             (pointer)
+   79 00000034 6808            LDR              R0, [R1]    ; R0 = [R1] = GPIO_
+                                                            PORTF_AFSEL_R (valu
+                                                            e)
+   80 00000036 F020 0004       BIC              R0, R0, #0x04 ; R0 = R0&~0x04 (
+                                                            disable alt funct o
+                                                            n PF2)
+   81 0000003A 6008            STR              R0, [R1]    ; [R1] = R0
+   82 0000003C         ; enable digital port
+   83 0000003C 4912            LDR              R1, =GPIO_PORTF_DEN_R ; R1 = &G
+                                                            PIO_PORTF_DEN_R (po
+                                                            inter)
+   84 0000003E 6808            LDR              R0, [R1]    ; R0 = [R1] = GPIO_
+                                                            PORTF_DEN_R (value)
+                                                            
+   85 00000040 F040 0004       ORR              R0, R0, #0x04 ; R0 = R0|0x04 (e
+                                                            nable digital I/O o
+                                                            n PF2)
+   86 00000044 6008            STR              R0, [R1]    ; [R1] = R0
+   87 00000046         ; configure as GPIO
+   88 00000046 4911            LDR              R1, =GPIO_PORTF_PCTL_R ; R1 = &
+                                                            GPIO_PORTF_PCTL_R (
+                                                            pointer)
+   89 00000048 6808            LDR              R0, [R1]    ; R0 = [R1] = GPIO_
+                                                            PORTF_PCTL_R (value
+                                                            )
+   90 0000004A F420 6070       BIC              R0, R0, #0x00000F00 ; R0 = R0&~
+                                                            0x00000F00 (clear p
+                                                            ort control field f
+                                                            or PF2)
+   91 0000004E F100 0000       ADD              R0, R0, #0x00000000 ; R0 = R0+0
+                                                            x00000000 (configur
+                                                            e PF2 as GPIO)
+   92 00000052 6008            STR              R0, [R1]    ; [R1] = R0
+   93 00000054         ; disable analog functionality
+   94 00000054 490E            LDR              R1, =GPIO_PORTF_AMSEL_R ; R1 = 
+                                                            &GPIO_PORTF_AMSEL_R
+                                                             (pointer)
+   95 00000056 F04F 0000       MOV              R0, #0      ; R0 = 0 (disable a
+                                                            nalog functionality
+                                                             on PF)
+   96 0000005A 6008            STR              R0, [R1]    ; [R1] = R0
+
+
+
+ARM Macro Assembler    Page 4 
+
+
+   97 0000005C         ; initialize Counts
+   98 0000005C 4906            LDR              R1, =Counts ; R1 = &Counts (poi
+                                                            nter)
+   99 0000005E F04F 0000       MOV              R0, #0      ; R0 = 0
+  100 00000062 6008            STR              R0, [R1]    ; [R1] = R0 (Counts
+                                                             = 0)
+  101 00000064         ; enable SysTick
+  102 00000064 F24C 3050       MOV              R0, #50000  ; initialize SysTic
+                                                            k timer for 1,000 H
+                                                            z interrupts
+  103 00000068 F7FF FFFE       BL               SysTick_Init ; enable SysTick
+  104 0000006C B662            CPSIE            I           ; enable interrupts
+                                                             and configurable f
+                                                            ault handlers (clea
+                                                            r PRIMASK)
+  105 0000006E         loop
+  106 0000006E BF30            WFI                          ; wait for interrup
+                                                            t
+  107 00000070 E7FD            B                loop        ; unconditional bra
+                                                            nch to 'loop'
+  108 00000072         
+  109 00000072 00 00           ALIGN                        ; make sure the end
+                                                             of this section is
+                                                             aligned
+  110 00000074                 END                          ; end of file
+              40025010 
+              00000000 
+              400FE108 
+              40025400 
+              40025420 
+              4002551C 
+              4002552C 
+              40025528 
+Command Line: --debug --xref --cpu=Cortex-M4 --apcs=interwork --depend=Periodic
+SysTickInts.d -oPeriodicSysTickInts.o -ID:\Keil\ARM\RV31\Inc -ID:\Keil\ARM\CMSI
+S\Include -ID:\Keil\ARM\Inc\Luminary --predefine="__EVAL SETA 1" --list=Periodi
+cSysTickInts.lst PeriodicSysTickInts.s
+
+
+
+ARM Macro Assembler    Page 1 Alphabetic symbol ordering
+Relocatable symbols
+
+Counts 00000000
+
+Symbol: Counts
+   Definitions
+      At line 42 in file PeriodicSysTickInts.s
+   Uses
+      At line 43 in file PeriodicSysTickInts.s
+      At line 57 in file PeriodicSysTickInts.s
+      At line 98 in file PeriodicSysTickInts.s
+
+DATA 00000000
+
+Symbol: DATA
+   Definitions
+      At line 41 in file PeriodicSysTickInts.s
+   Uses
+      None
+Comment: DATA unused
+2 symbols
+
+
+
+ARM Macro Assembler    Page 1 Alphabetic symbol ordering
+Relocatable symbols
+
+.text 00000000
+
+Symbol: .text
+   Definitions
+      At line 46 in file PeriodicSysTickInts.s
+   Uses
+      None
+Comment: .text unused
+Start 00000016
+
+Symbol: Start
+   Definitions
+      At line 63 in file PeriodicSysTickInts.s
+   Uses
+      At line 49 in file PeriodicSysTickInts.s
+Comment: Start used once
+SysTick_Handler 00000000
+
+Symbol: SysTick_Handler
+   Definitions
+      At line 50 in file PeriodicSysTickInts.s
+   Uses
+      At line 48 in file PeriodicSysTickInts.s
+Comment: SysTick_Handler used once
+loop 0000006E
+
+Symbol: loop
+   Definitions
+      At line 105 in file PeriodicSysTickInts.s
+   Uses
+      At line 107 in file PeriodicSysTickInts.s
+Comment: loop used once
+4 symbols
+
+
+
+ARM Macro Assembler    Page 1 Alphabetic symbol ordering
+Absolute symbols
+
+GPIO_PORTF2 40025010
+
+Symbol: GPIO_PORTF2
+   Definitions
+      At line 32 in file PeriodicSysTickInts.s
+   Uses
+      At line 52 in file PeriodicSysTickInts.s
+Comment: GPIO_PORTF2 used once
+GPIO_PORTF_AFSEL_R 40025420
+
+Symbol: GPIO_PORTF_AFSEL_R
+   Definitions
+      At line 34 in file PeriodicSysTickInts.s
+   Uses
+      At line 78 in file PeriodicSysTickInts.s
+Comment: GPIO_PORTF_AFSEL_R used once
+GPIO_PORTF_AMSEL_R 40025528
+
+Symbol: GPIO_PORTF_AMSEL_R
+   Definitions
+      At line 36 in file PeriodicSysTickInts.s
+   Uses
+      At line 94 in file PeriodicSysTickInts.s
+Comment: GPIO_PORTF_AMSEL_R used once
+GPIO_PORTF_DEN_R 4002551C
+
+Symbol: GPIO_PORTF_DEN_R
+   Definitions
+      At line 35 in file PeriodicSysTickInts.s
+   Uses
+      At line 83 in file PeriodicSysTickInts.s
+Comment: GPIO_PORTF_DEN_R used once
+GPIO_PORTF_DIR_R 40025400
+
+Symbol: GPIO_PORTF_DIR_R
+   Definitions
+      At line 33 in file PeriodicSysTickInts.s
+   Uses
+      At line 73 in file PeriodicSysTickInts.s
+Comment: GPIO_PORTF_DIR_R used once
+GPIO_PORTF_PCTL_R 4002552C
+
+Symbol: GPIO_PORTF_PCTL_R
+   Definitions
+      At line 37 in file PeriodicSysTickInts.s
+   Uses
+      At line 88 in file PeriodicSysTickInts.s
+Comment: GPIO_PORTF_PCTL_R used once
+SYSCTL_RCGC2_GPIOF 00000020
+
+Symbol: SYSCTL_RCGC2_GPIOF
+   Definitions
+      At line 39 in file PeriodicSysTickInts.s
+   Uses
+      At line 68 in file PeriodicSysTickInts.s
+Comment: SYSCTL_RCGC2_GPIOF used once
+SYSCTL_RCGC2_R 400FE108
+
+Symbol: SYSCTL_RCGC2_R
+
+
+
+ARM Macro Assembler    Page 2 Alphabetic symbol ordering
+Absolute symbols
+
+   Definitions
+      At line 38 in file PeriodicSysTickInts.s
+   Uses
+      At line 66 in file PeriodicSysTickInts.s
+Comment: SYSCTL_RCGC2_R used once
+8 symbols
+
+
+
+ARM Macro Assembler    Page 1 Alphabetic symbol ordering
+External symbols
+
+PLL_Init 00000000
+
+Symbol: PLL_Init
+   Definitions
+      At line 29 in file PeriodicSysTickInts.s
+   Uses
+      At line 64 in file PeriodicSysTickInts.s
+Comment: PLL_Init used once
+SysTick_Init 00000000
+
+Symbol: SysTick_Init
+   Definitions
+      At line 30 in file PeriodicSysTickInts.s
+   Uses
+      At line 103 in file PeriodicSysTickInts.s
+Comment: SysTick_Init used once
+2 symbols
+349 symbols in table

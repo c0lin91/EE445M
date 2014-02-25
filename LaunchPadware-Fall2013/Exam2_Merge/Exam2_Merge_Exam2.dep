@@ -1,0 +1,9 @@
+Dependencies for Project 'Exam2_Merge', Target 'Exam2': (DO NOT MODIFY !)
+F (.\Startup.s)(0x508D9CD4)(--cpu Cortex-M3 --pd "__EVAL SETA 1" -g --apcs=interwork -I C:\Keil\ARM\RV31\INC-I C:\Keil\ARM\CMSIS\Include-I C:\Keil\ARM\Inc\Luminary--list .\startup.lst --xref -o .\startup.o --depend .\startup.d)
+F (.\PLL.c)(0x508C4D10)(-c --cpu Cortex-M3 -D__EVAL -g -O0 --apcs=interwork --signed_chars-I C:\Keil\ARM\RV31\INC-I C:\Keil\ARM\CMSIS\Include-I C:\Keil\ARM\Inc\Luminary-o .\pll.o --omf_browse .\pll.crf --depend .\pll.d)
+F (.\UART.c)(0x5143357E)(-c --cpu Cortex-M3 -D__EVAL -g -O0 --apcs=interwork --signed_chars-I C:\Keil\ARM\RV31\INC-I C:\Keil\ARM\CMSIS\Include-I C:\Keil\ARM\Inc\Luminary-o .\uart.o --omf_browse .\uart.crf --depend .\uart.d)
+I (UART.h)(0x5143357E)
+F (.\main.c)(0x514939A0)(-c --cpu Cortex-M3 -D__EVAL -g -O0 --apcs=interwork --signed_chars-I C:\Keil\ARM\RV31\INC-I C:\Keil\ARM\CMSIS\Include-I C:\Keil\ARM\Inc\Luminary-o .\main.o --omf_browse .\main.crf --depend .\main.d)
+I (C:\LaunchPadware\Exam2_Merge\PLL.h)(0x5075E746)
+I (C:\LaunchPadware\Exam2_Merge\UART.h)(0x5143357E)
+F (.\Exam2.s)(0x5279996F)(--cpu Cortex-M3 --pd "__EVAL SETA 1" -g --apcs=interwork -I C:\Keil\ARM\RV31\INC-I C:\Keil\ARM\CMSIS\Include-I C:\Keil\ARM\Inc\Luminary--list .\exam2.lst --xref -o .\exam2.o --depend .\exam2.d)

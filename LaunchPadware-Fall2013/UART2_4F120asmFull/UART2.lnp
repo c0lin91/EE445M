@@ -1,0 +1,4 @@
+--cpu Cortex-M4 "startup.o" "pll.o" "uart2.o" "uart2testmain.o" "fifo.o" 
+--ro-base 0x00000000 --entry 0x00000000 --rw-base 0x20000000 --entry Reset_Handler --first __Vectors --strict --summary_stderr --info summarysizes --map --xref --callgraph --symbols 
+--info sizes --info totals --info unused --info veneers 
+ --list ".\UART2.map" -o UART2.axf

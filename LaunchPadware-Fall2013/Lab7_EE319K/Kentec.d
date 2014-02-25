@@ -1,0 +1,1 @@
+Kentec.o: Kentec.s

@@ -1,0 +1,5 @@
+Dependencies for Project 'PointerTrafficLight', Target 'PointerTrafficLight': (DO NOT MODIFY !)
+F (.\Startup.s)(0x5199647E)(--cpu Cortex-M4 --pd "__EVAL SETA 1" -g --apcs=interwork -I D:\Keil\ARM\RV31\Inc -I D:\Keil\ARM\CMSIS\Include -I D:\Keil\ARM\Inc\Luminary --list "Startup.lst" --xref -o "Startup.o" --depend "Startup.d")
+F (.\SysTick.s)(0x5089A352)(--cpu Cortex-M4 --pd "__EVAL SETA 1" -g --apcs=interwork -I D:\Keil\ARM\RV31\Inc -I D:\Keil\ARM\CMSIS\Include -I D:\Keil\ARM\Inc\Luminary --list "SysTick.lst" --xref -o "SysTick.o" --depend "SysTick.d")
+F (.\PLL.s)(0x5199663D)(--cpu Cortex-M4 --pd "__EVAL SETA 1" -g --apcs=interwork -I D:\Keil\ARM\RV31\Inc -I D:\Keil\ARM\CMSIS\Include -I D:\Keil\ARM\Inc\Luminary --list "PLL.lst" --xref -o "PLL.o" --depend "PLL.d")
+F (.\PointerTrafficLight.s)(0x519966D0)(--cpu Cortex-M4 --pd "__EVAL SETA 1" -g --apcs=interwork -I D:\Keil\ARM\RV31\Inc -I D:\Keil\ARM\CMSIS\Include -I D:\Keil\ARM\Inc\Luminary --list "PointerTrafficLight.lst" --xref -o "PointerTrafficLight.o" --depend "PointerTrafficLight.d")

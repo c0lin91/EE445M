@@ -1,0 +1,100 @@
+
+
+
+ARM Macro Assembler    Page 1 
+
+
+    1 00000000                 THUMB
+    2 00000000                 AREA             DATA, ALIGN=2
+    3 00000000 00 00 00 
+              00       M       SPACE            4
+    4 00000004                 ALIGN
+    5 00000004                 AREA             |.text|, CODE, READONLY, ALIGN=
+2
+    6 00000000                 EXPORT           Random_Init
+    7 00000000                 EXPORT           Random
+    8 00000000         Random_Init
+    9 00000000 4A06            LDR              R2,=M       ; R4 = &M, R4 point
+                                                            s to M
+   10 00000002 F04F 0001       MOV              R0,#1       ; Initial seed
+   11 00000006 6010            STR              R0,[R2]     ; M=1
+   12 00000008 4770            BX               LR
+   13 0000000A         ;------------Random------------
+   14 0000000A         ; Return R0= random number
+   15 0000000A         ; Linear congruential generator 
+   16 0000000A         ; from Numerical Recipes by Press et al.
+   17 0000000A 4A04    Random  LDR              R2,=M       ; R2 = &M, R4 point
+                                                            s to M
+   18 0000000C 6810            LDR              R0,[R2]     ; R0=M
+   19 0000000E 4904            LDR              R1,=1664525
+   20 00000010 FB00 F001       MUL              R0,R0,R1    ; R0 = 1664525*M
+   21 00000014 4903            LDR              R1,=1013904223
+   22 00000016 4408            ADD              R0,R1       ; 1664525*M+1013904
+                                                            223 
+   23 00000018 6010            STR              R0,[R2]     ; store M
+   24 0000001A 4770            BX               LR
+   25 0000001C                 ALIGN
+   26 0000001C                 END
+              00000000 
+              0019660D 
+              3C6EF35F 
+Command Line: --debug --xref --cpu=Cortex-M4.fp --apcs=interwork --depend=rando
+m.d -orandom.o -I../ -ID:\Keil\ARM\RV31\Inc -ID:\Keil\ARM\CMSIS\Include -ID:\Ke
+il\ARM\Inc\TI\TM4C123 --predefine="__EVAL SETA 1" --predefine="__MICROLIB SETA 
+1" --list=random.lst random.s
+
+
+
+ARM Macro Assembler    Page 1 Alphabetic symbol ordering
+Relocatable symbols
+
+DATA 00000000
+
+Symbol: DATA
+   Definitions
+      At line 2 in file random.s
+   Uses
+      None
+Comment: DATA unused
+M 00000000
+
+Symbol: M
+   Definitions
+      At line 3 in file random.s
+   Uses
+      At line 9 in file random.s
+      At line 17 in file random.s
+
+2 symbols
+
+
+
+ARM Macro Assembler    Page 1 Alphabetic symbol ordering
+Relocatable symbols
+
+.text 00000000
+
+Symbol: .text
+   Definitions
+      At line 5 in file random.s
+   Uses
+      None
+Comment: .text unused
+Random 0000000A
+
+Symbol: Random
+   Definitions
+      At line 17 in file random.s
+   Uses
+      At line 7 in file random.s
+Comment: Random used once
+Random_Init 00000000
+
+Symbol: Random_Init
+   Definitions
+      At line 8 in file random.s
+   Uses
+      At line 6 in file random.s
+Comment: Random_Init used once
+3 symbols
+340 symbols in table

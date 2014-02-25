@@ -1,0 +1,274 @@
+
+
+
+ARM Macro Assembler    Page 1 
+
+
+    1 00000000         ; SysTickInts.s
+    2 00000000         ; Runs on LM4F120
+    3 00000000         ; Use the SysTick timer to request interrupts at a parti
+                       cular period.
+    4 00000000         ; Daniel Valvano
+    5 00000000         ; November 6, 2012
+    6 00000000         
+    7 00000000         ;  This example accompanies the book
+    8 00000000         ;   "Embedded Systems: Introduction to ARM Cortex M Micr
+                       ocontrollers"
+    9 00000000         ;   ISBN: 978-1469998749, Jonathan Valvano, copyright (c
+                       ) 2013
+   10 00000000         ;   Volume 1, Program 9.7
+   11 00000000         
+   12 00000000         ;   "Embedded Systems: Real Time Interfacing to ARM Cort
+                       ex M Microcontrollers",
+   13 00000000         ;   ISBN: 978-1463590154, Jonathan Valvano, copyright (c
+                       ) 2013
+   14 00000000         ;   Volume 2, Program 5.12, section 5.7
+   15 00000000         ;
+   16 00000000         ;Copyright 2013 by Jonathan W. Valvano, valvano@mail.ute
+                       xas.edu
+   17 00000000         ;   You may use, edit, run or distribute this file
+   18 00000000         ;   as long as the above copyright notice remains
+   19 00000000         ;THIS SOFTWARE IS PROVIDED "AS IS".  NO WARRANTIES, WHET
+                       HER EXPRESS, IMPLIED
+   20 00000000         ;OR STATUTORY, INCLUDING, BUT NOT LIMITED TO, IMPLIED WA
+                       RRANTIES OF
+   21 00000000         ;MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE AP
+                       PLY TO THIS SOFTWARE.
+   22 00000000         ;VALVANO SHALL NOT, IN ANY CIRCUMSTANCES, BE LIABLE FOR 
+                       SPECIAL, INCIDENTAL,
+   23 00000000         ;OR CONSEQUENTIAL DAMAGES, FOR ANY REASON WHATSOEVER.
+   24 00000000         ;For more information about my classes, my research, and
+                        my books, see
+   25 00000000         ;http://users.ece.utexas.edu/~valvano/
+   26 00000000         
+   27 00000000 E000E010 
+                       NVIC_ST_CTRL_R
+                               EQU              0xE000E010
+   28 00000000 E000E014 
+                       NVIC_ST_RELOAD_R
+                               EQU              0xE000E014
+   29 00000000 E000E018 
+                       NVIC_ST_CURRENT_R
+                               EQU              0xE000E018
+   30 00000000 00010000 
+                       NVIC_ST_CTRL_COUNT
+                               EQU              0x00010000  ; Count flag
+   31 00000000 00000004 
+                       NVIC_ST_CTRL_CLK_SRC
+                               EQU              0x00000004  ; Clock Source
+   32 00000000 00000002 
+                       NVIC_ST_CTRL_INTEN
+                               EQU              0x00000002  ; Interrupt enable
+   33 00000000 00000001 
+                       NVIC_ST_CTRL_ENABLE
+                               EQU              0x00000001  ; Counter mode
+   34 00000000 00FFFFFF 
+
+
+
+ARM Macro Assembler    Page 2 
+
+
+                       NVIC_ST_RELOAD_M
+                               EQU              0x00FFFFFF  ; Counter load valu
+                                                            e
+   35 00000000 E000ED20 
+                       NVIC_SYS_PRI3_R
+                               EQU              0xE000ED20  ; Sys. Handlers 12 
+                                                            to 15 Priority
+   36 00000000         
+   37 00000000                 AREA             |.text|, CODE, READONLY, ALIGN=
+2
+   38 00000000                 THUMB
+   39 00000000                 EXPORT           SysTick_Init
+   40 00000000         
+   41 00000000         ; **************SysTick_Init*********************
+   42 00000000         ; Initialize SysTick periodic interrupts, priority 2
+   43 00000000         ; Input: R0  interrupt period
+   44 00000000         ;        Units of period are 1/clockfreq
+   45 00000000         ;        Maximum is 2^24-1
+   46 00000000         ;        Minimum is determined by length of ISR
+   47 00000000         ; Output: none
+   48 00000000         ; Modifies: R0, R1, R2, R3
+   49 00000000         SysTick_Init
+   50 00000000         ; start critical section
+   51 00000000 F3EF 8310       MRS              R3, PRIMASK ; save old status
+   52 00000004 B672            CPSID            I           ; mask all (except 
+                                                            faults)
+   53 00000006         ; disable SysTick during setup
+   54 00000006 490C            LDR              R1, =NVIC_ST_CTRL_R ; R1 = &NVI
+                                                            C_ST_CTRL_R (pointe
+                                                            r)
+   55 00000008 F04F 0200       MOV              R2, #0
+   56 0000000C 600A            STR              R2, [R1]    ; disable SysTick
+   57 0000000E         ; maximum reload value
+   58 0000000E 490B            LDR              R1, =NVIC_ST_RELOAD_R ; R1 = &N
+                                                            VIC_ST_RELOAD_R (po
+                                                            inter)
+   59 00000010 F1A0 0001       SUB              R0, R0, #1  ; counts down from 
+                                                            RELOAD to 0
+   60 00000014 6008            STR              R0, [R1]    ; establish interru
+                                                            pt period
+   61 00000016         ; any write to current clears it
+   62 00000016 490A            LDR              R1, =NVIC_ST_CURRENT_R ; R1 = &
+                                                            NVIC_ST_CURRENT_R (
+                                                            pointer)
+   63 00000018 600A            STR              R2, [R1]    ; writing to counte
+                                                            r clears it
+   64 0000001A         ; set NVIC system interrupt 15 to priority 2
+   65 0000001A 490A            LDR              R1, =NVIC_SYS_PRI3_R ; R1 = &NV
+                                                            IC_SYS_PRI3_R (poin
+                                                            ter)
+   66 0000001C 680A            LDR              R2, [R1]    ; friendly access
+   67 0000001E F022 427F       AND              R2, R2, #0x00FFFFFF ; R2 = R2&0
+                                                            x00FFFFFF (clear in
+                                                            terrupt 15 priority
+                                                            )
+   68 00000022 F042 4280       ORR              R2, R2, #0x40000000 ; R2 = R2|0
+                                                            x40000000 (interrup
+                                                            t 15 priority is in
+                                                             bits 31-29)
+
+
+
+ARM Macro Assembler    Page 3 
+
+
+   69 00000026 600A            STR              R2, [R1]    ; set SysTick to pr
+                                                            iority 2
+   70 00000028         ; enable SysTick with core clock
+   71 00000028 4903            LDR              R1, =NVIC_ST_CTRL_R ; R1 = &NVI
+                                                            C_ST_CTRL_R
+   72 0000002A         ; ENABLE SysTick (bit 0), INTEN enable interrupts (bit 1
+                       ), and CLK_SRC (bit 2) is internal
+   73 0000002A F04F 0207       MOV              R2, #(NVIC_ST_CTRL_ENABLE+NVIC_
+ST_CTRL_INTEN+NVIC_ST_CTRL_CLK_SRC)
+   74 0000002E 600A            STR              R2, [R1]    ; store a 7 to NVIC
+                                                            _ST_CTRL_R
+   75 00000030         ; end critical section
+   76 00000030 F383 8810       MSR              PRIMASK, R3 ; restore old statu
+                                                            s
+   77 00000034 4770            BX               LR          ; return
+   78 00000036         
+   79 00000036 00 00           ALIGN                        ; make sure the end
+                                                             of this section is
+                                                             aligned
+   80 00000038                 END                          ; end of file
+              E000E010 
+              E000E014 
+              E000E018 
+              E000ED20 
+Command Line: --debug --xref --cpu=Cortex-M4 --apcs=interwork --depend=SysTickI
+nts.d -oSysTickInts.o -ID:\Keil\ARM\RV31\Inc -ID:\Keil\ARM\CMSIS\Include -ID:\K
+eil\ARM\Inc\Luminary --predefine="__EVAL SETA 1" --list=SysTickInts.lst SysTick
+Ints.s
+
+
+
+ARM Macro Assembler    Page 1 Alphabetic symbol ordering
+Relocatable symbols
+
+.text 00000000
+
+Symbol: .text
+   Definitions
+      At line 37 in file SysTickInts.s
+   Uses
+      None
+Comment: .text unused
+SysTick_Init 00000000
+
+Symbol: SysTick_Init
+   Definitions
+      At line 49 in file SysTickInts.s
+   Uses
+      At line 39 in file SysTickInts.s
+Comment: SysTick_Init used once
+2 symbols
+
+
+
+ARM Macro Assembler    Page 1 Alphabetic symbol ordering
+Absolute symbols
+
+NVIC_ST_CTRL_CLK_SRC 00000004
+
+Symbol: NVIC_ST_CTRL_CLK_SRC
+   Definitions
+      At line 31 in file SysTickInts.s
+   Uses
+      At line 73 in file SysTickInts.s
+Comment: NVIC_ST_CTRL_CLK_SRC used once
+NVIC_ST_CTRL_COUNT 00010000
+
+Symbol: NVIC_ST_CTRL_COUNT
+   Definitions
+      At line 30 in file SysTickInts.s
+   Uses
+      None
+Comment: NVIC_ST_CTRL_COUNT unused
+NVIC_ST_CTRL_ENABLE 00000001
+
+Symbol: NVIC_ST_CTRL_ENABLE
+   Definitions
+      At line 33 in file SysTickInts.s
+   Uses
+      At line 73 in file SysTickInts.s
+Comment: NVIC_ST_CTRL_ENABLE used once
+NVIC_ST_CTRL_INTEN 00000002
+
+Symbol: NVIC_ST_CTRL_INTEN
+   Definitions
+      At line 32 in file SysTickInts.s
+   Uses
+      At line 73 in file SysTickInts.s
+Comment: NVIC_ST_CTRL_INTEN used once
+NVIC_ST_CTRL_R E000E010
+
+Symbol: NVIC_ST_CTRL_R
+   Definitions
+      At line 27 in file SysTickInts.s
+   Uses
+      At line 54 in file SysTickInts.s
+      At line 71 in file SysTickInts.s
+
+NVIC_ST_CURRENT_R E000E018
+
+Symbol: NVIC_ST_CURRENT_R
+   Definitions
+      At line 29 in file SysTickInts.s
+   Uses
+      At line 62 in file SysTickInts.s
+Comment: NVIC_ST_CURRENT_R used once
+NVIC_ST_RELOAD_M 00FFFFFF
+
+Symbol: NVIC_ST_RELOAD_M
+   Definitions
+      At line 34 in file SysTickInts.s
+   Uses
+      None
+Comment: NVIC_ST_RELOAD_M unused
+NVIC_ST_RELOAD_R E000E014
+
+
+
+
+ARM Macro Assembler    Page 2 Alphabetic symbol ordering
+Absolute symbols
+
+Symbol: NVIC_ST_RELOAD_R
+   Definitions
+      At line 28 in file SysTickInts.s
+   Uses
+      At line 58 in file SysTickInts.s
+Comment: NVIC_ST_RELOAD_R used once
+NVIC_SYS_PRI3_R E000ED20
+
+Symbol: NVIC_SYS_PRI3_R
+   Definitions
+      At line 35 in file SysTickInts.s
+   Uses
+      At line 65 in file SysTickInts.s
+Comment: NVIC_SYS_PRI3_R used once
+9 symbols
+344 symbols in table

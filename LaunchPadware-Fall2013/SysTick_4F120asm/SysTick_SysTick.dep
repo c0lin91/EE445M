@@ -1,0 +1,5 @@
+Dependencies for Project 'SysTick', Target 'SysTick': (DO NOT MODIFY !)
+F (.\Startup.s)(0x519857CE)(--cpu Cortex-M4 --pd "__EVAL SETA 1" -g --apcs=interwork -I D:\Keil\ARM\RV31\Inc -I D:\Keil\ARM\CMSIS\Include -I D:\Keil\ARM\Inc\Luminary --list "Startup.lst" --xref -o "Startup.o" --depend "Startup.d")
+F (.\SysTick.s)(0x519857DE)(--cpu Cortex-M4 --pd "__EVAL SETA 1" -g --apcs=interwork -I D:\Keil\ARM\RV31\Inc -I D:\Keil\ARM\CMSIS\Include -I D:\Keil\ARM\Inc\Luminary --list "SysTick.lst" --xref -o "SysTick.o" --depend "SysTick.d")
+F (.\SysTickTestMain.s)(0x519857CE)(--cpu Cortex-M4 --pd "__EVAL SETA 1" -g --apcs=interwork -I D:\Keil\ARM\RV31\Inc -I D:\Keil\ARM\CMSIS\Include -I D:\Keil\ARM\Inc\Luminary --list "SysTickTestMain.lst" --xref -o "SysTickTestMain.o" --depend "SysTickTestMain.d")
+F (.\PLL.s)(0x519857CE)(--cpu Cortex-M4 --pd "__EVAL SETA 1" -g --apcs=interwork -I D:\Keil\ARM\RV31\Inc -I D:\Keil\ARM\CMSIS\Include -I D:\Keil\ARM\Inc\Luminary --list "PLL.lst" --xref -o "PLL.o" --depend "PLL.d")

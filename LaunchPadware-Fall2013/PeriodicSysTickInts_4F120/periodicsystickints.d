@@ -1,0 +1,10 @@
+.\periodicsystickints.o: PeriodicSysTickInts.c
+.\periodicsystickints.o: C:\Keil\ARM\ARMCC\bin\..\include\stdlib.h
+.\periodicsystickints.o: C:\Keil\ARM\ARMCC\bin\..\include\stdio.h
+.\periodicsystickints.o: C:\Keil\ARM\ARMCC\bin\..\include\string.h
+.\periodicsystickints.o: DAC.h
+.\periodicsystickints.o: SysTickInts.h
+.\periodicsystickints.o: PLL.h
+.\periodicsystickints.o: fftw3.h
+.\periodicsystickints.o: C:\Keil\ARM\ARMCC\bin\..\include\stddef.h
+.\periodicsystickints.o: C:\Keil\ARM\Inc\Luminary\lm4f120h5qr.h

@@ -1,0 +1,10 @@
+Dependencies for Project 'UART2', Target 'UART2': (DO NOT MODIFY !)
+F (.\startup.s)(0x52239AEB)(--cpu Cortex-M4 --pd "__EVAL SETA 1" -g --apcs=interwork -I C:\Keil\ARM\RV31\INC-I C:\Keil\ARM\CMSIS\Include-I C:\Keil\ARM\Inc\Luminary--list .\startup.lst --xref -o .\startup.o --depend .\startup.d)
+F (.\UART2.c)(0x52239AE9)(-c --cpu Cortex-M4 -D__EVAL -g -O0 --apcs=interwork --split_sections --signed_chars -I.. -I..\..\..-I C:\Keil\ARM\RV31\INC-I C:\Keil\ARM\CMSIS\Include-I C:\Keil\ARM\Inc\Luminary-Drvmdk -DPART_LM4F120H5QR -o .\uart2.o --omf_browse .\uart2.crf --depend .\uart2.d)
+I (C:\LaunchPadware-Fall2013\UART2_4F120\FIFO.h)(0x52239AE9)
+I (C:\LaunchPadware-Fall2013\UART2_4F120\UART2.h)(0x52239AE9)
+F (.\UART2TestMain.c)(0x52239AEA)(-c --cpu Cortex-M4 -D__EVAL -g -O0 --apcs=interwork --split_sections --signed_chars -I.. -I..\..\..-I C:\Keil\ARM\RV31\INC-I C:\Keil\ARM\CMSIS\Include-I C:\Keil\ARM\Inc\Luminary-Drvmdk -DPART_LM4F120H5QR -o .\uart2testmain.o --omf_browse .\uart2testmain.crf --depend .\uart2testmain.d)
+I (C:\LaunchPadware-Fall2013\UART2_4F120\PLL.h)(0x52239AE9)
+I (C:\LaunchPadware-Fall2013\UART2_4F120\UART2.h)(0x52239AE9)
+F (.\PLL.c)(0x52239AE9)(-c --cpu Cortex-M4 -D__EVAL -g -O0 --apcs=interwork --split_sections --signed_chars -I.. -I..\..\..-I C:\Keil\ARM\RV31\INC-I C:\Keil\ARM\CMSIS\Include-I C:\Keil\ARM\Inc\Luminary-Drvmdk -DPART_LM4F120H5QR -o .\pll.o --omf_browse .\pll.crf --depend .\pll.d)
+I (C:\LaunchPadware-Fall2013\UART2_4F120\PLL.h)(0x52239AE9)

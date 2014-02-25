@@ -1,0 +1,26 @@
+Dependencies for Project 'PeriodicSysTickInts', Target 'PeriodicSysTickInts': (DO NOT MODIFY !)
+F (.\startup.s)(0x52422A20)(--cpu Cortex-M4 --pd "__EVAL SETA 1" -g --apcs=interwork -I C:\Keil\ARM\RV31\INC-I C:\Keil\ARM\CMSIS\Include-I C:\Keil\ARM\Inc\Luminary--list .\startup.lst --xref -o .\startup.o --depend .\startup.d)
+F (.\PeriodicSysTickInts.c)(0x5246277C)(-c --cpu Cortex-M4 -D__EVAL -g -O0 --apcs=interwork --split_sections -I..\..\fftw-3.3.3-dll32 -I..\PeriodicSysTickInts_4F120 -I.. -I..\..\.. -I..\..\fftw-3.3.3-dll32 -I..\PeriodicSysTickInts_4F120-I C:\Keil\ARM\RV31\INC-I C:\Keil\ARM\CMSIS\Include-I C:\Keil\ARM\Inc\Luminary-Drvmdk -DPART_LM4F120H5QR -o .\periodicsystickints.o --omf_browse .\periodicsystickints.crf --depend .\periodicsystickints.d)
+I (C:\Keil\ARM\ARMCC\include\stdlib.h)(0x51C86004)
+I (C:\Keil\ARM\ARMCC\include\stdio.h)(0x51C86004)
+I (C:\Keil\ARM\ARMCC\include\string.h)(0x51C86004)
+I (C:\Users\Prachi Gupta\Dropbox\445M\LaunchPadware-Fall2013\PeriodicSysTickInts_4F120\DAC.h)(0x52461E9D)
+I (C:\Users\Prachi Gupta\Dropbox\445M\LaunchPadware-Fall2013\PeriodicSysTickInts_4F120\SysTickInts.h)(0x519AF380)
+I (C:\Users\Prachi Gupta\Dropbox\445M\LaunchPadware-Fall2013\PeriodicSysTickInts_4F120\PLL.h)(0x519165AA)
+I (C:\Users\Prachi Gupta\Dropbox\445M\LaunchPadware-Fall2013\PeriodicSysTickInts_4F120\fftw3.h)(0x52420A80)
+I (C:\Keil\ARM\ARMCC\include\stddef.h)(0x51C86004)
+I (C:\Keil\ARM\Inc\Luminary\lm4f120h5qr.h)(0x51C85936)
+F (.\PLL.c)(0x519AF380)(-c --cpu Cortex-M4 -D__EVAL -g -O0 --apcs=interwork --split_sections -I..\..\fftw-3.3.3-dll32 -I..\PeriodicSysTickInts_4F120 -I.. -I..\..\.. -I..\..\fftw-3.3.3-dll32 -I..\PeriodicSysTickInts_4F120-I C:\Keil\ARM\RV31\INC-I C:\Keil\ARM\CMSIS\Include-I C:\Keil\ARM\Inc\Luminary-Drvmdk -DPART_LM4F120H5QR -o .\pll.o --omf_browse .\pll.crf --depend .\pll.d)
+I (C:\Users\Prachi Gupta\Dropbox\445M\LaunchPadware-Fall2013\PeriodicSysTickInts_4F120\PLL.h)(0x519165AA)
+F (.\ADC.c)(0x52463217)(-c --cpu Cortex-M4 -D__EVAL -g -O0 --apcs=interwork --split_sections -I..\..\fftw-3.3.3-dll32 -I..\PeriodicSysTickInts_4F120 -I.. -I..\..\.. -I..\..\fftw-3.3.3-dll32 -I..\PeriodicSysTickInts_4F120-I C:\Keil\ARM\RV31\INC-I C:\Keil\ARM\CMSIS\Include-I C:\Keil\ARM\Inc\Luminary-Drvmdk -DPART_LM4F120H5QR -o .\adc.o --omf_browse .\adc.crf --depend .\adc.d)
+I (C:\Keil\ARM\Inc\Luminary\lm4f120h5qr.h)(0x51C85936)
+I (C:\Users\Prachi Gupta\Dropbox\445M\LaunchPadware-Fall2013\PeriodicSysTickInts_4F120\ADCSWTrigger.h)(0x517EF43E)
+I (C:\Users\Prachi Gupta\Dropbox\445M\LaunchPadware-Fall2013\PeriodicSysTickInts_4F120\DAC.h)(0x52461E9D)
+F (.\ADCSWTrigger.h)(0x517EF43E)()
+F (.\ADCSWTrigger.c)(0x5242364A)(-c --cpu Cortex-M4 -D__EVAL -g -O0 --apcs=interwork --split_sections -I..\..\fftw-3.3.3-dll32 -I..\PeriodicSysTickInts_4F120 -I.. -I..\..\.. -I..\..\fftw-3.3.3-dll32 -I..\PeriodicSysTickInts_4F120-I C:\Keil\ARM\RV31\INC-I C:\Keil\ARM\CMSIS\Include-I C:\Keil\ARM\Inc\Luminary-Drvmdk -DPART_LM4F120H5QR -o .\adcswtrigger.o --omf_browse .\adcswtrigger.crf --depend .\adcswtrigger.d)
+I (C:\Users\Prachi Gupta\Dropbox\445M\LaunchPadware-Fall2013\PeriodicSysTickInts_4F120\ADCSWTrigger.h)(0x517EF43E)
+I (C:\Keil\ARM\Inc\Luminary\lm4f120h5qr.h)(0x51C85936)
+F (.\fftw3.h)(0x52420A80)()
+F (.\libfftw3-3.lib)(0x5243730A)()
+F (.\DAC.c)(0x524630D2)(-c --cpu Cortex-M4 -D__EVAL -g -O0 --apcs=interwork --split_sections -I..\..\fftw-3.3.3-dll32 -I..\PeriodicSysTickInts_4F120 -I.. -I..\..\.. -I..\..\fftw-3.3.3-dll32 -I..\PeriodicSysTickInts_4F120-I C:\Keil\ARM\RV31\INC-I C:\Keil\ARM\CMSIS\Include-I C:\Keil\ARM\Inc\Luminary-Drvmdk -DPART_LM4F120H5QR -o .\dac.o --omf_browse .\dac.crf --depend .\dac.d)
+F (.\DAC.h)(0x52461E9D)()

@@ -1,0 +1,332 @@
+
+
+
+ARM Macro Assembler    Page 1 
+
+
+    1 00000000         ; SysTickTestMain.s
+    2 00000000         ; Runs on LM4F120
+    3 00000000         ; Test the SysTick functions by activating the PLL, init
+                       ializing the
+    4 00000000         ; SysTick timer, and flashing an LED at a constant rate.
+                       
+    5 00000000         ; Daniel Valvano
+    6 00000000         ; February 22, 2012
+    7 00000000         
+    8 00000000         ;  This example accompanies the book
+    9 00000000         ;  "Embedded Systems: Introduction to ARM Cortex M Micro
+                       controllers",
+   10 00000000         ;  ISBN: 978-1469998749, Jonathan Valvano, copyright (c)
+                        2013
+   11 00000000         ;  Program 4.6, Section 4.3
+   12 00000000         ;  Program 4.7, Section 4.4
+   13 00000000         ;
+   14 00000000         ;Copyright 2013 by Jonathan W. Valvano, valvano@mail.ute
+                       xas.edu
+   15 00000000         ;   You may use, edit, run or distribute this file
+   16 00000000         ;   as long as the above copyright notice remains
+   17 00000000         ;THIS SOFTWARE IS PROVIDED "AS IS".  NO WARRANTIES, WHET
+                       HER EXPRESS, IMPLIED
+   18 00000000         ;OR STATUTORY, INCLUDING, BUT NOT LIMITED TO, IMPLIED WA
+                       RRANTIES OF
+   19 00000000         ;MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE AP
+                       PLY TO THIS SOFTWARE.
+   20 00000000         ;VALVANO SHALL NOT, IN ANY CIRCUMSTANCES, BE LIABLE FOR 
+                       SPECIAL, INCIDENTAL,
+   21 00000000         ;OR CONSEQUENTIAL DAMAGES, FOR ANY REASON WHATSOEVER.
+   22 00000000         ;For more information about my classes, my research, and
+                        my books, see
+   23 00000000         ;http://users.ece.utexas.edu/~valvano/
+   24 00000000         
+   25 00000000                 IMPORT           SysTick_Init
+   26 00000000                 IMPORT           SysTick_Wait
+   27 00000000                 IMPORT           SysTick_Wait10ms
+   28 00000000                 IMPORT           PLL_Init
+   29 00000000         
+   30 00000000 40025010 
+                       GPIO_PORTF2
+                               EQU              0x40025010
+   31 00000000 40025400 
+                       GPIO_PORTF_DIR_R
+                               EQU              0x40025400
+   32 00000000 40025420 
+                       GPIO_PORTF_AFSEL_R
+                               EQU              0x40025420
+   33 00000000 4002551C 
+                       GPIO_PORTF_DEN_R
+                               EQU              0x4002551C
+   34 00000000 40025528 
+                       GPIO_PORTF_AMSEL_R
+                               EQU              0x40025528
+   35 00000000 4002552C 
+                       GPIO_PORTF_PCTL_R
+                               EQU              0x4002552C
+   36 00000000 400FE108 
+                       SYSCTL_RCGC2_R
+
+
+
+ARM Macro Assembler    Page 2 
+
+
+                               EQU              0x400FE108
+   37 00000000 00000020 
+                       SYSCTL_RCGC2_GPIOF
+                               EQU              0x00000020  ; port F Clock Gati
+                                                            ng Control
+   38 00000000         
+   39 00000000                 AREA             |.text|, CODE, READONLY, ALIGN=
+2
+   40 00000000                 THUMB
+   41 00000000                 EXPORT           Start
+   42 00000000         Start
+   43 00000000 F7FF FFFE       BL               PLL_Init    ; set system clock 
+                                                            to 50 MHz
+   44 00000004 F7FF FFFE       BL               SysTick_Init ; initialize SysTi
+                                                            ck timer
+   45 00000008         ; activate clock for Port F
+   46 00000008 4915            LDR              R1, =SYSCTL_RCGC2_R ; R1 = &SYS
+                                                            CTL_RCGC2_R
+   47 0000000A 6808            LDR              R0, [R1]    ; R0 = [R1]
+   48 0000000C F040 0020       ORR              R0, R0, #SYSCTL_RCGC2_GPIOF ; R
+                                                            0 = R0|SYSCTL_RCGC2
+                                                            _GPIOF
+   49 00000010 6008            STR              R0, [R1]    ; [R1] = R0
+   50 00000012 BF00            NOP
+   51 00000014 BF00            NOP                          ; allow time to fin
+                                                            ish activating
+   52 00000016         ; set direction register
+   53 00000016 4913            LDR              R1, =GPIO_PORTF_DIR_R ; R1 = &G
+                                                            PIO_PORTF_DIR_R
+   54 00000018 6808            LDR              R0, [R1]    ; R0 = [R1]
+   55 0000001A F040 0004       ORR              R0, R0, #0x04 ; R0 = R0|0x04 (m
+                                                            ake PF2 output; PF2
+                                                             built-in blue LED)
+                                                            
+   56 0000001E 6008            STR              R0, [R1]    ; [R1] = R0
+   57 00000020         ; regular port function
+   58 00000020 4911            LDR              R1, =GPIO_PORTF_AFSEL_R ; R1 = 
+                                                            &GPIO_PORTF_AFSEL_R
+                                                            
+   59 00000022 6808            LDR              R0, [R1]    ; R0 = [R1]
+   60 00000024 F020 0004       BIC              R0, R0, #0x04 ; R0 = R0&~0x04 (
+                                                            disable alt funct o
+                                                            n PF2)
+   61 00000028 6008            STR              R0, [R1]    ; [R1] = R0
+   62 0000002A         ; enable digital port
+   63 0000002A 4910            LDR              R1, =GPIO_PORTF_DEN_R ; R1 = &G
+                                                            PIO_PORTF_DEN_R
+   64 0000002C 6808            LDR              R0, [R1]    ; R0 = [R1]
+   65 0000002E F040 0004       ORR              R0, R0, #0x04 ; R0 = R0|0x04 (e
+                                                            nable digital I/O o
+                                                            n PF2)
+   66 00000032 6008            STR              R0, [R1]    ; [R1] = R0
+   67 00000034         ; configure as GPIO
+   68 00000034 490E            LDR              R1, =GPIO_PORTF_PCTL_R ; R1 = &
+                                                            GPIO_PORTF_PCTL_R
+   69 00000036 6808            LDR              R0, [R1]    ; R0 = [R1]
+   70 00000038 F420 6070       BIC              R0, R0, #0x00000F00 ; R0 = R0&~
+                                                            0x00000F00 (clear p
+                                                            ort control field f
+
+
+
+ARM Macro Assembler    Page 3 
+
+
+                                                            or PF2)
+   71 0000003C F100 0000       ADD              R0, R0, #0x00000000 ; R0 = R0+0
+                                                            x00000000 (configur
+                                                            e PF2 as GPIO)
+   72 00000040 6008            STR              R0, [R1]    ; [R1] = R0
+   73 00000042         ; disable analog functionality
+   74 00000042 490C            LDR              R1, =GPIO_PORTF_AMSEL_R ; R1 = 
+                                                            &GPIO_PORTF_AMSEL_R
+                                                            
+   75 00000044 F04F 0000       MOV              R0, #0      ; R0 = 0 (disable a
+                                                            nalog functionality
+                                                             on PF)
+   76 00000048 6008            STR              R0, [R1]    ; [R1] = R0
+   77 0000004A 4C0B            LDR              R4, =GPIO_PORTF2 
+                                                            ; R4 = &GPIO_PORTF2
+                                                            
+   78 0000004C 6825            LDR              R5, [R4]    ; R5 = [R4]
+   79 0000004E         loop
+   80 0000004E F085 0504       EOR              R5, R5, #0x04 ; R5 = R5^0x04 (t
+                                                            oggle PF2)
+   81 00000052 6025            STR              R5, [R4]    ; [R4] = R5
+   82 00000054         ;    MOV R0, #1                      ; approximately 720
+                        ns
+   83 00000054         ;    MOV R0, #2                      ; approximately 720
+                        ns
+   84 00000054         ;    MOV R0, #10000                  ; approximately 0.2
+                        ms
+   85 00000054         ;    BL  SysTick_Wait
+   86 00000054 F04F 0001       MOV              R0, #1      ; approximately 10 
+                                                            ms
+   87 00000058 F7FF FFFE       BL               SysTick_Wait10ms
+   88 0000005C E7F7            B                loop
+   89 0000005E         
+   90 0000005E 00 00           ALIGN                        ; make sure the end
+                                                             of this section is
+                                                             aligned
+   91 00000060                 END                          ; end of file
+              400FE108 
+              40025400 
+              40025420 
+              4002551C 
+              4002552C 
+              40025528 
+              40025010 
+Command Line: --debug --xref --cpu=Cortex-M4 --apcs=interwork --depend=SysTickT
+estMain.d -oSysTickTestMain.o -ID:\Keil\ARM\RV31\Inc -ID:\Keil\ARM\CMSIS\Includ
+e -ID:\Keil\ARM\Inc\Luminary --predefine="__EVAL SETA 1" --list=SysTickTestMain
+.lst SysTickTestMain.s
+
+
+
+ARM Macro Assembler    Page 1 Alphabetic symbol ordering
+Relocatable symbols
+
+.text 00000000
+
+Symbol: .text
+   Definitions
+      At line 39 in file SysTickTestMain.s
+   Uses
+      None
+Comment: .text unused
+Start 00000000
+
+Symbol: Start
+   Definitions
+      At line 42 in file SysTickTestMain.s
+   Uses
+      At line 41 in file SysTickTestMain.s
+Comment: Start used once
+loop 0000004E
+
+Symbol: loop
+   Definitions
+      At line 79 in file SysTickTestMain.s
+   Uses
+      At line 88 in file SysTickTestMain.s
+Comment: loop used once
+3 symbols
+
+
+
+ARM Macro Assembler    Page 1 Alphabetic symbol ordering
+Absolute symbols
+
+GPIO_PORTF2 40025010
+
+Symbol: GPIO_PORTF2
+   Definitions
+      At line 30 in file SysTickTestMain.s
+   Uses
+      At line 77 in file SysTickTestMain.s
+Comment: GPIO_PORTF2 used once
+GPIO_PORTF_AFSEL_R 40025420
+
+Symbol: GPIO_PORTF_AFSEL_R
+   Definitions
+      At line 32 in file SysTickTestMain.s
+   Uses
+      At line 58 in file SysTickTestMain.s
+Comment: GPIO_PORTF_AFSEL_R used once
+GPIO_PORTF_AMSEL_R 40025528
+
+Symbol: GPIO_PORTF_AMSEL_R
+   Definitions
+      At line 34 in file SysTickTestMain.s
+   Uses
+      At line 74 in file SysTickTestMain.s
+Comment: GPIO_PORTF_AMSEL_R used once
+GPIO_PORTF_DEN_R 4002551C
+
+Symbol: GPIO_PORTF_DEN_R
+   Definitions
+      At line 33 in file SysTickTestMain.s
+   Uses
+      At line 63 in file SysTickTestMain.s
+Comment: GPIO_PORTF_DEN_R used once
+GPIO_PORTF_DIR_R 40025400
+
+Symbol: GPIO_PORTF_DIR_R
+   Definitions
+      At line 31 in file SysTickTestMain.s
+   Uses
+      At line 53 in file SysTickTestMain.s
+Comment: GPIO_PORTF_DIR_R used once
+GPIO_PORTF_PCTL_R 4002552C
+
+Symbol: GPIO_PORTF_PCTL_R
+   Definitions
+      At line 35 in file SysTickTestMain.s
+   Uses
+      At line 68 in file SysTickTestMain.s
+Comment: GPIO_PORTF_PCTL_R used once
+SYSCTL_RCGC2_GPIOF 00000020
+
+Symbol: SYSCTL_RCGC2_GPIOF
+   Definitions
+      At line 37 in file SysTickTestMain.s
+   Uses
+      At line 48 in file SysTickTestMain.s
+Comment: SYSCTL_RCGC2_GPIOF used once
+SYSCTL_RCGC2_R 400FE108
+
+Symbol: SYSCTL_RCGC2_R
+
+
+
+ARM Macro Assembler    Page 2 Alphabetic symbol ordering
+Absolute symbols
+
+   Definitions
+      At line 36 in file SysTickTestMain.s
+   Uses
+      At line 46 in file SysTickTestMain.s
+Comment: SYSCTL_RCGC2_R used once
+8 symbols
+
+
+
+ARM Macro Assembler    Page 1 Alphabetic symbol ordering
+External symbols
+
+PLL_Init 00000000
+
+Symbol: PLL_Init
+   Definitions
+      At line 28 in file SysTickTestMain.s
+   Uses
+      At line 43 in file SysTickTestMain.s
+Comment: PLL_Init used once
+SysTick_Init 00000000
+
+Symbol: SysTick_Init
+   Definitions
+      At line 25 in file SysTickTestMain.s
+   Uses
+      At line 44 in file SysTickTestMain.s
+Comment: SysTick_Init used once
+SysTick_Wait 00000000
+
+Symbol: SysTick_Wait
+   Definitions
+      At line 26 in file SysTickTestMain.s
+   Uses
+      None
+Comment: SysTick_Wait unused
+SysTick_Wait10ms 00000000
+
+Symbol: SysTick_Wait10ms
+   Definitions
+      At line 27 in file SysTickTestMain.s
+   Uses
+      At line 87 in file SysTickTestMain.s
+Comment: SysTick_Wait10ms used once
+4 symbols
+348 symbols in table

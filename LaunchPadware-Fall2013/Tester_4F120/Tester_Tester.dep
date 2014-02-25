@@ -1,0 +1,16 @@
+Dependencies for Project 'Tester', Target 'Tester': (DO NOT MODIFY !)
+F (.\startup.s)(0x5223A8F8)(--cpu Cortex-M4.fp --pd "__EVAL SETA 1" -g --apcs=interwork --pd "__MICROLIB SETA 1"-I C:\Keil\ARM\RV31\INC-I C:\Keil\ARM\CMSIS\Include-I C:\Keil\ARM\Inc\Luminary--list .\startup.lst --xref -o .\startup.o --depend .\startup.d)
+F (.\ADCSWTrigger.c)(0x5223A8F6)(-c --cpu Cortex-M4.fp -D__EVAL -D__MICROLIB -g -O0 --apcs=interwork --split_sections --signed_chars -I.. -I..\..\..-I C:\Keil\ARM\RV31\INC-I C:\Keil\ARM\CMSIS\Include-I C:\Keil\ARM\Inc\Luminary-Drvmdk -DPART_LM4F120H5QR -o .\adcswtrigger.o --omf_browse .\adcswtrigger.crf --depend .\adcswtrigger.d)
+I (C:\LaunchPadware\Tester_4F120\ADCSWTrigger.h)(0x5223A8F6)
+I (C:\Keil\ARM\Inc\Luminary\lm4f120h5qr.h)(0x51C86746)
+F (.\PLL.c)(0x5223A8F6)(-c --cpu Cortex-M4.fp -D__EVAL -D__MICROLIB -g -O0 --apcs=interwork --split_sections --signed_chars -I.. -I..\..\..-I C:\Keil\ARM\RV31\INC-I C:\Keil\ARM\CMSIS\Include-I C:\Keil\ARM\Inc\Luminary-Drvmdk -DPART_LM4F120H5QR -o .\pll.o --omf_browse .\pll.crf --depend .\pll.d)
+I (C:\LaunchPadware\Tester_4F120\PLL.h)(0x5223A8F6)
+F (.\Tester.c)(0x5223A8F6)(-c --cpu Cortex-M4.fp -D__EVAL -D__MICROLIB -g -O0 --apcs=interwork --split_sections --signed_chars -I.. -I..\..\..-I C:\Keil\ARM\RV31\INC-I C:\Keil\ARM\CMSIS\Include-I C:\Keil\ARM\Inc\Luminary-Drvmdk -DPART_LM4F120H5QR -o .\tester.o --omf_browse .\tester.crf --depend .\tester.d)
+I (C:\LaunchPadware\Tester_4F120\ADCSWTrigger.h)(0x5223A8F6)
+I (C:\LaunchPadware\Tester_4F120\PLL.h)(0x5223A8F6)
+I (C:\LaunchPadware\Tester_4F120\Timer0.h)(0x5223A8F7)
+I (C:\LaunchPadware\Tester_4F120\UART2.h)(0x5223A8F7)
+F (.\Timer0.c)(0x5223A8F7)(-c --cpu Cortex-M4.fp -D__EVAL -D__MICROLIB -g -O0 --apcs=interwork --split_sections --signed_chars -I.. -I..\..\..-I C:\Keil\ARM\RV31\INC-I C:\Keil\ARM\CMSIS\Include-I C:\Keil\ARM\Inc\Luminary-Drvmdk -DPART_LM4F120H5QR -o .\timer0.o --omf_browse .\timer0.crf --depend .\timer0.d)
+F (.\UART2.c)(0x5223A8F7)(-c --cpu Cortex-M4.fp -D__EVAL -D__MICROLIB -g -O0 --apcs=interwork --split_sections --signed_chars -I.. -I..\..\..-I C:\Keil\ARM\RV31\INC-I C:\Keil\ARM\CMSIS\Include-I C:\Keil\ARM\Inc\Luminary-Drvmdk -DPART_LM4F120H5QR -o .\uart2.o --omf_browse .\uart2.crf --depend .\uart2.d)
+I (C:\LaunchPadware\Tester_4F120\FIFO.h)(0x5223A8F6)
+I (C:\LaunchPadware\Tester_4F120\UART2.h)(0x5223A8F7)

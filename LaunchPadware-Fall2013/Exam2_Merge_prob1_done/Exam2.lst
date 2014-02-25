@@ -1,0 +1,227 @@
+
+
+
+ARM Macro Assembler    Page 1 
+
+
+    1 00000000         ;*****Your name goes here*******
+    2 00000000         ; -5 points if you do not add your name
+    3 00000000         
+    4 00000000         ;This is Exam2_Merge 
+    5 00000000         ;EE319K Practice exam
+    6 00000000         ;You edit this file only
+    7 00000000                 AREA             Data, ALIGN=4
+    8 00000000         
+    9 00000000         
+   10 00000000                 AREA             |.text|, CODE, READONLY, ALIGN=
+2
+   11 00000000                 THUMB
+   12 00000000         
+   13 00000000         ;***** Init *********************
+   14 00000000         ;Initialize the array to a value
+   15 00000000         ;Each value is 16-bit unsigned
+   16 00000000         ;Initialize the first array to 1 and the second array to
+                        -1
+   17 00000000         ;Inputs:  R0 is a pointer to an empty array of 16-bit un
+                       signed numbers
+   18 00000000         ;         R1 is the 16-bit unsigned value to be stored i
+                       nto each element
+   19 00000000         ;         R2 is the number of 16-bit unsigned values in 
+                       the array
+   20 00000000         ;         The array maybe of zero length (R2 may be zero
+                       )
+   21 00000000         ;Output:  none
+   22 00000000         ;Error conditions: none
+   23 00000000         ;Invariables: You must not permanently modify registers 
+                       R4 to R11, and LR
+   24 00000000         ;Test cases
+   25 00000000         ;R0=>empty array, R1=3,R2=4, result new array is {3,3,3,
+                       3}
+   26 00000000         ;R0=>empty array, R1=7,R2=1, result new array is {7}
+   27 00000000         ;R0=>empty array, R1=5,R2=8, result new array is {5,5,5,
+                       5,5,5,5,5}
+   28 00000000         ;R0=>empty array, R1=0,R2=0, result is no change to empt
+                       y array
+   29 00000000                 EXPORT           Init
+   30 00000000         Init
+   31 00000000         ; put your code here
+   32 00000000         
+   33 00000000         Init_loop
+   34 00000000 2A00            CMP              R2, #0
+   35 00000002 D005            BEQ              Init_Done
+   36 00000004         
+   37 00000004 8001            STRH             R1, [R0]
+   38 00000006 F100 0002       ADD              R0, #2
+   39 0000000A F1A2 0201       SUB              R2, #1
+   40 0000000E E7F7            B                Init_loop
+   41 00000010         Init_Done
+   42 00000010         
+   43 00000010 4770            BX               LR
+   44 00000012         
+   45 00000012         ;***** Insert subroutine *********************
+   46 00000012         ; Insert the number into the beginning of the output arr
+                       ay
+   47 00000012         ;   copy all the elements of the input array to the outp
+                       ut array
+
+
+
+ARM Macro Assembler    Page 2 
+
+
+   48 00000012         ;Inputs : Register R0 points to input array of 16-bit un
+                       signed numbers
+   49 00000012         ;         Register R1 contains the length of the input a
+                       rray
+   50 00000012         ;         Register R2 contains number to insert
+   51 00000012         ;         Register R3 is a pointer to an empty array tha
+                       t should be written into
+   52 00000012         ;Outputs: The array at R3 is modified
+   53 00000012         ;Invariables: You must not permanently modify registers 
+                       R4 to R11, and LR
+   54 00000012         ;Error conditions: none.
+   55 00000012         ;test cases
+   56 00000012         ;R0=>{1,2,3,4,5,6},R1=6,R2=8,result={8,1,2,3,4,5,6}
+   57 00000012         ;R0=>{1},R1=1,R2=9,,result={9,1}
+   58 00000012         ;R0=>{0,0,1,2},R1=4,R2=0xFE,,result={0xFE,0,0,1,2}
+   59 00000012         ;R0=>{},R1=0,R2=0x45,result={0x45}
+   60 00000012         
+   61 00000012                 EXPORT           Insert
+   62 00000012         Insert
+   63 00000012         ; put your code here
+   64 00000012         
+   65 00000012         
+   66 00000012         
+   67 00000012         
+   68 00000012         
+   69 00000012 4770            BX               LR
+   70 00000014         
+   71 00000014         ;***** Merge subroutine *********************
+   72 00000014         ; Assume both arrays are initially sorted 16-bit unsigne
+                       d numbers
+   73 00000014         ; Merge the two input arrays into the output array
+   74 00000014         ;   making the output array contain all the numbers in s
+                       orted order
+   75 00000014         ;Inputs : Register R0 points to the first array of 16-bi
+                       t unsigned numbers
+   76 00000014         ;         Register R1 points to the second array of 16-b
+                       it unsigned numbers
+   77 00000014         ;         Register R2 contains the number of elements in
+                        the first array
+   78 00000014         ;         Register R3 contains the number of elements in
+                        the second array
+   79 00000014         ;         Top element on the stack is a pointer to an em
+                       pty output array
+   80 00000014         ;Outputs: the output array is modified
+   81 00000014         ;Invariables: You must not permanently modify registers 
+                       R4 to R11, and LR
+   82 00000014         ;Error conditions: none.
+   83 00000014         ;test cases
+   84 00000014         ;R0=>{0x8000},             R1=>{0x7000},             R2=
+                       1,R3=1,output array={0x7000,0x8000}
+   85 00000014         ;R0=>{0x01,0x03,0x05,0x07},R1=>{0x02,0x04,0x06,0x08},R2=
+                       4,R3=4,output array={0x01,0x02,0x03,0x04,0x05,0x06,0x07,
+                       0x08}
+   86 00000014         ;R0=>{0x01,0x02,0x03,0x04},R1=>{0x05,0x06,0x07,0x08},R2=
+                       4,R3=4,output array={0x01,0x02,0x03,0x04,0x05,0x06,0x07,
+                       0x08}
+   87 00000014         ;R0=>{0x01,0x02},          R1=>{0x05,0x06,0x07,0x08},R2=
+                       2,R3=4,output array={0x01,0x02,0x05,0x06,0x07,0x08}
+   88 00000014         ;R0=>{0x01,0x02,0x03,0x04},R1=>{0x05},               R2=
+
+
+
+ARM Macro Assembler    Page 3 
+
+
+                       4,R3=1,output array={0x01,0x02,0x03,0x04,0x05}
+   89 00000014         ;R0=>{0x01,0x02,0x03,0x04},R1=>{},                   R2=
+                       4,R3=0,output array={0x01,0x02,0x03,0x04}
+   90 00000014         ;R0=>{},R1=>{},                                      R2=
+                       0,R3=0,output array={} (no change to output array)
+   91 00000014                 EXPORT           Merge
+   92 00000014         Merge
+   93 00000014         ; put your code here
+   94 00000014         
+   95 00000014         
+   96 00000014         
+   97 00000014         
+   98 00000014         
+   99 00000014 4770            BX               LR
+  100 00000016         
+  101 00000016 00 00           ALIGN
+  102 00000018                 END
+Command Line: --debug --xref --cpu=Cortex-M3 --apcs=interwork --depend=.\exam2.
+d -o.\exam2.o -IC:\Keil\ARM\RV31\INC -IC:\Keil\ARM\CMSIS\Include -IC:\Keil\ARM\
+Inc\Luminary --predefine="__EVAL SETA 1" --list=.\exam2.lst Exam2.s
+
+
+
+ARM Macro Assembler    Page 1 Alphabetic symbol ordering
+Relocatable symbols
+
+Data 00000000
+
+Symbol: Data
+   Definitions
+      At line 7 in file Exam2.s
+   Uses
+      None
+Comment: Data unused
+1 symbol
+
+
+
+ARM Macro Assembler    Page 1 Alphabetic symbol ordering
+Relocatable symbols
+
+.text 00000000
+
+Symbol: .text
+   Definitions
+      At line 10 in file Exam2.s
+   Uses
+      None
+Comment: .text unused
+Init 00000000
+
+Symbol: Init
+   Definitions
+      At line 30 in file Exam2.s
+   Uses
+      At line 29 in file Exam2.s
+Comment: Init used once
+Init_Done 00000010
+
+Symbol: Init_Done
+   Definitions
+      At line 41 in file Exam2.s
+   Uses
+      At line 35 in file Exam2.s
+Comment: Init_Done used once
+Init_loop 00000000
+
+Symbol: Init_loop
+   Definitions
+      At line 33 in file Exam2.s
+   Uses
+      At line 40 in file Exam2.s
+Comment: Init_loop used once
+Insert 00000012
+
+Symbol: Insert
+   Definitions
+      At line 62 in file Exam2.s
+   Uses
+      At line 61 in file Exam2.s
+Comment: Insert used once
+Merge 00000014
+
+Symbol: Merge
+   Definitions
+      At line 92 in file Exam2.s
+   Uses
+      At line 91 in file Exam2.s
+Comment: Merge used once
+6 symbols
+338 symbols in table

@@ -1,0 +1,1 @@
+--cpu Cortex-M4.fp --pd "__EVAL SETA 1" -g --apcs=interwork -I D:\Keil\ARM\RV31\Inc -I D:\Keil\ARM\CMSIS\Include -I D:\Keil\ARM\Inc\Luminary --list "GPIO.lst" --xref -o "GPIO.o" --depend "GPIO.d" "GPIO.s"

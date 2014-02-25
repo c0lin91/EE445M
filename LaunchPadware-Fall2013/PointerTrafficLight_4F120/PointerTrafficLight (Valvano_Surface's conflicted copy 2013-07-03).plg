@@ -1,0 +1,23 @@
+<html>
+<body>
+<pre>
+<h1>µVision Build Log</h1>
+<h2>Project:</h2>
+C:\Users\valvano\Dropbox\ArmBook\LaunchPad\LaunchPadware\PointerTrafficLight_4F120\PointerTrafficLight.uvproj
+Project File Date:  06/19/2013
+
+<h2>Output:</h2>
+Build target 'PointerTrafficLight'
+linking...
+Program Size: Code=1400 RO-data=112 RW-data=0 ZI-data=1120  
+"PointerTrafficLight.axf" - 0 Error(s), 0 Warning(s).
+Load "C:\\Users\\valvano\\Dropbox\\ArmBook\\LaunchPad\\LaunchPadware\\PointerTrafficLight_4F120\\PointerTrafficLight.axf" 
+Connecting: Mode=JTAG, Speed=1000000Hz
+Erase Done.
+Programming Done.
+Verify OK.
+Load "C:\\Users\\valvano\\Dropbox\\ArmBook\\LaunchPad\\LaunchPadware\\PointerTrafficLight_4F120\\PointerTrafficLight.axf" 
+Connecting: Mode=JTAG, Speed=1000000Hz
+Erase Done.
+Programming Done.
+Verify OK.

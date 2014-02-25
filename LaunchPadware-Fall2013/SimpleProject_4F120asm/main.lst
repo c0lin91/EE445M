@@ -1,0 +1,149 @@
+
+
+
+ARM Macro Assembler    Page 1 
+
+
+    1 00000000         ; main.s
+    2 00000000         ; Runs on any Cortex M processor
+    3 00000000         ; A very simple first project implementing a random numb
+                       er generator
+    4 00000000         ; Daniel Valvano
+    5 00000000         ; May 4, 2012
+    6 00000000         
+    7 00000000         ;  This example accompanies the book
+    8 00000000         ;  "Embedded Systems: Introduction to Arm Cortex M Micro
+                       controllers",
+    9 00000000         ;  ISBN: 978-1469998749, Jonathan Valvano, copyright (c)
+                        2012
+   10 00000000         ;  Section 3.3.10, Program 3.12
+   11 00000000         ;
+   12 00000000         ;Copyright 2012 by Jonathan W. Valvano, valvano@mail.ute
+                       xas.edu
+   13 00000000         ;   You may use, edit, run or distribute this file
+   14 00000000         ;   as long as the above copyright notice remains
+   15 00000000         ;THIS SOFTWARE IS PROVIDED "AS IS".  NO WARRANTIES, WHET
+                       HER EXPRESS, IMPLIED
+   16 00000000         ;OR STATUTORY, INCLUDING, BUT NOT LIMITED TO, IMPLIED WA
+                       RRANTIES OF
+   17 00000000         ;MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE AP
+                       PLY TO THIS SOFTWARE.
+   18 00000000         ;VALVANO SHALL NOT, IN ANY CIRCUMSTANCES, BE LIABLE FOR 
+                       SPECIAL, INCIDENTAL,
+   19 00000000         ;OR CONSEQUENTIAL DAMAGES, FOR ANY REASON WHATSOEVER.
+   20 00000000         ;For more information about my classes, my research, and
+                        my books, see
+   21 00000000         ;http://users.ece.utexas.edu/~valvano/
+   22 00000000         
+   23 00000000         
+   24 00000000         ; we align 32 bit variables to 32-bits
+   25 00000000         ; we align op codes to 16 bits
+   26 00000000                 THUMB
+   27 00000000                 AREA             DATA, ALIGN=4
+   28 00000000                 EXPORT           M [DATA,SIZE=4]
+   29 00000000 00 00 00 
+              00       M       SPACE            4
+   30 00000004         
+   31 00000004                 AREA             |.text|, CODE, READONLY, ALIGN=
+2
+   32 00000000                 EXPORT           Start
+   33 00000000 4A07    Start   LDR              R2,=M       ; R2 = &M, R2 point
+                                                            s to M
+   34 00000002 F04F 0001       MOV              R0,#1       ; Initial seed
+   35 00000006 6010            STR              R0,[R2]     ; M=1
+   36 00000008 F000 F801 
+                       loop    BL               Random
+   37 0000000C E7FC            B                loop
+   38 0000000E         ;------------Random------------
+   39 0000000E         ; Return R0= random number
+   40 0000000E         ; Linear congruential generator 
+   41 0000000E         ; from Numerical Recipes by Press et al.
+   42 0000000E 4A04    Random  LDR              R2,=M       ; R2 = &M, R2 point
+                                                            s to M
+   43 00000010 6810            LDR              R0,[R2]     ; R0=M
+   44 00000012 4904            LDR              R1,=1664525
+   45 00000014 FB00 F001       MUL              R0,R0,R1    ; R0 = 1664525*M
+
+
+
+ARM Macro Assembler    Page 2 
+
+
+   46 00000018 4903            LDR              R1,=1013904223
+   47 0000001A 4408            ADD              R0,R1       ; 1664525*M+1013904
+                                                            223 
+   48 0000001C 6010            STR              R0,[R2]     ; store M
+   49 0000001E 4770            BX               LR
+   50 00000020                 ALIGN
+   51 00000020                 END
+              00000000 
+              0019660D 
+              3C6EF35F 
+Command Line: --debug --xref --cpu=Cortex-M4.fp --apcs=interwork --depend=main.
+d -omain.o -ID:\Keil\ARM\RV31\INC -ID:\Keil\ARM\CMSIS\Include -ID:\Keil\ARM\Inc
+\Luminary --list=main.lst main.s
+
+
+
+ARM Macro Assembler    Page 1 Alphabetic symbol ordering
+Relocatable symbols
+
+DATA 00000000
+
+Symbol: DATA
+   Definitions
+      At line 27 in file main.s
+   Uses
+      None
+Comment: DATA unused
+M 00000000
+
+Symbol: M
+   Definitions
+      At line 29 in file main.s
+   Uses
+      At line 28 in file main.s
+      At line 33 in file main.s
+      At line 42 in file main.s
+
+2 symbols
+
+
+
+ARM Macro Assembler    Page 1 Alphabetic symbol ordering
+Relocatable symbols
+
+.text 00000000
+
+Symbol: .text
+   Definitions
+      At line 31 in file main.s
+   Uses
+      None
+Comment: .text unused
+Random 0000000E
+
+Symbol: Random
+   Definitions
+      At line 42 in file main.s
+   Uses
+      At line 36 in file main.s
+Comment: Random used once
+Start 00000000
+
+Symbol: Start
+   Definitions
+      At line 33 in file main.s
+   Uses
+      At line 32 in file main.s
+Comment: Start used once
+loop 00000008
+
+Symbol: loop
+   Definitions
+      At line 36 in file main.s
+   Uses
+      At line 37 in file main.s
+Comment: loop used once
+4 symbols
+339 symbols in table

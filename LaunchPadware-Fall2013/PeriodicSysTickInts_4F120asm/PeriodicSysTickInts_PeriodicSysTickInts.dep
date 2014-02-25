@@ -1,0 +1,5 @@
+Dependencies for Project 'PeriodicSysTickInts', Target 'PeriodicSysTickInts': (DO NOT MODIFY !)
+F (.\Startup.s)(0x519B0244)(--cpu Cortex-M4 --pd "__EVAL SETA 1" -g --apcs=interwork -I D:\Keil\ARM\RV31\Inc -I D:\Keil\ARM\CMSIS\Include -I D:\Keil\ARM\Inc\Luminary --list "Startup.lst" --xref -o "Startup.o" --depend "Startup.d")
+F (.\SysTickInts.s)(0x519B0244)(--cpu Cortex-M4 --pd "__EVAL SETA 1" -g --apcs=interwork -I D:\Keil\ARM\RV31\Inc -I D:\Keil\ARM\CMSIS\Include -I D:\Keil\ARM\Inc\Luminary --list "SysTickInts.lst" --xref -o "SysTickInts.o" --depend "SysTickInts.d")
+F (.\PeriodicSysTickInts.s)(0x519B0244)(--cpu Cortex-M4 --pd "__EVAL SETA 1" -g --apcs=interwork -I D:\Keil\ARM\RV31\Inc -I D:\Keil\ARM\CMSIS\Include -I D:\Keil\ARM\Inc\Luminary --list "PeriodicSysTickInts.lst" --xref -o "PeriodicSysTickInts.o" --depend "PeriodicSysTickInts.d")
+F (.\PLL.s)(0x519B0244)(--cpu Cortex-M4 --pd "__EVAL SETA 1" -g --apcs=interwork -I D:\Keil\ARM\RV31\Inc -I D:\Keil\ARM\CMSIS\Include -I D:\Keil\ARM\Inc\Luminary --list "PLL.lst" --xref -o "PLL.o" --depend "PLL.d")

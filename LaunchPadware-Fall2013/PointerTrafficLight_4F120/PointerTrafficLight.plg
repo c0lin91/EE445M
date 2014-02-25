@@ -1,0 +1,11 @@
+<html>
+<body>
+<pre>
+<h1>µVision Build Log</h1>
+<h2>Project:</h2>
+C:\Dropbox\ArmBook\LaunchPad\LaunchPadware\PointerTrafficLight_4F120\PointerTrafficLight.uvproj
+Project File Date:  07/10/2013
+
+<h2>Output:</h2>
+Load "C:\\Dropbox\\ArmBook\\LaunchPad\\LaunchPadware\\PointerTrafficLight_4F120\\PointerTrafficLight.axf" 
+Connecting: Mode=JTAG, Speed=1000000Hz

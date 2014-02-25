@@ -1,0 +1,465 @@
+
+
+
+ARM Macro Assembler    Page 1 
+
+
+    1 00000000         ; Lab7Main.s
+    2 00000000         ; Runs on LM4F120 or TM4C123
+    3 00000000         ; Lab 7 test main program
+    4 00000000         ; I/O drivers for Kentec EB-LM4F120-L35
+    5 00000000         ; August 23, 2013
+    6 00000000         
+    7 00000000         ;  This example accompanies the book
+    8 00000000         ;  "Embedded Systems: Introduction to Arm Cortex M Micro
+                       controllers",
+    9 00000000         ;  ISBN: 978-1469998749, Jonathan Valvano, copyright (c)
+                        2013
+   10 00000000         ;
+   11 00000000         ;Copyright 2013 by Jonathan W. Valvano, valvano@mail.ute
+                       xas.edu
+   12 00000000         ;   You may use, edit, run or distribute this file
+   13 00000000         ;   as long as the above copyright notice remains
+   14 00000000         ;THIS SOFTWARE IS PROVIDED "AS IS".  NO WARRANTIES, WHET
+                       HER EXPRESS, IMPLIED
+   15 00000000         ;OR STATUTORY, INCLUDING, BUT NOT LIMITED TO, IMPLIED WA
+                       RRANTIES OF
+   16 00000000         ;MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE AP
+                       PLY TO THIS SOFTWARE.
+   17 00000000         ;VALVANO SHALL NOT, IN ANY CIRCUMSTANCES, BE LIABLE FOR 
+                       SPECIAL, INCIDENTAL,
+   18 00000000         ;OR CONSEQUENTIAL DAMAGES, FOR ANY REASON WHATSOEVER.
+   19 00000000         ;For more information about my classes, my research, and
+                        my books, see
+   20 00000000         ;http://users.ece.utexas.edu/~valvano/
+   21 00000000         
+   22 00000000                 AREA             |.text|, CODE, READONLY, ALIGN=
+2
+   23 00000000                 THUMB
+   24 00000000                 EXPORT           Start
+   25 00000000                 IMPORT           PLL_Init
+   26 00000000                 IMPORT           LCD_Init
+   27 00000000                 IMPORT           LCD_OutChar
+   28 00000000                 IMPORT           LCD_Goto
+   29 00000000                 IMPORT           LCD_ColorFill
+   30 00000000                 IMPORT           LCD_SetTextColorRGB
+   31 00000000                 IMPORT           LCD_OutString
+   32 00000000                 IMPORT           LCD_OutDec  ; you write this
+   33 00000000                 IMPORT           LCD_OutFix  ; you write this   
+                                                               
+   34 00000000                 IMPORT           IO_Init     ; you write this
+   35 00000000                 IMPORT           IO_Touch    ; you write this
+   36 00000000                 IMPORT           IO_HeartBeat ; you write this
+   37 00000000         ; color definitions encoded as 5-6-5 RGB
+   38 00000000 00000000 
+                       BLACK   EQU              0x0000      ; R=0   G=0   B=0
+   39 00000000 0000FFFF 
+                       WHITE   EQU              0xFFFF      ; R=255 G=255 B=255
+                                                            
+   40 00000000 0000F81F 
+                       PINK    EQU              0xF81F      ; R=255 G=0   B=255
+                                                            
+   41 00000000 0000F800 
+                       RED     EQU              0xF800      ; R=255 G=0   B=0
+   42 00000000 0000C300 
+                       BURNTORANGE
+
+
+
+ARM Macro Assembler    Page 2 
+
+
+                               EQU              0xC300      ; R=197 G=96  B=6
+   43 00000000 0000FC00 
+                       ORANGE  EQU              0xFC00      ; R=255 G=128 B=0
+   44 00000000 0000FFE0 
+                       YELLOW  EQU              0xFFE0      ; R=255 G=255 B=0
+   45 00000000 000007E0 
+                       GREEN   EQU              0x07E0      ; R=0   G=255 B=0
+   46 00000000 0000041F 
+                       LIGHTBLUE
+                               EQU              0x041F      ; R=0   G=128 B=255
+                                                            
+   47 00000000 0000001F 
+                       BLUE    EQU              0x001F      ; R=0   G=0   B=255
+                                                            
+   48 00000000 0000801F 
+                       VIOLET  EQU              0x801F      ; R=128 G=0   B=255
+                                                            
+   49 00000000         
+   50 00000000         
+   51 00000000 F7FF FFFE 
+                       Start   BL               PLL_Init    ; initialize PLL 80
+                                                             MHz
+   52 00000004 F7FF FFFE       BL               LCD_Init    ; initialize Kentec
+                                                             EB-LM4F120-L35
+   53 00000008 F7FF FFFE       BL               IO_Init     ; ***Your function 
+                                                            that initialize swi
+                                                            tch and LED
+   54 0000000C F64F 70E0       MOV              R0,#YELLOW
+   55 00000010 F7FF FFFE       BL               LCD_SetTextColorRGB
+   56 00000014 F04F 0000 
+                       run     MOV              R0,#BLACK
+   57 00000018 F7FF FFFE       BL               LCD_ColorFill
+   58 0000001C F04F 0000       MOV              R0,#0       ;left column
+   59 00000020 F04F 0100       MOV              R1,#0       ;top row 
+   60 00000024 F7FF FFFE       BL               LCD_Goto
+   61 00000028 4828            LDR              R0,=Welcome
+   62 0000002A F7FF FFFE       BL               LCD_OutString ;***Your function
+                                                             that outputs a str
+                                                            ing
+   63 0000002E 4C28            LDR              R4,=TestData
+   64 00000030 4D28            LDR              R5,=TestEnd
+   65 00000032 F04F 0602       MOV              R6,#2       ;row number
+   66 00000036 F7FF FFFE       BL               IO_Touch    ;***Your function t
+                                                            hat waits for relea
+                                                            se and touch 
+   67 0000003A F7FF FFFE 
+                       loop    BL               IO_HeartBeat ;***Your function 
+                                                            that toggles LED
+   68 0000003E F04F 0000       MOV              R0,#0       ;left column
+   69 00000042 4631            MOV              R1,R6       ;row number
+   70 00000044 F7FF FFFE       BL               LCD_Goto
+   71 00000048 6820            LDR              R0, [R4]
+   72 0000004A F7FF FFFE       BL               LCD_OutDec  ;***Your function t
+                                                            hat outputs an inte
+                                                            ger
+   73 0000004E F04F 000C       MOV              R0,#12      ;13th column
+   74 00000052 4631            MOV              R1,R6       ;row number
+   75 00000054 F7FF FFFE       BL               LCD_Goto
+   76 00000058 F854 0B04       LDR              R0, [R4],#4
+
+
+
+ARM Macro Assembler    Page 3 
+
+
+   77 0000005C F7FF FFFE       BL               LCD_OutFix  ;***Your function t
+                                                            hat outputs a fixed
+                                                            -point
+   78 00000060 F7FF FFFE       BL               IO_Touch    ;***Your function t
+                                                            hat waits for relea
+                                                            se and touch 
+   79 00000064 F106 0601       ADD              R6,#1       ;next row
+   80 00000068 42AC            CMP              R4, R5
+   81 0000006A D1E6            BNE              loop
+   82 0000006C E7D2            B                run
+   83 0000006E 00 00           ALIGN
+   84 00000070 4C 61 62 
+              20 37 2C 
+              20 77 65 
+              6C 63 6F 
+              6D 65 20 
+              74 6F 20 
+              33 31 39 
+              4B 21 00 Welcome DCB              "Lab 7, welcome to 319K!",0
+   85 00000088                 ALIGN
+   86 00000088 00000000 
+              00000007 
+              00000022 
+              000000C7 
+              00000141 
+              0000028E 
+              000012B5 
+              0000270F 
+              00002710 
+              00005588 
+              0000FFFF TestData
+                               DCD              0,7,34,199,321,654,4789,9999,10
+000,21896,65535
+   87 000000B4 0001E240 
+              0012D687 
+              00BC614E 
+              075BCD15 
+              FFFFFFFF         DCD              123456,1234567,12345678,1234567
+89,0xFFFFFFFF
+   88 000000C8 00000000 
+                       TestEnd DCD              0
+   89 000000CC         
+   90 000000CC                 ALIGN                        ; make sure the end
+                                                             of this section is
+                                                             aligned
+   91 000000CC                 END                          ; end of file
+              00000000 
+              00000000 
+              00000000 
+Command Line: --debug --xref --cpu=Cortex-M4 --apcs=interwork --depend=Lab7Main
+.d -oLab7Main.o -ID:\Keil\ARM\RV31\Inc -ID:\Keil\ARM\CMSIS\Include -ID:\Keil\AR
+M\Inc\Luminary --predefine="__EVAL SETA 1" --list=Lab7Main.lst Lab7Main.s
+
+
+
+ARM Macro Assembler    Page 1 Alphabetic symbol ordering
+Relocatable symbols
+
+.text 00000000
+
+Symbol: .text
+   Definitions
+      At line 22 in file Lab7Main.s
+   Uses
+      None
+Comment: .text unused
+Start 00000000
+
+Symbol: Start
+   Definitions
+      At line 51 in file Lab7Main.s
+   Uses
+      At line 24 in file Lab7Main.s
+Comment: Start used once
+TestData 00000088
+
+Symbol: TestData
+   Definitions
+      At line 86 in file Lab7Main.s
+   Uses
+      At line 63 in file Lab7Main.s
+Comment: TestData used once
+TestEnd 000000C8
+
+Symbol: TestEnd
+   Definitions
+      At line 88 in file Lab7Main.s
+   Uses
+      At line 64 in file Lab7Main.s
+Comment: TestEnd used once
+Welcome 00000070
+
+Symbol: Welcome
+   Definitions
+      At line 84 in file Lab7Main.s
+   Uses
+      At line 61 in file Lab7Main.s
+Comment: Welcome used once
+loop 0000003A
+
+Symbol: loop
+   Definitions
+      At line 67 in file Lab7Main.s
+   Uses
+      At line 81 in file Lab7Main.s
+Comment: loop used once
+run 00000014
+
+Symbol: run
+   Definitions
+      At line 56 in file Lab7Main.s
+   Uses
+      At line 82 in file Lab7Main.s
+Comment: run used once
+7 symbols
+
+
+
+ARM Macro Assembler    Page 1 Alphabetic symbol ordering
+Absolute symbols
+
+BLACK 00000000
+
+Symbol: BLACK
+   Definitions
+      At line 38 in file Lab7Main.s
+   Uses
+      At line 56 in file Lab7Main.s
+Comment: BLACK used once
+BLUE 0000001F
+
+Symbol: BLUE
+   Definitions
+      At line 47 in file Lab7Main.s
+   Uses
+      None
+Comment: BLUE unused
+BURNTORANGE 0000C300
+
+Symbol: BURNTORANGE
+   Definitions
+      At line 42 in file Lab7Main.s
+   Uses
+      None
+Comment: BURNTORANGE unused
+GREEN 000007E0
+
+Symbol: GREEN
+   Definitions
+      At line 45 in file Lab7Main.s
+   Uses
+      None
+Comment: GREEN unused
+LIGHTBLUE 0000041F
+
+Symbol: LIGHTBLUE
+   Definitions
+      At line 46 in file Lab7Main.s
+   Uses
+      None
+Comment: LIGHTBLUE unused
+ORANGE 0000FC00
+
+Symbol: ORANGE
+   Definitions
+      At line 43 in file Lab7Main.s
+   Uses
+      None
+Comment: ORANGE unused
+PINK 0000F81F
+
+Symbol: PINK
+   Definitions
+      At line 40 in file Lab7Main.s
+   Uses
+      None
+Comment: PINK unused
+RED 0000F800
+
+Symbol: RED
+
+
+
+ARM Macro Assembler    Page 2 Alphabetic symbol ordering
+Absolute symbols
+
+   Definitions
+      At line 41 in file Lab7Main.s
+   Uses
+      None
+Comment: RED unused
+VIOLET 0000801F
+
+Symbol: VIOLET
+   Definitions
+      At line 48 in file Lab7Main.s
+   Uses
+      None
+Comment: VIOLET unused
+WHITE 0000FFFF
+
+Symbol: WHITE
+   Definitions
+      At line 39 in file Lab7Main.s
+   Uses
+      None
+Comment: WHITE unused
+YELLOW 0000FFE0
+
+Symbol: YELLOW
+   Definitions
+      At line 44 in file Lab7Main.s
+   Uses
+      At line 54 in file Lab7Main.s
+Comment: YELLOW used once
+11 symbols
+
+
+
+ARM Macro Assembler    Page 1 Alphabetic symbol ordering
+External symbols
+
+IO_HeartBeat 00000000
+
+Symbol: IO_HeartBeat
+   Definitions
+      At line 36 in file Lab7Main.s
+   Uses
+      At line 67 in file Lab7Main.s
+Comment: IO_HeartBeat used once
+IO_Init 00000000
+
+Symbol: IO_Init
+   Definitions
+      At line 34 in file Lab7Main.s
+   Uses
+      At line 53 in file Lab7Main.s
+Comment: IO_Init used once
+IO_Touch 00000000
+
+Symbol: IO_Touch
+   Definitions
+      At line 35 in file Lab7Main.s
+   Uses
+      At line 66 in file Lab7Main.s
+      At line 78 in file Lab7Main.s
+
+LCD_ColorFill 00000000
+
+Symbol: LCD_ColorFill
+   Definitions
+      At line 29 in file Lab7Main.s
+   Uses
+      At line 57 in file Lab7Main.s
+Comment: LCD_ColorFill used once
+LCD_Goto 00000000
+
+Symbol: LCD_Goto
+   Definitions
+      At line 28 in file Lab7Main.s
+   Uses
+      At line 60 in file Lab7Main.s
+      At line 70 in file Lab7Main.s
+      At line 75 in file Lab7Main.s
+
+LCD_Init 00000000
+
+Symbol: LCD_Init
+   Definitions
+      At line 26 in file Lab7Main.s
+   Uses
+      At line 52 in file Lab7Main.s
+Comment: LCD_Init used once
+LCD_OutChar 00000000
+
+Symbol: LCD_OutChar
+   Definitions
+      At line 27 in file Lab7Main.s
+   Uses
+      None
+Comment: LCD_OutChar unused
+
+
+
+ARM Macro Assembler    Page 2 Alphabetic symbol ordering
+External symbols
+
+LCD_OutDec 00000000
+
+Symbol: LCD_OutDec
+   Definitions
+      At line 32 in file Lab7Main.s
+   Uses
+      At line 72 in file Lab7Main.s
+Comment: LCD_OutDec used once
+LCD_OutFix 00000000
+
+Symbol: LCD_OutFix
+   Definitions
+      At line 33 in file Lab7Main.s
+   Uses
+      At line 77 in file Lab7Main.s
+Comment: LCD_OutFix used once
+LCD_OutString 00000000
+
+Symbol: LCD_OutString
+   Definitions
+      At line 31 in file Lab7Main.s
+   Uses
+      At line 62 in file Lab7Main.s
+Comment: LCD_OutString used once
+LCD_SetTextColorRGB 00000000
+
+Symbol: LCD_SetTextColorRGB
+   Definitions
+      At line 30 in file Lab7Main.s
+   Uses
+      At line 55 in file Lab7Main.s
+Comment: LCD_SetTextColorRGB used once
+PLL_Init 00000000
+
+Symbol: PLL_Init
+   Definitions
+      At line 25 in file Lab7Main.s
+   Uses
+      At line 51 in file Lab7Main.s
+Comment: PLL_Init used once
+12 symbols
+363 symbols in table

@@ -1,0 +1,1 @@
+FIFO.o: FIFO.s

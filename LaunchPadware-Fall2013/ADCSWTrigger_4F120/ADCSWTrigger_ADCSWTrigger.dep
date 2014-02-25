@@ -1,0 +1,11 @@
+Dependencies for Project 'ADCSWTrigger', Target 'ADCSWTrigger': (DO NOT MODIFY !)
+F (.\startup.s)(0x52239A98)(--cpu Cortex-M4 --pd "__EVAL SETA 1" -g --apcs=interwork -I C:\Keil\ARM\RV31\INC-I C:\Keil\ARM\CMSIS\Include-I C:\Keil\ARM\Inc\Luminary--list .\startup.lst --xref -o .\startup.o --depend .\startup.d)
+F (.\ADCSWTrigger.c)(0x52239A96)(-c --cpu Cortex-M4 -D__EVAL -g -O0 --apcs=interwork --split_sections -I.. -I..\..\..-I C:\Keil\ARM\RV31\INC-I C:\Keil\ARM\CMSIS\Include-I C:\Keil\ARM\Inc\Luminary-Drvmdk -DPART_LM4F120H5QR -o .\adcswtrigger.o --omf_browse .\adcswtrigger.crf --depend .\adcswtrigger.d)
+I (C:\Users\Prachi Gupta\Dropbox\445M\LaunchPadware-Fall2013\ADCSWTrigger_4F120\ADCSWTrigger.h)(0x52239A96)
+I (C:\Keil\ARM\Inc\Luminary\lm4f120h5qr.h)(0x51C85936)
+F (.\ADCTestMain.c)(0x52239A97)(-c --cpu Cortex-M4 -D__EVAL -g -O0 --apcs=interwork --split_sections -I.. -I..\..\..-I C:\Keil\ARM\RV31\INC-I C:\Keil\ARM\CMSIS\Include-I C:\Keil\ARM\Inc\Luminary-Drvmdk -DPART_LM4F120H5QR -o .\adctestmain.o --omf_browse .\adctestmain.crf --depend .\adctestmain.d)
+I (C:\Users\Prachi Gupta\Dropbox\445M\LaunchPadware-Fall2013\ADCSWTrigger_4F120\ADCSWTrigger.h)(0x52239A96)
+I (C:\Keil\ARM\Inc\Luminary\lm4f120h5qr.h)(0x51C85936)
+I (C:\Users\Prachi Gupta\Dropbox\445M\LaunchPadware-Fall2013\ADCSWTrigger_4F120\PLL.h)(0x52239A98)
+F (.\PLL.c)(0x52239A98)(-c --cpu Cortex-M4 -D__EVAL -g -O0 --apcs=interwork --split_sections -I.. -I..\..\..-I C:\Keil\ARM\RV31\INC-I C:\Keil\ARM\CMSIS\Include-I C:\Keil\ARM\Inc\Luminary-Drvmdk -DPART_LM4F120H5QR -o .\pll.o --omf_browse .\pll.crf --depend .\pll.d)
+I (C:\Users\Prachi Gupta\Dropbox\445M\LaunchPadware-Fall2013\ADCSWTrigger_4F120\PLL.h)(0x52239A98)

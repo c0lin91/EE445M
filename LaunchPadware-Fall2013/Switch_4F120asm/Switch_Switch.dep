@@ -1,0 +1,4 @@
+Dependencies for Project 'Switch', Target 'Switch': (DO NOT MODIFY !)
+F (.\Startup.s)(0x5197D610)(--cpu Cortex-M4 --pd "__EVAL SETA 1" -g --apcs=interwork -I D:\Keil\ARM\RV31\Inc -I D:\Keil\ARM\CMSIS\Include -I D:\Keil\ARM\Inc\Luminary --list "Startup.lst" --xref -o "Startup.o" --depend "Startup.d")
+F (.\Switch.s)(0x51982D0A)(--cpu Cortex-M4 --pd "__EVAL SETA 1" -g --apcs=interwork -I D:\Keil\ARM\RV31\Inc -I D:\Keil\ARM\CMSIS\Include -I D:\Keil\ARM\Inc\Luminary --list "Switch.lst" --xref -o "Switch.o" --depend "Switch.d")
+F (.\SwitchTestMain.s)(0x51983348)(--cpu Cortex-M4 --pd "__EVAL SETA 1" -g --apcs=interwork -I D:\Keil\ARM\RV31\Inc -I D:\Keil\ARM\CMSIS\Include -I D:\Keil\ARM\Inc\Luminary --list "SwitchTestMain.lst" --xref -o "SwitchTestMain.o" --depend "SwitchTestMain.d")

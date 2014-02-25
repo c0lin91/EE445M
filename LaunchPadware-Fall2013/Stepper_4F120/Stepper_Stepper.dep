@@ -1,0 +1,8 @@
+Dependencies for Project 'Stepper', Target 'Stepper': (DO NOT MODIFY !)
+F (.\startup.s)(0x519AE469)(--cpu Cortex-M4 --pd "__EVAL SETA 1" -g --apcs=interwork -I D:\Keil\ARM\RV31\Inc -I D:\Keil\ARM\CMSIS\Include -I D:\Keil\ARM\Inc\Luminary --list "startup.lst" --xref -o "startup.o" --depend "startup.d")
+F (.\stepper.c)(0x519AEEAF)(-c --cpu Cortex-M4 -D__EVAL -g -O0 --apcs=interwork --split_sections -I.. -I..\..\.. -I D:\Keil\ARM\RV31\Inc -I D:\Keil\ARM\CMSIS\Include -I D:\Keil\ARM\Inc\Luminary -Drvmdk -DPART_LM4F120H5QR -o "stepper.o" --omf_browse "stepper.crf" --depend "stepper.d")
+I (D:\Keil\ARM\Inc\Luminary\lm4f120h5qr.h)(0x4F58FC3E)
+I (systick.h)(0x50899E64)
+F (.\StepperTestMain.c)(0x50899D2D)(-c --cpu Cortex-M4 -D__EVAL -g -O0 --apcs=interwork --split_sections -I.. -I..\..\.. -I D:\Keil\ARM\RV31\Inc -I D:\Keil\ARM\CMSIS\Include -I D:\Keil\ARM\Inc\Luminary -Drvmdk -DPART_LM4F120H5QR -o "steppertestmain.o" --omf_browse "steppertestmain.crf" --depend "steppertestmain.d")
+I (stepper.h)(0x50899D2D)
+F (.\SysTick.c)(0x50899EB5)(-c --cpu Cortex-M4 -D__EVAL -g -O0 --apcs=interwork --split_sections -I.. -I..\..\.. -I D:\Keil\ARM\RV31\Inc -I D:\Keil\ARM\CMSIS\Include -I D:\Keil\ARM\Inc\Luminary -Drvmdk -DPART_LM4F120H5QR -o "systick.o" --omf_browse "systick.crf" --depend "systick.d")

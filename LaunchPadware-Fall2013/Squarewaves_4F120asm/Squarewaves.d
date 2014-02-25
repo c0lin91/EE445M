@@ -1,0 +1,1 @@
+.\squarewaves.o: Squarewaves.s

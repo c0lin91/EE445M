@@ -1,0 +1,8 @@
+Dependencies for Project 'SysTick', Target 'SysTick': (DO NOT MODIFY !)
+F (.\startup.s)(0x52239AE1)(--cpu Cortex-M4 --pd "__EVAL SETA 1" -g --apcs=interwork -I C:\Keil\ARM\RV31\INC-I C:\Keil\ARM\CMSIS\Include-I C:\Keil\ARM\Inc\Luminary--list .\startup.lst --xref -o .\startup.o --depend .\startup.d)
+F (.\SysTick.c)(0x52239ADF)(-c --cpu Cortex-M4 -D__EVAL -g -O0 --apcs=interwork --split_sections -I.. -I..\..\..-I C:\Keil\ARM\RV31\INC-I C:\Keil\ARM\CMSIS\Include-I C:\Keil\ARM\Inc\Luminary-Drvmdk -DPART_LM4F120H5QR -o .\systick.o --omf_browse .\systick.crf --depend .\systick.d)
+F (.\SysTickTestMain.c)(0x52239AE0)(-c --cpu Cortex-M4 -D__EVAL -g -O0 --apcs=interwork --split_sections -I.. -I..\..\..-I C:\Keil\ARM\RV31\INC-I C:\Keil\ARM\CMSIS\Include-I C:\Keil\ARM\Inc\Luminary-Drvmdk -DPART_LM4F120H5QR -o .\systicktestmain.o --omf_browse .\systicktestmain.crf --depend .\systicktestmain.d)
+I (C:\Users\Prachi Gupta\Dropbox\445M\LaunchPadware-Fall2013\SysTick_4F120\SysTick.h)(0x52239ADF)
+I (C:\Users\Prachi Gupta\Dropbox\445M\LaunchPadware-Fall2013\SysTick_4F120\PLL.h)(0x52239ADF)
+F (.\PLL.c)(0x52239ADF)(-c --cpu Cortex-M4 -D__EVAL -g -O0 --apcs=interwork --split_sections -I.. -I..\..\..-I C:\Keil\ARM\RV31\INC-I C:\Keil\ARM\CMSIS\Include-I C:\Keil\ARM\Inc\Luminary-Drvmdk -DPART_LM4F120H5QR -o .\pll.o --omf_browse .\pll.crf --depend .\pll.d)
+I (C:\Users\Prachi Gupta\Dropbox\445M\LaunchPadware-Fall2013\SysTick_4F120\PLL.h)(0x52239ADF)

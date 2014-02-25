@@ -1,0 +1,1 @@
+PointerTrafficLight.o: PointerTrafficLight.s

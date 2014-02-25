@@ -1,0 +1,6 @@
+Dependencies for Project 'UART2', Target 'UART2': (DO NOT MODIFY !)
+F (.\Startup.s)(0x51904196)(--cpu Cortex-M4 -g --apcs=interwork -I C:\Keil\ARM\RV31\INC -I C:\Keil\ARM\CMSIS\Include -I C:\Keil\ARM\Inc\Luminary --list "Startup.lst" --xref -o "Startup.o" --depend "Startup.d")
+F (.\PLL.s)(0x51917E97)(--cpu Cortex-M4 -g --apcs=interwork -I C:\Keil\ARM\RV31\INC -I C:\Keil\ARM\CMSIS\Include -I C:\Keil\ARM\Inc\Luminary --list "PLL.lst" --xref -o "PLL.o" --depend "PLL.d")
+F (.\UART2.s)(0x51903803)(--cpu Cortex-M4 -g --apcs=interwork -I C:\Keil\ARM\RV31\INC -I C:\Keil\ARM\CMSIS\Include -I C:\Keil\ARM\Inc\Luminary --list "UART2.lst" --xref -o "UART2.o" --depend "UART2.d")
+F (.\UART2TestMain.s)(0x518C0E70)(--cpu Cortex-M4 -g --apcs=interwork -I C:\Keil\ARM\RV31\INC -I C:\Keil\ARM\CMSIS\Include -I C:\Keil\ARM\Inc\Luminary --list "UART2TestMain.lst" --xref -o "UART2TestMain.o" --depend "UART2TestMain.d")
+F (.\FIFO.s)(0x51917F0C)(--cpu Cortex-M4 -g --apcs=interwork -I C:\Keil\ARM\RV31\INC -I C:\Keil\ARM\CMSIS\Include -I C:\Keil\ARM\Inc\Luminary --list "FIFO.lst" --xref -o "FIFO.o" --depend "FIFO.d")

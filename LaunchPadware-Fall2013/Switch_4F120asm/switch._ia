@@ -1,0 +1,1 @@
+--cpu Cortex-M4 --pd "__EVAL SETA 1" -g --apcs=interwork -I D:\Keil\ARM\RV31\Inc -I D:\Keil\ARM\CMSIS\Include -I D:\Keil\ARM\Inc\Luminary --list "Switch.lst" --xref -o "Switch.o" --depend "Switch.d" "Switch.s"

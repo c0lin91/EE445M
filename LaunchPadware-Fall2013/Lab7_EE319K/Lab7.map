@@ -1,0 +1,301 @@
+ARM Linker, 4.1 [Build 894] [Evaluation]
+
+==============================================================================
+
+Section Cross References
+
+    startup.o(RESET) refers to startup.o(STACK) for StackMem
+    startup.o(RESET) refers to lab7main.o(.text) for Start
+    lab7main.o(.text) refers (Special) to ssd2119.o(.text) for LCD_OutChar
+    lab7main.o(.text) refers to pll.o(.text) for PLL_Init
+    lab7main.o(.text) refers to io.o(.text) for IO_Init
+    lab7main.o(.text) refers to kentec.o(.text) for LCD_OutDec
+    ssd2119.o(.text) refers to lcd.o(.text) for LCD_GPIOInit
+    ssd2119.o(.text) refers to ssd2119.o(.data) for textColor
+    ssd2119.o(.text) refers to ssd2119.o(.constdata) for ASCII
+
+
+==============================================================================
+
+Removing Unused input sections from the image.
+
+    Removing startup.o(HEAP), (0 bytes).
+    Removing startup.o(.text), (28 bytes).
+
+2 unused section(s) (total 28 bytes) removed from the image.
+
+==============================================================================
+
+Image Symbol Table
+
+    Local Symbols
+
+    Symbol Name                              Value     Ov Type        Size  Object(Section)
+
+    RESET                                    0x00000000   Section      644  startup.o(RESET)
+    IO.s                                     0x00000000   Number         0  io.o ABSOLUTE
+    Kentec.s                                 0x00000000   Number         0  kentec.o ABSOLUTE
+    LCD.s                                    0x00000000   Number         0  lcd.o ABSOLUTE
+    Lab7Main.s                               0x00000000   Number         0  lab7main.o ABSOLUTE
+    PLL.s                                    0x00000000   Number         0  pll.o ABSOLUTE
+    SSD2119.c                                0x00000000   Number         0  ssd2119.o ABSOLUTE
+    Startup.s                                0x00000000   Number         0  startup.o ABSOLUTE
+    .text                                    0x00000284   Section       92  pll.o(.text)
+    .text                                    0x000002e0   Section      216  lab7main.o(.text)
+    Welcome                                  0x00000350   Data          24  lab7main.o(.text)
+    TestData                                 0x00000368   Data          44  lab7main.o(.text)
+    TestEnd                                  0x000003a8   Data           4  lab7main.o(.text)
+    .text                                    0x000003b8   Section        0  ssd2119.o(.text)
+    .text                                    0x00000cb4   Section        8  lcd.o(.text)
+    .text                                    0x00000cbc   Section        8  io.o(.text)
+    .text                                    0x00000cc4   Section        4  kentec.o(.text)
+    .constdata                               0x00000cc8   Section      480  ssd2119.o(.constdata)
+    ASCII                                    0x00000cc8   Data         480  ssd2119.o(.constdata)
+    .data                                    0x20000000   Section        6  ssd2119.o(.data)
+    STACK                                    0x20000008   Section     1024  startup.o(STACK)
+    StackMem                                 0x20000008   Data           0  startup.o(STACK)
+
+    Global Symbols
+
+    Symbol Name                              Value     Ov Type        Size  Object(Section)
+
+    BuildAttributes$$THM_ISAv4$E$P$D$K$B$S$7EM$PE$A:L22UL41UL21$X:L11$S22US41US21$IEEE1$IW$USESV6$~STKCKD$USESV7$~SHL$OSPACE$EBA8$STANDARDLIB$REQ8$PRES8$EABIv2 0x00000000   Number         0  anon$$obj.o ABSOLUTE
+    __Vectors                                0x00000000   Data           0  startup.o(RESET)
+    Reset_Handler                            0x0000026d   Thumb Code     0  startup.o(RESET)
+    NMI_Handler                              0x00000271   Thumb Code     2  startup.o(RESET)
+    HardFault_Handler                        0x00000273   Thumb Code     2  startup.o(RESET)
+    MemManage_Handler                        0x00000275   Thumb Code     2  startup.o(RESET)
+    BusFault_Handler                         0x00000277   Thumb Code     2  startup.o(RESET)
+    UsageFault_Handler                       0x00000279   Thumb Code     2  startup.o(RESET)
+    SVC_Handler                              0x0000027b   Thumb Code     2  startup.o(RESET)
+    DebugMon_Handler                         0x0000027d   Thumb Code     2  startup.o(RESET)
+    PendSV_Handler                           0x0000027f   Thumb Code     2  startup.o(RESET)
+    SysTick_Handler                          0x00000281   Thumb Code     2  startup.o(RESET)
+    ADC0Seq0_Handler                         0x00000283   Thumb Code     0  startup.o(RESET)
+    ADC0Seq1_Handler                         0x00000283   Thumb Code     0  startup.o(RESET)
+    ADC0Seq2_Handler                         0x00000283   Thumb Code     0  startup.o(RESET)
+    ADC0Seq3_Handler                         0x00000283   Thumb Code     0  startup.o(RESET)
+    ADC1Seq0_Handler                         0x00000283   Thumb Code     0  startup.o(RESET)
+    ADC1Seq1_Handler                         0x00000283   Thumb Code     0  startup.o(RESET)
+    ADC1Seq2_Handler                         0x00000283   Thumb Code     0  startup.o(RESET)
+    ADC1Seq3_Handler                         0x00000283   Thumb Code     0  startup.o(RESET)
+    CAN0_Handler                             0x00000283   Thumb Code     0  startup.o(RESET)
+    CAN1_Handler                             0x00000283   Thumb Code     0  startup.o(RESET)
+    CAN2_Handler                             0x00000283   Thumb Code     0  startup.o(RESET)
+    Comp0_Handler                            0x00000283   Thumb Code     0  startup.o(RESET)
+    Comp1_Handler                            0x00000283   Thumb Code     0  startup.o(RESET)
+    Comp2_Handler                            0x00000283   Thumb Code     0  startup.o(RESET)
+    Ethernet_Handler                         0x00000283   Thumb Code     0  startup.o(RESET)
+    ExtBus_Handler                           0x00000283   Thumb Code     0  startup.o(RESET)
+    FPU_Handler                              0x00000283   Thumb Code     0  startup.o(RESET)
+    Fan0_Handler                             0x00000283   Thumb Code     0  startup.o(RESET)
+    FlashCtl_Handler                         0x00000283   Thumb Code     0  startup.o(RESET)
+    GPIOPortA_Handler                        0x00000283   Thumb Code     0  startup.o(RESET)
+    GPIOPortB_Handler                        0x00000283   Thumb Code     0  startup.o(RESET)
+    GPIOPortC_Handler                        0x00000283   Thumb Code     0  startup.o(RESET)
+    GPIOPortD_Handler                        0x00000283   Thumb Code     0  startup.o(RESET)
+    GPIOPortE_Handler                        0x00000283   Thumb Code     0  startup.o(RESET)
+    GPIOPortF_Handler                        0x00000283   Thumb Code     0  startup.o(RESET)
+    GPIOPortG_Handler                        0x00000283   Thumb Code     0  startup.o(RESET)
+    GPIOPortH_Handler                        0x00000283   Thumb Code     0  startup.o(RESET)
+    GPIOPortJ_Handler                        0x00000283   Thumb Code     0  startup.o(RESET)
+    GPIOPortK_Handler                        0x00000283   Thumb Code     0  startup.o(RESET)
+    GPIOPortL_Handler                        0x00000283   Thumb Code     0  startup.o(RESET)
+    GPIOPortM_Handler                        0x00000283   Thumb Code     0  startup.o(RESET)
+    GPIOPortN_Handler                        0x00000283   Thumb Code     0  startup.o(RESET)
+    GPIOPortP1_Handler                       0x00000283   Thumb Code     0  startup.o(RESET)
+    GPIOPortP2_Handler                       0x00000283   Thumb Code     0  startup.o(RESET)
+    GPIOPortP3_Handler                       0x00000283   Thumb Code     0  startup.o(RESET)
+    GPIOPortP4_Handler                       0x00000283   Thumb Code     0  startup.o(RESET)
+    GPIOPortP5_Handler                       0x00000283   Thumb Code     0  startup.o(RESET)
+    GPIOPortP6_Handler                       0x00000283   Thumb Code     0  startup.o(RESET)
+    GPIOPortP7_Handler                       0x00000283   Thumb Code     0  startup.o(RESET)
+    GPIOPortP_Handler                        0x00000283   Thumb Code     0  startup.o(RESET)
+    GPIOPortQ1_Handler                       0x00000283   Thumb Code     0  startup.o(RESET)
+    GPIOPortQ2_Handler                       0x00000283   Thumb Code     0  startup.o(RESET)
+    GPIOPortQ3_Handler                       0x00000283   Thumb Code     0  startup.o(RESET)
+    GPIOPortQ4_Handler                       0x00000283   Thumb Code     0  startup.o(RESET)
+    GPIOPortQ5_Handler                       0x00000283   Thumb Code     0  startup.o(RESET)
+    GPIOPortQ6_Handler                       0x00000283   Thumb Code     0  startup.o(RESET)
+    GPIOPortQ7_Handler                       0x00000283   Thumb Code     0  startup.o(RESET)
+    GPIOPortQ_Handler                        0x00000283   Thumb Code     0  startup.o(RESET)
+    GPIOPortR_Handler                        0x00000283   Thumb Code     0  startup.o(RESET)
+    GPIOPortS_Handler                        0x00000283   Thumb Code     0  startup.o(RESET)
+    Hibernate_Handler                        0x00000283   Thumb Code     0  startup.o(RESET)
+    I2C0_Handler                             0x00000283   Thumb Code     0  startup.o(RESET)
+    I2C1_Handler                             0x00000283   Thumb Code     0  startup.o(RESET)
+    I2C2_Handler                             0x00000283   Thumb Code     0  startup.o(RESET)
+    I2C3_Handler                             0x00000283   Thumb Code     0  startup.o(RESET)
+    I2C4_Handler                             0x00000283   Thumb Code     0  startup.o(RESET)
+    I2C5_Handler                             0x00000283   Thumb Code     0  startup.o(RESET)
+    I2S0_Handler                             0x00000283   Thumb Code     0  startup.o(RESET)
+    LPC0_Handler                             0x00000283   Thumb Code     0  startup.o(RESET)
+    PECI0_Handler                            0x00000283   Thumb Code     0  startup.o(RESET)
+    PWM0Fault_Handler                        0x00000283   Thumb Code     0  startup.o(RESET)
+    PWM0Generator0_Handler                   0x00000283   Thumb Code     0  startup.o(RESET)
+    PWM0Generator1_Handler                   0x00000283   Thumb Code     0  startup.o(RESET)
+    PWM0Generator2_Handler                   0x00000283   Thumb Code     0  startup.o(RESET)
+    PWM0Generator3_Handler                   0x00000283   Thumb Code     0  startup.o(RESET)
+    PWM1Fault_Handler                        0x00000283   Thumb Code     0  startup.o(RESET)
+    PWM1Generator0_Handler                   0x00000283   Thumb Code     0  startup.o(RESET)
+    PWM1Generator1_Handler                   0x00000283   Thumb Code     0  startup.o(RESET)
+    PWM1Generator2_Handler                   0x00000283   Thumb Code     0  startup.o(RESET)
+    PWM1Generator3_Handler                   0x00000283   Thumb Code     0  startup.o(RESET)
+    Quadrature0_Handler                      0x00000283   Thumb Code     0  startup.o(RESET)
+    Quadrature1_Handler                      0x00000283   Thumb Code     0  startup.o(RESET)
+    Quadrature2_Handler                      0x00000283   Thumb Code     0  startup.o(RESET)
+    SSI0_Handler                             0x00000283   Thumb Code     0  startup.o(RESET)
+    SSI1_Handler                             0x00000283   Thumb Code     0  startup.o(RESET)
+    SSI2_Handler                             0x00000283   Thumb Code     0  startup.o(RESET)
+    SSI3_Handler                             0x00000283   Thumb Code     0  startup.o(RESET)
+    SysCtl_Handler                           0x00000283   Thumb Code     0  startup.o(RESET)
+    Timer0A_Handler                          0x00000283   Thumb Code     0  startup.o(RESET)
+    Timer0B_Handler                          0x00000283   Thumb Code     0  startup.o(RESET)
+    Timer1A_Handler                          0x00000283   Thumb Code     0  startup.o(RESET)
+    Timer1B_Handler                          0x00000283   Thumb Code     0  startup.o(RESET)
+    Timer2A_Handler                          0x00000283   Thumb Code     0  startup.o(RESET)
+    Timer2B_Handler                          0x00000283   Thumb Code     0  startup.o(RESET)
+    Timer3A_Handler                          0x00000283   Thumb Code     0  startup.o(RESET)
+    Timer3B_Handler                          0x00000283   Thumb Code     0  startup.o(RESET)
+    Timer4A_Handler                          0x00000283   Thumb Code     0  startup.o(RESET)
+    Timer4B_Handler                          0x00000283   Thumb Code     0  startup.o(RESET)
+    Timer5A_Handler                          0x00000283   Thumb Code     0  startup.o(RESET)
+    Timer5B_Handler                          0x00000283   Thumb Code     0  startup.o(RESET)
+    UART0_Handler                            0x00000283   Thumb Code     0  startup.o(RESET)
+    UART1_Handler                            0x00000283   Thumb Code     0  startup.o(RESET)
+    UART2_Handler                            0x00000283   Thumb Code     0  startup.o(RESET)
+    UART3_Handler                            0x00000283   Thumb Code     0  startup.o(RESET)
+    UART4_Handler                            0x00000283   Thumb Code     0  startup.o(RESET)
+    UART5_Handler                            0x00000283   Thumb Code     0  startup.o(RESET)
+    UART6_Handler                            0x00000283   Thumb Code     0  startup.o(RESET)
+    UART7_Handler                            0x00000283   Thumb Code     0  startup.o(RESET)
+    USB0_Handler                             0x00000283   Thumb Code     0  startup.o(RESET)
+    WDT_Handler                              0x00000283   Thumb Code     0  startup.o(RESET)
+    WideTimer0A_Handler                      0x00000283   Thumb Code     0  startup.o(RESET)
+    WideTimer0B_Handler                      0x00000283   Thumb Code     0  startup.o(RESET)
+    WideTimer1A_Handler                      0x00000283   Thumb Code     0  startup.o(RESET)
+    WideTimer1B_Handler                      0x00000283   Thumb Code     0  startup.o(RESET)
+    WideTimer2A_Handler                      0x00000283   Thumb Code     0  startup.o(RESET)
+    WideTimer2B_Handler                      0x00000283   Thumb Code     0  startup.o(RESET)
+    WideTimer3A_Handler                      0x00000283   Thumb Code     0  startup.o(RESET)
+    WideTimer3B_Handler                      0x00000283   Thumb Code     0  startup.o(RESET)
+    WideTimer4A_Handler                      0x00000283   Thumb Code     0  startup.o(RESET)
+    WideTimer4B_Handler                      0x00000283   Thumb Code     0  startup.o(RESET)
+    WideTimer5A_Handler                      0x00000283   Thumb Code     0  startup.o(RESET)
+    WideTimer5B_Handler                      0x00000283   Thumb Code     0  startup.o(RESET)
+    uDMA_Error                               0x00000283   Thumb Code     0  startup.o(RESET)
+    uDMA_Handler                             0x00000283   Thumb Code     0  startup.o(RESET)
+    PLL_Init                                 0x00000285   Thumb Code     0  pll.o(.text)
+    Start                                    0x000002e1   Thumb Code     4  lab7main.o(.text)
+    convertColor                             0x000003b9   Thumb Code    20  ssd2119.o(.text)
+    LCD_SetTextColor                         0x000003cd   Thumb Code    24  ssd2119.o(.text)
+    LCD_SetCursor                            0x000003e5   Thumb Code    10  ssd2119.o(.text)
+    LCD_Init                                 0x000003ef   Thumb Code   416  ssd2119.o(.text)
+    LCD_DrawFilledRect                       0x0000058f   Thumb Code    82  ssd2119.o(.text)
+    LCD_ColorFill                            0x000005e1   Thumb Code    22  ssd2119.o(.text)
+    abs                                      0x000005f7   Thumb Code    14  ssd2119.o(.text)
+    LCD_DrawPixel                            0x00000605   Thumb Code    46  ssd2119.o(.text)
+    LCD_OutChar                              0x00000633   Thumb Code   180  ssd2119.o(.text)
+    LCD_OutString                            0x000006e7   Thumb Code    26  ssd2119.o(.text)
+    LCD_Goto                                 0x00000701   Thumb Code    32  ssd2119.o(.text)
+    LCD_SetTextColorRGB                      0x00000721   Thumb Code     6  ssd2119.o(.text)
+    LCD_DrawPixelRGB                         0x00000727   Thumb Code    42  ssd2119.o(.text)
+    LCD_DrawLine                             0x00000751   Thumb Code   196  ssd2119.o(.text)
+    LCD_DrawRect                             0x00000815   Thumb Code   108  ssd2119.o(.text)
+    LCD_DrawCircle                           0x00000881   Thumb Code   256  ssd2119.o(.text)
+    LCD_DrawFilledCircle                     0x00000981   Thumb Code   210  ssd2119.o(.text)
+    LCD_DrawImage                            0x00000a53   Thumb Code   230  ssd2119.o(.text)
+    LCD_DrawBMP                              0x00000b39   Thumb Code   380  ssd2119.o(.text)
+    LCD_GPIOInit                             0x00000cb5   Thumb Code     0  lcd.o(.text)
+    LCD_WriteCommand                         0x00000cb7   Thumb Code     0  lcd.o(.text)
+    LCD_WriteData                            0x00000cb9   Thumb Code     0  lcd.o(.text)
+    IO_Init                                  0x00000cbd   Thumb Code     0  io.o(.text)
+    IO_HeartBeat                             0x00000cbf   Thumb Code     0  io.o(.text)
+    IO_Touch                                 0x00000cc1   Thumb Code     0  io.o(.text)
+    LCD_OutDec                               0x00000cc5   Thumb Code     0  kentec.o(.text)
+    LCD_OutFix                               0x00000cc7   Thumb Code     0  kentec.o(.text)
+    cursorX                                  0x20000000   Data           2  ssd2119.o(.data)
+    cursorY                                  0x20000002   Data           2  ssd2119.o(.data)
+    textColor                                0x20000004   Data           2  ssd2119.o(.data)
+
+
+
+==============================================================================
+
+Memory Map of the image
+
+  Image Entry point : 0x0000026d
+
+  Load Region LR_1 (Base: 0x00000000, Size: 0x00000eb0, Max: 0xffffffff, ABSOLUTE)
+
+    Execution Region ER_RO (Base: 0x00000000, Size: 0x00000ea8, Max: 0xffffffff, ABSOLUTE)
+
+    Base Addr    Size         Type   Attr      Idx    E Section Name        Object
+
+    0x00000000   0x00000284   Code   RO            3  * RESET               startup.o
+    0x00000284   0x0000005c   Code   RO           12    .text               pll.o
+    0x000002e0   0x000000d8   Code   RO           15    .text               lab7main.o
+    0x000003b8   0x000008fc   Code   RO           18    .text               ssd2119.o
+    0x00000cb4   0x00000008   Code   RO           38    .text               lcd.o
+    0x00000cbc   0x00000008   Code   RO           41    .text               io.o
+    0x00000cc4   0x00000004   Code   RO           44    .text               kentec.o
+    0x00000cc8   0x000001e0   Data   RO           19    .constdata          ssd2119.o
+
+
+    Execution Region ER_RW (Base: 0x20000000, Size: 0x00000008, Max: 0xffffffff, ABSOLUTE)
+
+    Base Addr    Size         Type   Attr      Idx    E Section Name        Object
+
+    0x20000000   0x00000006   Data   RW           20    .data               ssd2119.o
+
+
+    Execution Region ER_ZI (Base: 0x20000008, Size: 0x00000400, Max: 0xffffffff, ABSOLUTE)
+
+    Base Addr    Size         Type   Attr      Idx    E Section Name        Object
+
+    0x20000008   0x00000400   Zero   RW            1    STACK               startup.o
+
+
+==============================================================================
+
+Image component sizes
+
+
+      Code (inc. data)   RO Data    RW Data    ZI Data      Debug   Object Name
+
+         8          2          0          0          0        168   io.o
+         4          0          0          0          0        172   kentec.o
+       216        106          0          0          0        208   lab7main.o
+         8          2          0          0          0        172   lcd.o
+        92         14          0          0          0        192   pll.o
+      2300         22        480          6          0      11150   ssd2119.o
+       644        620          0          0       1024        692   startup.o
+
+    ----------------------------------------------------------------------
+      3272        766        480          8       1024      12754   Object Totals
+         0          0          0          0          0          0   (incl. Generated)
+         0          0          0          2          0          0   (incl. Padding)
+
+    ----------------------------------------------------------------------
+         0          0          0          0          0          0   Library Totals
+         0          0          0          0          0          0   (incl. Padding)
+
+    ----------------------------------------------------------------------
+
+==============================================================================
+
+
+      Code (inc. data)   RO Data    RW Data    ZI Data      Debug   
+
+      3272        766        480          8       1024      12754   Grand Totals
+      3272        766        480          8       1024      12754   ELF Image Totals
+      3272        766        480          8          0          0   ROM Totals
+
+==============================================================================
+
+    Total RO  Size (Code + RO Data)                 3752 (   3.66kB)
+    Total RW  Size (RW Data + ZI Data)              1032 (   1.01kB)
+    Total ROM Size (Code + RO Data + RW Data)       3760 (   3.67kB)
+
+==============================================================================
+
