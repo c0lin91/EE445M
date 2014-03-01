@@ -68,6 +68,7 @@ unsigned long JitterHistogram[JITTERSIZE]={0,};
 #define PE1  (*((volatile unsigned long *)0x40024008))
 #define PE2  (*((volatile unsigned long *)0x40024010))
 #define PE3  (*((volatile unsigned long *)0x40024020))
+#define PF1 										(*((volatile unsigned long *)0x40025008))
 
 void PortE_Init(void){ unsigned long volatile delay;
   SYSCTL_RCGC2_R |= 0x10;       // activate port E
@@ -88,6 +89,19 @@ void PortE_Init(void){ unsigned long volatile delay;
 	PE2 = 0;
 	PE3 = 0; 
 }
+
+void PortF_Init(void){ unsigned long volatile delay;
+	SYSCTL_RCGC2_R |= SYSCTL_RCGC2_GPIOF;
+  GPIO_PORTF_DIR_R |= 0x02;    // (c) make PF4 in (built-in button)
+  GPIO_PORTF_AFSEL_R &= ~0x02;  //     disable alt funct on PF4
+  GPIO_PORTF_DEN_R |= 0x02;     //     enable digital I/O on PF4   
+  GPIO_PORTF_PCTL_R &= ~0x000000F0; // configure PF4 as GPIO
+  GPIO_PORTF_AMSEL_R = 0;       //     disable analog functionality on PF
+	PF1 = 0;
+	
+}
+
+	
 
 	
 //------------------Task 1--------------------------------
@@ -332,7 +346,7 @@ void Interpreter(void);    // just a prototype, link to your interpreter
 
 
 //*******************final user main DEMONTRATE THIS TO TA**********
-int main (void){ 
+int Finalmain (void){ 
   OS_Init();           // initialize, disable interrupts
   PortE_Init();
 	ST7735_InitR(INITR_REDTAB);
@@ -682,10 +696,17 @@ void Thread7(void){  // foreground thread
 #define workA 500       // {5,50,500 us} work in Task A
 #define counts1us 10    // number of OS_Time counts per 1us
 void TaskA(void){       // called every {1000, 2990us} in background
+	static int i =0;
+	if(i == 200){
+//		PF1 ^= 0x02;
+		i = 0;
+	}
+	i++;
   PE1 = 0x02;      // debugging profile  
   CountA++;
   PseudoWork(workA*counts1us); //  do work (100ns time resolution)
   PE1 = 0x00;      // debugging profile  
+	
 }
 #define workB 250       // 250 us work in Task B
 void TaskB(void){       // called every pB in background
@@ -695,15 +716,17 @@ void TaskB(void){       // called every pB in background
   PE2 = 0x00;      // debugging profile  
 }
 
-int Testmain5(void){       // Testmain5 Lab 3
+
+int main(void){       // Testmain5 Lab 3
   PortE_Init();
+	PortF_Init();
   OS_Init();           // initialize, disable interrupts
   NumCreated = 0 ;
-//  NumCreated += OS_AddThread(&Thread6,128,2); 
+  NumCreated += OS_AddThread(&Thread6,128,0,2); 
 //  NumCreated += OS_AddThread(&Thread7,128,1); 
-  OS_AddPeriodicThread(&TaskA,TIME_1MS,0);           // 1 ms, higher priority
-  OS_AddPeriodicThread(&TaskB,2*TIME_1MS,1);         // 2 ms, lower priority
- 
+  OS_AddPeriodicThread(&TaskA,TIME_1MS,1);           // 1 ms, higher priority
+  OS_AddPeriodicThread(&TaskB,2*TIME_1MS,2);         // 2 ms, lower priority
+
   OS_Launch(TIME_2MS); // 2ms, doesn't return, interrupts enabled in here
   return 0;             // this never executes
 }

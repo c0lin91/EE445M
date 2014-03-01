@@ -30,6 +30,7 @@
 #define NVIC_SYS_PRI3_R         (*((volatile unsigned long *)0xE000ED20))  // Sys. Handlers 12 to 15 Priority  
 #define NVIC_EN0_INT19          0x00080000  // Interrupt 19 enable
 #define PF4 										(*((volatile unsigned long *)0x40025040))
+#define PF0 										(*((volatile unsigned long *)0x40025004))
 #define NVIC_EN0_INT30					0x40000000
 
 #define PE1  (*((volatile unsigned long *)0x40024008))
@@ -50,10 +51,15 @@ DataType static Fifo[FIFOSIZE];
 
 
 void (*PF4Task)(void);  // user function
-void (*CallBack)(void);	// Periodic background task
+void (*PF0Task)(void);
+void (*PeriodicTask1)(void);	// Periodic background task
+void (*PeriodicTask2)(void);	// Periodic background task
+void (*WakeupTask)(void);	// Periodic background task
 void init_openThreads (void); 
 void push_OpenThreads (int threadId); 
 int pop_OpenThreads (void); 
+void SysClock_Init(int period);
+
 
 extern tcbType tcbs[NUMTHREADS];
 extern long Stacks [NUMTHREADS][STACKSIZE]; 
@@ -61,7 +67,7 @@ extern unsigned long NumCreated;
 extern unsigned long NumSleeping; 
 extern tcbType *RunPt; 
 extern tcbType* SleepPt;
-unsigned long static LastPF4;
+unsigned long static LastPF4, LastPF0;
 extern tcbType *tempRunPt; 
 int open_threads [NUMTHREADS]; 
 int idxOpenThreads; 
@@ -75,6 +81,7 @@ static int SysTime = 0;
 void OS_Init(void){
 	OS_DisableInterrupts(); 
 	PLL_Init();					// Incompatable with simulator (I think)
+	SysClock_Init(1000);
 //	SysCtClockSet(SYSCTL_SYSDIV_4 | SYSCTL_USE_PLL | SYSCTL_XTAL_6MHZ | SYSCTL_OSC_MAIN);
 	NVIC_ST_CTRL_R = 0; 
 	NVIC_ST_RELOAD_R = NVIC_ST_RELOAD_M;
@@ -235,45 +242,61 @@ unsigned long OS_Id(void){
 //           determines the relative priority of these four threads
 int OS_AddPeriodicThread(void(*task)(void), 		
    unsigned long period, unsigned long priority){
-
-	SYSCTL_RCGC1_R |= SYSCTL_RCGC1_TIMER1; // 0) activate timer0
-  CallBack = task;             // user function 
-  TIMER1_CTL_R &= ~0x00000001;     // 1) disable timer1A during setup
-  TIMER1_CFG_R = 0x00000000;       // 2) configure for 32-bit timer mode
-  TIMER1_TAMR_R = 0x00000002;      // 3) configure for periodic mode
-  TIMER1_TAILR_R = period;         // 4) reload value
-  TIMER1_TAPR_R = 49;              // 5) 1us timer0A 49
-  TIMER1_ICR_R = 0x00000001;       // 6) clear timer1A timeout flag
-  TIMER1_IMR_R |= 0x00000001;      // 7) arm timeout interrupt
-	NVIC_PRI5_R &= (7<<13); 
-  NVIC_PRI5_R |= (0<<13);; // 8) priority 2
-  NVIC_EN0_R |= NVIC_EN0_INT21;    // 9) enable interrupt 21 in NVIC
-  TIMER1_CTL_R |= 0x00000001;      // 10) enable timer1A
+ 
+  static int bgThreadNum = 0;
+	switch (bgThreadNum){
+		case 0:
+			SYSCTL_RCGC1_R |= SYSCTL_RCGC1_TIMER1; // 0) activate timer0
+			PeriodicTask1 = task;             // user function 
+			TIMER1_CTL_R &= ~0x00000001;     // 1) disable timer1A during setup
+			TIMER1_CFG_R = 0x00000000;       // 2) configure for 32-bit timer mode
+			TIMER1_TAMR_R = 0x00000002;      // 3) configure for periodic mode
+			TIMER1_TAILR_R = period;         // 4) reload value
+			TIMER1_TAPR_R = 49;              // 5) 1us timer0A 49
+			TIMER1_ICR_R = 0x00000001;       // 6) clear timer1A timeout flag
+			TIMER1_IMR_R |= 0x00000001;      // 7) arm timeout interrupt
+			NVIC_PRI5_R &= ~(7<<13); 
+			NVIC_PRI5_R |= (priority<<13);; // 8) priority 2
+			NVIC_EN0_R |= NVIC_EN0_INT21;    // 9) enable interrupt 21 in NVIC
+			TIMER1_CTL_R |= 0x00000001;      // 10) enable timer1A
+			break;
+		
+		case 1:
+			SYSCTL_RCGC1_R |= SYSCTL_RCGC1_TIMER2; // 0) activate timer0
+			PeriodicTask2 = task;             // user function 
+			TIMER2_CTL_R &= ~0x00000001;     // 1) disable timer1A during setup
+			TIMER2_CFG_R = 0x00000000;       // 2) configure for 32-bit timer mode
+			TIMER2_TAMR_R = 0x00000002;      // 3) configure for periodic mode
+			TIMER2_TAILR_R = period;         // 4) reload value
+			TIMER2_TAPR_R = 49;              // 5) 1us timer0A 49
+			TIMER2_ICR_R = 0x00000001;       // 6) clear timer1A timeout flag
+			TIMER2_IMR_R |= 0x00000001;      // 7) arm timeout interrupt
+			NVIC_PRI5_R &= ~(7<<29); 
+			NVIC_PRI5_R |= (priority<<29);; // 8) priority 2
+			NVIC_EN0_R |= (1<<23);    // 9) enable interrupt 21 in NVIC
+			TIMER2_CTL_R |= 0x00000001;      // 10) enable timer1A
+			break;
+		default:
+			return 0;
+		
+	}
+	bgThreadNum ++;
 	return 1;
 }
 
 void Timer1A_Handler(void){
-	int idx; tcbType *tempSleep; 
   TIMER1_ICR_R = TIMER_ICR_TATOCINT;	// acknowledge timer1A timeout
-	SysTime++;
-	for(idx = 0; idx < NumSleeping; idx++){
-		SleepPt->sleepState -= 1; 
-		if (!(SleepPt->sleepState)) {
-			//wake up this thread
-			NumSleeping--; 
-			tempSleep = SleepPt->nextThread;
-			SleepPt->prevThread = RunPt; 
-			SleepPt->nextThread = RunPt->nextThread; 
-			RunPt->nextThread->prevThread = SleepPt; 
-			RunPt->nextThread = SleepPt;
-			
-			SleepPt = (NumSleeping) ? tempSleep : 0; 
-		}
-	}
-  (*CallBack)();                // execute user task
+  (*PeriodicTask1)();                // execute user task
 }
 
-	 
+void Timer2A_Handler(void){
+  TIMER2_ICR_R = TIMER_ICR_TATOCINT;	// acknowledge timer1A timeout
+  (*PeriodicTask2)();                // execute user task
+}
+
+
+
+
 	 
 
 //******** OS_AddSW1Task *************** 
@@ -292,10 +315,12 @@ void Timer1A_Handler(void){
 int OS_AddSW1Task(void(*task)(void), unsigned long priority){unsigned long volatile delay;
 	SYSCTL_RCGC2_R |= SYSCTL_RCGC2_GPIOF;
 	PF4Task = task;
+	GPIO_PORTF_LOCK_R = GPIO_LOCK_KEY;
+	GPIO_PORTF_CR_R |= 0x10;
   GPIO_PORTF_DIR_R &= ~0x10;    // (c) make PF4 in (built-in button)
   GPIO_PORTF_AFSEL_R &= ~0x10;  //     disable alt funct on PF4
   GPIO_PORTF_DEN_R |= 0x10;     //     enable digital I/O on PF4   
-  GPIO_PORTF_PCTL_R &= ~0x000F0000; // configure PF4 as GPIO
+  GPIO_PORTF_PCTL_R &= ~0x000F000F; // configure PF4 as GPIO
   GPIO_PORTF_AMSEL_R = 0;       //     disable analog functionality on PF
   GPIO_PORTF_PUR_R |= 0x10;     //     enable weak pull-up on PF4
   GPIO_PORTF_IS_R &= ~0x10;     // (d) PF4 is edge-sensitive
@@ -309,22 +334,48 @@ int OS_AddSW1Task(void(*task)(void), unsigned long priority){unsigned long volat
 	return 1;
 }
 
-void static DebounceTask (void) {
-	OS_Sleep(10); 
-	LastPF4 = PF4; 
-	GPIO_PORTF_ICR_R = 0x10;
-	GPIO_PORTF_IM_R |= 0x10; 
-	OS_Kill(); 
-} 
-void GPIOPortF_Handler(void){
-	PE2 ^= 0x04; 
-  if(LastPF4){
-		(*PF4Task)();                // execute user task
+void static DebounceTaskPF0 () {
+			OS_Sleep(10); 
+			LastPF0 = PF0; 
+			GPIO_PORTF_ICR_R = 0x01;
+			GPIO_PORTF_IM_R |= 0x01; 
+			OS_Kill(); 
+}
+void static DebounceTaskPF4 () {
+			OS_Sleep(10); 
+			LastPF4 = PF4; 
+			GPIO_PORTF_ICR_R = 0x10;
+			GPIO_PORTF_IM_R |= 0x10; 
+			OS_Kill(); 
 	}
-	GPIO_PORTF_IM_R &= ~0x10; 
+//void GPIOPortF_Handler(void){
+//	PE2 ^= 0x04;	
+//  if(LastPF4){
+//		(*PF4Task)();                // execute user task
+//	}
+//	GPIO_PORTF_IM_R &= ~0x10; 
+//	
+//	NumCreated += OS_AddThread (&DebounceTask, 0, 0, 0); 
+//	PE2 ^= 0x04;
+//}
+
+void GPIOPortF_Handler(void){
+	if (GPIO_PORTF_RIS_R & 0x10) { 
+		if(LastPF4){
+		(*PF4Task)();                // execute user task
+		}
+		GPIO_PORTF_IM_R &= ~0x10; 
+		NumCreated += OS_AddThread (&DebounceTaskPF4, 0, 0, 0); 
+	} 
 	
-	NumCreated += OS_AddThread (&DebounceTask, 0, 0, 0); 
-	PE2 ^= 0x04;
+	else if (GPIO_PORTF_RIS_R & 0x01) {
+		if(LastPF0){
+		(*PF0Task)();                // execute user task
+		}
+		GPIO_PORTF_IM_R &= ~0x01; 
+	
+		NumCreated += OS_AddThread (&DebounceTaskPF0, 0, 0, 0); 
+	} 
 }
 
 //******** OS_AddSW2Task *************** 
@@ -340,7 +391,27 @@ void GPIOPortF_Handler(void){
 // In lab 3, this command will be called will be called 0 or 1 times
 // In lab 3, there will be up to four background threads, and this priority field 
 //           determines the relative priority of these four threads
-int OS_AddSW2Task(void(*task)(void), unsigned long priority){return 0;}
+int OS_AddSW2Task(void(*task)(void), unsigned long priority){
+	SYSCTL_RCGC2_R |= SYSCTL_RCGC2_GPIOF;
+	PF0Task = task;
+	GPIO_PORTF_LOCK_R = GPIO_LOCK_KEY;
+	GPIO_PORTF_CR_R |= 0x01;
+  GPIO_PORTF_DIR_R &= ~0x01;    // (c) make PF0 in (built-in button)
+  GPIO_PORTF_AFSEL_R &= ~0x01;  //     disable alt funct on PF4
+  GPIO_PORTF_DEN_R |= 0x01;     //     enable digital I/O on PF4   
+  GPIO_PORTF_PCTL_R &= ~0x0000000F; // configure PF4 as GPIO
+  GPIO_PORTF_AMSEL_R = 0;       //     disable analog functionality on PF
+  GPIO_PORTF_PUR_R |= 0x01;     //     enable weak pull-up on PF4
+  GPIO_PORTF_IS_R &= ~0x01;     // (d) PF4 is edge-sensitive
+  GPIO_PORTF_IBE_R |= 0x01;    //     PF4 is not both edges
+//  GPIO_PORTF_IEV_R &= ~0x01;    //     PF4 falling edge event
+  GPIO_PORTF_ICR_R = 0x01;      // (e) clear flag4
+  GPIO_PORTF_IM_R |= 0x01;      // (f) arm interrupt on PF4
+  NVIC_PRI7_R = (NVIC_PRI7_R&0xFF00FFFF)|0x00A00000; // (g) priority 5
+  NVIC_EN0_R = NVIC_EN0_INT30;  // (h) enable interrupt 30 in NVIC
+	LastPF0 = PF0;
+	return 1;
+}
 
 // ******** OS_Sleep ************
 // place this thread into a dormant state
@@ -575,3 +646,43 @@ void push_OpenThreads (int threadId) {
 int pop_OpenThreads () {
 	return  ((idxOpenThreads != EMPTYSTACK) ? open_threads[idxOpenThreads--] : -1);
 } 
+
+void Wakeup(void){
+	int idx; tcbType *tempSleep; 
+	SysTime++;
+	for(idx = 0; idx < NumSleeping; idx++){
+		SleepPt->sleepState -= 1; 
+		if (!(SleepPt->sleepState)) {
+			//wake up this thread
+			NumSleeping--; 
+			tempSleep = SleepPt->nextThread;
+			SleepPt->prevThread = RunPt; 
+			SleepPt->nextThread = RunPt->nextThread; 
+			RunPt->nextThread->prevThread = SleepPt; 
+			RunPt->nextThread = SleepPt;
+			
+			SleepPt = (NumSleeping) ? tempSleep : 0; 
+		}
+	}
+}
+
+void SysClock_Init(int period){
+			SYSCTL_RCGC1_R |= SYSCTL_RCGC1_TIMER3; // 0) activate timer0
+			WakeupTask = &Wakeup;             // user function 
+			TIMER3_CTL_R &= ~0x00000001;     // 1) disable timer1A during setup
+			TIMER3_CFG_R = 0x00000000;       // 2) configure for 32-bit timer mode
+			TIMER3_TAMR_R = 0x00000002;      // 3) configure for periodic mode
+			TIMER3_TAILR_R = period;         // 4) reload value
+			TIMER3_TAPR_R = 49;              // 5) 1us timer0A 49
+			TIMER3_ICR_R = 0x00000001;       // 6) clear timer1A timeout flag
+			TIMER3_IMR_R |= 0x00000001;      // 7) arm timeout interrupt
+			NVIC_PRI8_R &= ~(7<<29); // 8) priority 0
+			NVIC_EN1_R |= 0X08;    // 9) enable interrupt 21 in NVIC
+			TIMER3_CTL_R |= 0x00000001;      // 10) enable timer3A
+}
+
+
+void Timer3A_Handler(void){
+	TIMER3_ICR_R = TIMER_ICR_TATOCINT;	// acknowledge timer1A timeout
+	(*WakeupTask)();
+}
