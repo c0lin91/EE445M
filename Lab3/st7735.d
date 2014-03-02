@@ -4,3 +4,4 @@
 .\st7735.o: C:\Keil\ARM\ARMCC\bin\..\include\stdlib.h
 .\st7735.o: C:\Keil\ARM\ARMCC\bin\..\include\stdio.h
 .\st7735.o: C:\Keil\ARM\ARMCC\bin\..\include\string.h
+.\st7735.o: UART2.h

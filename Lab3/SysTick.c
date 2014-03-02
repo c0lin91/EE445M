@@ -51,6 +51,7 @@
 
 extern tcbType *tempRunPt; 
 extern tcbType *RunPt; 
+extern tcbType *StartPt;
 // Initialize SysTick with busy wait running at bus clock.
 void SysTick_Init(){
   NVIC_ST_CTRL_R = 0;                   // disable SysTick during setup
@@ -93,7 +94,12 @@ void SysTick_Wait1ms(unsigned long delay){
 void SysTick_Handler (void) {
 	//Do MAGIC
 	PE3 ^= 0x08; 
-	tempRunPt = RunPt->nextThread; 
+	
+	if(RunPt->nextThread->priority == StartPt->priority){
+		tempRunPt = RunPt->nextThread; 
+	}else{
+		tempRunPt = StartPt;
+	}
 	NVIC_INT_CTRL_R |= NVIC_INT_CTRL_PEND_SV; //Trigger PendSV
 	PE3 ^= 0x08; 
 } 
