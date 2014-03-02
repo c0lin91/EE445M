@@ -57,6 +57,7 @@ long Stacks [NUMTHREADS][STACKSIZE];
 tcbType *RunPt; 
 tcbType *SleepPt;
 tcbType *tempRunPt; 
+tcbType *StartPt;
 
 //---------------------User debugging-----------------------
 unsigned long DataLost;     // data sent by Producer, but not received by Consumer
@@ -69,6 +70,7 @@ unsigned long JitterHistogram[JITTERSIZE]={0,};
 #define PE2  (*((volatile unsigned long *)0x40024010))
 #define PE3  (*((volatile unsigned long *)0x40024020))
 #define PF1 										(*((volatile unsigned long *)0x40025008))
+#define PF2  (*((volatile unsigned long *)0x40025010))
 
 void PortE_Init(void){ unsigned long volatile delay;
   SYSCTL_RCGC2_R |= 0x10;       // activate port E
@@ -92,12 +94,13 @@ void PortE_Init(void){ unsigned long volatile delay;
 
 void PortF_Init(void){ unsigned long volatile delay;
 	SYSCTL_RCGC2_R |= SYSCTL_RCGC2_GPIOF;
-  GPIO_PORTF_DIR_R |= 0x02;    // (c) make PF4 in (built-in button)
-  GPIO_PORTF_AFSEL_R &= ~0x02;  //     disable alt funct on PF4
-  GPIO_PORTF_DEN_R |= 0x02;     //     enable digital I/O on PF4   
-  GPIO_PORTF_PCTL_R &= ~0x000000F0; // configure PF4 as GPIO
+  GPIO_PORTF_DIR_R |= 0x06;    // (c) make PF1-2 out
+  GPIO_PORTF_AFSEL_R &= ~0x06;  //     disable alt funct on PF1-2
+  GPIO_PORTF_DEN_R |= 0x06;     //     enable digital I/O on PF1-2   
+  GPIO_PORTF_PCTL_R &= ~0x00000FF0; // configure PF1-2 as GPIO
   GPIO_PORTF_AMSEL_R = 0;       //     disable analog functionality on PF
 	PF1 = 0;
+	PF2 = 0;
 	
 }
 
@@ -204,11 +207,12 @@ void SW1Push(void){
 // background threads execute once and return
 void SW2Push(void){
   if(OS_MsTime() > 20){ // debounce
-    if(OS_AddThread(&ButtonWork,1,0, 3)){
-      NumCreated++; 
-    }
+    //if(OS_AddThread(&ButtonWork,1,0, 3)){
+    //  NumCreated++; 
+    //}
     OS_ClearMsTime();  // at least 20ms between touches
   }
+	PF2 ^= 0x04;
 }
 //--------------end of Task 2-----------------------------
 
@@ -698,7 +702,7 @@ void Thread7(void){  // foreground thread
 void TaskA(void){       // called every {1000, 2990us} in background
 	static int i =0;
 	if(i == 200){
-//		PF1 ^= 0x02;
+		PF1 ^= 0x02;
 		i = 0;
 	}
 	i++;
@@ -721,11 +725,14 @@ int main(void){       // Testmain5 Lab 3
   PortE_Init();
 	PortF_Init();
   OS_Init();           // initialize, disable interrupts
+	UART_Init();
   NumCreated = 0 ;
   NumCreated += OS_AddThread(&Thread6,128,0,2); 
-//  NumCreated += OS_AddThread(&Thread7,128,1); 
+  NumCreated += OS_AddThread(&Thread7,128,0, 1); 
   OS_AddPeriodicThread(&TaskA,TIME_1MS,1);           // 1 ms, higher priority
   OS_AddPeriodicThread(&TaskB,2*TIME_1MS,2);         // 2 ms, lower priority
+	OS_AddSW1Task(&SW2Push, 4);
+	OS_AddSW2Task(&SW2Push, 4);
 
   OS_Launch(TIME_2MS); // 2ms, doesn't return, interrupts enabled in here
   return 0;             // this never executes
@@ -805,7 +812,7 @@ static long result;
   result = m+n;
   return result;
 }
-int Testmain6(void){      // Testmain6  Lab 3
+int testmain6(void){      // Testmain6  Lab 3
   volatile unsigned long delay;
   OS_Init();           // initialize, disable interrupts
   delay = add(3,4);

@@ -66,7 +66,8 @@ extern long Stacks [NUMTHREADS][STACKSIZE];
 extern unsigned long NumCreated;
 extern unsigned long NumSleeping; 
 extern tcbType *RunPt; 
-extern tcbType* SleepPt;
+extern tcbType *SleepPt;
+extern tcbType *StartPt;
 unsigned long static LastPF4, LastPF0;
 extern tcbType *tempRunPt; 
 int open_threads [NUMTHREADS]; 
@@ -81,7 +82,7 @@ static int SysTime = 0;
 void OS_Init(void){
 	OS_DisableInterrupts(); 
 	PLL_Init();					// Incompatable with simulator (I think)
-	SysClock_Init(1000);
+	SysClock_Init(1000);		// give the system clock 1 ms ticks
 //	SysCtClockSet(SYSCTL_SYSDIV_4 | SYSCTL_USE_PLL | SYSCTL_XTAL_6MHZ | SYSCTL_OSC_MAIN);
 	NVIC_ST_CTRL_R = 0; 
 	NVIC_ST_RELOAD_R = NVIC_ST_RELOAD_M;
@@ -91,6 +92,7 @@ void OS_Init(void){
 	NVIC_ST_CTRL_R = NVIC_ST_CTRL_ENABLE+NVIC_ST_CTRL_CLK_SRC;
 	RunPt = &tcbs[0]; 
 	SleepPt = 0;
+	StartPt = 0;
 	idxOpenThreads = EMPTYSTACK; 
 	init_openThreads(); 
 	NumSleeping = 0; 
@@ -193,9 +195,15 @@ void SetInitialStack(int i){
 // In Lab 3, you can ignore the stackSize fields
 
 int OS_AddThread (void (*threadName) (void), int threadId, int sleepState, int priority)  {
+	tcbType *temp;
 	threadId = pop_OpenThreads(); 
-	 //call the function that initializes stack
 	
+	if(threadId == -1){ 			// Put this here to ease debugging
+		OS_DisableInterrupts(); // Should probably print error message instead
+		while(1){}
+	}
+	
+	//call the function that initializes stack
 	SetInitialStack(threadId); Stacks[threadId][STACKSIZE-2] = (long)threadName;   // initialize stack and pc on the stack
 	tcbs[threadId].prevThread = &tcbs[threadId]; 
 	tcbs[threadId].nextThread = &tcbs[threadId]; // Point to itself by default
@@ -203,12 +211,42 @@ int OS_AddThread (void (*threadName) (void), int threadId, int sleepState, int p
 	tcbs[threadId].sleepState = sleepState; 
 	tcbs[threadId].priority   = priority; 
 	
-	if(threadId >0){
-		tcbs[threadId].nextThread = tcbs[threadId-1].nextThread; 
-		tcbs[threadId].prevThread = &tcbs[threadId-1];
-		tcbs[threadId -1].nextThread = &tcbs[threadId];
-		tcbs[0].prevThread = &tcbs[threadId]; 
-	} 
+	if(StartPt){
+		//highest priority, add to front
+		if(StartPt->priority > tcbs[threadId].priority){
+			tcbs[threadId].nextThread = StartPt;
+			tcbs[threadId].prevThread = StartPt->prevThread;
+			StartPt->prevThread->nextThread = &tcbs[threadId];
+			StartPt->prevThread = &tcbs[threadId];
+			StartPt = &tcbs[threadId];
+		}else{
+			temp = StartPt;
+			while(temp->nextThread != StartPt){		// search for spot in middle
+				if((temp->priority             < tcbs[threadId].priority) &&
+					 (temp->nextThread->priority > tcbs[threadId].priority)){
+					break;
+				}
+				temp = temp->nextThread;
+			}
+			tcbs[threadId].nextThread = temp->nextThread;
+			tcbs[threadId].prevThread = temp;
+			temp->nextThread->prevThread = &tcbs[threadId];
+			temp->nextThread = &tcbs[threadId];
+		}
+	}else{	// no other link in the list
+		StartPt = &tcbs[threadId];
+		tcbs[threadId].nextThread = &tcbs[threadId];
+		tcbs[threadId].prevThread = &tcbs[threadId];
+	}	
+			
+	// Code from round robin scheduler
+//	if(threadId >0){
+//		tcbs[threadId].nextThread = tcbs[threadId-1].nextThread; 
+//		tcbs[threadId].prevThread = &tcbs[threadId-1];
+//		tcbs[threadId -1].nextThread = &tcbs[threadId];
+//		tcbs[0].prevThread = &tcbs[threadId]; 
+//	} 
+	
 	return 1; 
 } 	
 
@@ -425,6 +463,9 @@ void OS_Sleep(unsigned long sleepTime){
 	OS_DisableInterrupts();
 	tempRun = RunPt->nextThread;
 	RunPt->sleepState = sleepTime;
+	if(RunPt == StartPt){
+		StartPt = (StartPt->nextThread != StartPt) ? StartPt->nextThread : 0;
+	}
 //	*SleepPt = RunPt; 
 //	SleepPt += sizeof(tcbType); 
 
@@ -457,9 +498,10 @@ void OS_Sleep(unsigned long sleepTime){
 // output: none
 void OS_Kill(void){
 	OS_DisableInterrupts();
+	if(RunPt == StartPt){ StartPt = RunPt->nextThread;}
 	RunPt->nextThread->prevThread = RunPt->prevThread;
 	RunPt->prevThread->nextThread = RunPt->nextThread;
-//	NumCreated--;
+	NumCreated--;
 	push_OpenThreads(RunPt->threadId); 	// Need to make it apparent that this space is now availible in tcbs
 	OS_EnableInterrupts();
 	OS_Suspend();
@@ -648,18 +690,57 @@ int pop_OpenThreads () {
 } 
 
 void Wakeup(void){
-	int idx; tcbType *tempSleep; 
+	int idx; tcbType *tempSleep; tcbType *temp; 
 	SysTime++;
 	for(idx = 0; idx < NumSleeping; idx++){
 		SleepPt->sleepState -= 1; 
 		if (!(SleepPt->sleepState)) {
 			//wake up this thread
 			NumSleeping--; 
+			
+			// First fix the sleep linked list
 			tempSleep = SleepPt->nextThread;
-			SleepPt->prevThread = RunPt; 
-			SleepPt->nextThread = RunPt->nextThread; 
-			RunPt->nextThread->prevThread = SleepPt; 
-			RunPt->nextThread = SleepPt;
+			SleepPt->prevThread->nextThread = SleepPt->nextThread;
+			SleepPt->nextThread->prevThread = SleepPt->prevThread;
+//			SleepPt->prevThread = RunPt; 
+//			SleepPt->nextThread = RunPt->nextThread; 
+//			RunPt->nextThread->prevThread = SleepPt; 
+//			RunPt->nextThread = SleepPt;
+			// Restore the active linked list
+			if(StartPt){
+		//highest priority, add to front
+				if(StartPt->priority > SleepPt->priority){
+					SleepPt->nextThread = StartPt;
+					SleepPt->prevThread = StartPt->prevThread;
+					StartPt->prevThread->nextThread = SleepPt;
+					StartPt->prevThread = SleepPt;
+					StartPt = SleepPt;
+				}else{
+					temp = StartPt;
+					while(temp->nextThread != StartPt){		// search for spot in middle
+						if((temp->priority             < SleepPt->priority) &&
+							 (temp->nextThread->priority > SleepPt->priority)){
+							break;
+						}
+						temp = temp->nextThread;
+					}
+					SleepPt->nextThread = temp->nextThread;
+					SleepPt->prevThread = temp;
+					temp->nextThread->prevThread = SleepPt;
+					temp->nextThread = SleepPt;
+				}
+			}else{	// no other link in the list
+			StartPt = SleepPt;
+			SleepPt->nextThread = SleepPt;
+			SleepPt->prevThread = SleepPt;
+			}	
+			
+			//Round Robin Code (this was never 100% correct O_O)
+//			tempSleep = SleepPt->nextThread;
+//			SleepPt->prevThread = RunPt; 
+//			SleepPt->nextThread = RunPt->nextThread; 
+//			RunPt->nextThread->prevThread = SleepPt; 
+//			RunPt->nextThread = SleepPt;
 			
 			SleepPt = (NumSleeping) ? tempSleep : 0; 
 		}
