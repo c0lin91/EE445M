@@ -4,7 +4,6 @@
 ".\interpreter.o"
 ".\os.o"
 ".\pll.o"
-".\scheduler.o"
 ".\st7735.o"
 ".\systick.o"
 ".\uart2.o"

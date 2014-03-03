@@ -18,12 +18,6 @@
 
 #define NUMTHREADS 10
 #define STACKSIZE 128
-// feel free to change the type of semaphore, there are lots of good solutions
-struct  Sema4{
-  long Value;   // >0 means free, otherwise means busy        
-// add other components here, if necessary to implement blocking
-};
-typedef struct Sema4 Sema4Type;
 
 struct tcb {
 	long * stackPt; 
@@ -34,6 +28,16 @@ struct tcb {
 	int priority; 
 } ;
 typedef struct tcb tcbType; 
+
+
+// feel free to change the type of semaphore, there are lots of good solutions
+struct  Sema4{
+  long Value;   // >0 means free, otherwise means busy        
+	tcbType* oldestThread; 
+	tcbType* newestThread; 
+	// add other components here, if necessary to implement blocking
+};
+typedef struct Sema4 Sema4Type;
 
 struct mailbox {
 	Sema4Type boxFree; 
@@ -95,7 +99,7 @@ void OS_bSignal(Sema4Type *semaPt);
 // stack size must be divisable by 8 (aligned to double word boundary)
 // In Lab 2, you can ignore both the stackSize and priority fields
 // In Lab 3, you can ignore the stackSize fields
-int OS_AddThread (void (*threadName) (void), int threadId, int sleepState, int priority); 
+int OS_AddThread (void (*threadName) (void), int sleepState, int priority); 
 
 //******** OS_Id *************** 
 // returns the thread ID for the currently running thread

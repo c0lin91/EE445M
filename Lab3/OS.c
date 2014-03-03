@@ -32,7 +32,7 @@
 #define PF4 										(*((volatile unsigned long *)0x40025040))
 #define PF0 										(*((volatile unsigned long *)0x40025004))
 #define NVIC_EN0_INT30					0x40000000
-
+#define PF2  (*((volatile unsigned long *)0x40025010))
 #define PE1  (*((volatile unsigned long *)0x40024008))
 #define PE2  (*((volatile unsigned long *)0x40024010))
 
@@ -82,12 +82,13 @@ static int SysTime = 0;
 void OS_Init(void){
 	OS_DisableInterrupts(); 
 	PLL_Init();					// Incompatable with simulator (I think)
-	SysClock_Init(1000);		// give the system clock 1 ms ticks
+	SysClock_Init(100000);		// give the system clock 1 ms ticks
 //	SysCtClockSet(SYSCTL_SYSDIV_4 | SYSCTL_USE_PLL | SYSCTL_XTAL_6MHZ | SYSCTL_OSC_MAIN);
 	NVIC_ST_CTRL_R = 0; 
 	NVIC_ST_RELOAD_R = NVIC_ST_RELOAD_M;
 	NVIC_ST_CURRENT_R = 0; 
 	NVIC_SYS_PRI3_R = (NVIC_SYS_PRI3_R & 0x00FFFFFF) | 0xE0000000; //priority 7 
+  //NVIC_SYS_PRI3_R &= ~(7<<21);
 	NVIC_SYS_PRI3_R |= (7<<21);
 	NVIC_ST_CTRL_R = NVIC_ST_CTRL_ENABLE+NVIC_ST_CTRL_CLK_SRC;
 	RunPt = &tcbs[0]; 
@@ -105,6 +106,8 @@ void OS_Init(void){
 // output: none
 void OS_InitSemaphore(Sema4Type *semaPt, long value){
 	semaPt->Value = value;
+	semaPt->newestThread = 0; 
+	semaPt->oldestThread = 0; 
 } 
 
 // ******** OS_Wait ************
@@ -114,14 +117,49 @@ void OS_InitSemaphore(Sema4Type *semaPt, long value){
 // input:  pointer to a counting semaphore
 // output: none
 void OS_Wait(Sema4Type *semaPt){
-	OS_DisableInterrupts();
-	while(semaPt->Value <=0){
-		OS_EnableInterrupts();
-		OS_Suspend();
-		OS_DisableInterrupts();
-	}
+	long status; 
+	tcbType* temp; 
+	status = StartCritical(); 
 	semaPt->Value = semaPt->Value - 1;
-	OS_EnableInterrupts();
+	if(semaPt->Value < 0){
+		//save the next pt --- figure something out because this is a prioirty scheduler
+		 if(RunPt->nextThread->priority == StartPt->priority){
+			tempRunPt = RunPt->nextThread; 
+		 }
+		 else{
+			tempRunPt = StartPt;
+			}
+		if(RunPt == StartPt){
+		 StartPt = (StartPt->nextThread != StartPt) ? StartPt->nextThread : 0;
+	  }
+		//unlink it from the active list
+			RunPt->prevThread->nextThread = RunPt->nextThread; 
+			RunPt->nextThread->prevThread = RunPt->prevThread; 
+			
+		
+		//add it at the end of the semaphore's blocked threads
+			if (semaPt->Value == -1) {
+				semaPt->newestThread = RunPt; 
+				semaPt->oldestThread = RunPt; 
+				semaPt->newestThread->nextThread = 0; 
+				semaPt->newestThread->prevThread = 0; 
+			} 
+			else {
+				temp = semaPt->newestThread; 
+				semaPt->newestThread->nextThread = RunPt; 
+				semaPt->newestThread = RunPt; 
+				semaPt->newestThread->nextThread = 0; 
+				semaPt->newestThread->prevThread = temp; 
+				
+				
+			} 
+			// Suspend current thread
+		NVIC_INT_CTRL_R |= NVIC_INT_CTRL_PEND_SV; //Trigger PendSV
+		EndCritical(status);
+	}
+	else{
+		EndCritical(status); 
+	}
 }
 
 // ******** OS_Signal ************
@@ -132,9 +170,59 @@ void OS_Wait(Sema4Type *semaPt){
 // output: none
 void OS_Signal(Sema4Type *semaPt){
 	long status;
+	tcbType* unblock;
+	tcbType* temp;
+	
 	status = StartCritical();
 	semaPt->Value = semaPt->Value + 1;
-	EndCritical(status);
+	if (semaPt->Value <= 0) {
+		//Wake-up one thread
+		//First, figure out which one to unblock -- this implements bounded waiting
+		unblock = semaPt->oldestThread; 
+		semaPt->oldestThread = unblock->nextThread; 
+		/**********************************************************/
+		//add it to the active list
+		if(StartPt){
+		//highest priority, add to front
+		if(StartPt->priority > unblock->priority){
+			unblock->nextThread = StartPt;
+			unblock->prevThread = StartPt->prevThread;
+			StartPt->prevThread->nextThread = unblock;
+			StartPt->prevThread = unblock;
+			StartPt = unblock;
+		}else{
+			temp = StartPt;
+			while(temp->nextThread != StartPt){		// search for spot in middle
+				if((temp->priority             <= unblock->priority) &&
+					 (temp->nextThread->priority > unblock->priority)){
+					break;
+				}
+				temp = temp->nextThread;
+			}
+			unblock->nextThread = temp->nextThread;
+			unblock->prevThread = temp;
+			temp->nextThread->prevThread = unblock;
+			temp->nextThread = unblock;
+		}
+	}else{	// no other link in the list
+		StartPt = unblock;
+		unblock->nextThread = unblock;
+		unblock->prevThread = unblock;
+	}	
+		
+		//if the thread is higher priority , then suspend this one
+		if(unblock->priority > RunPt->priority) {
+			EndCritical(status); 
+			tempRunPt = unblock;
+			OS_Suspend(); 
+		}
+		else {
+			EndCritical(status); 
+		}
+	}
+	else {
+		EndCritical(status); 
+	}
 } 
 
 // ******** OS_bWait ************
@@ -194,7 +282,8 @@ void SetInitialStack(int i){
 // In Lab 2, you can ignore both the stackSize and priority fields
 // In Lab 3, you can ignore the stackSize fields
 
-int OS_AddThread (void (*threadName) (void), int threadId, int sleepState, int priority)  {
+int OS_AddThread (void (*threadName) (void),int sleepState, int priority)  {
+	int threadId; 
 	tcbType *temp;
 	threadId = pop_OpenThreads(); 
 	
@@ -222,7 +311,7 @@ int OS_AddThread (void (*threadName) (void), int threadId, int sleepState, int p
 		}else{
 			temp = StartPt;
 			while(temp->nextThread != StartPt){		// search for spot in middle
-				if((temp->priority             < tcbs[threadId].priority) &&
+				if((temp->priority             <= tcbs[threadId].priority) &&
 					 (temp->nextThread->priority > tcbs[threadId].priority)){
 					break;
 				}
@@ -403,7 +492,7 @@ void GPIOPortF_Handler(void){
 		(*PF4Task)();                // execute user task
 		}
 		GPIO_PORTF_IM_R &= ~0x10; 
-		NumCreated += OS_AddThread (&DebounceTaskPF4, 0, 0, 0); 
+		NumCreated += OS_AddThread (&DebounceTaskPF4, 0, 0); 
 	} 
 	
 	else if (GPIO_PORTF_RIS_R & 0x01) {
@@ -412,7 +501,7 @@ void GPIOPortF_Handler(void){
 		}
 		GPIO_PORTF_IM_R &= ~0x01; 
 	
-		NumCreated += OS_AddThread (&DebounceTaskPF0, 0, 0, 0); 
+		NumCreated += OS_AddThread (&DebounceTaskPF0,0, 0); 
 	} 
 }
 
@@ -461,7 +550,12 @@ void OS_Sleep(unsigned long sleepTime){
 // Be sure to reset SleepPt to zero (when neccessary) in the function that wakes up functions
 	tcbType *tempRun;
 	OS_DisableInterrupts();
-	tempRun = RunPt->nextThread;
+	
+	if(RunPt->nextThread->priority == StartPt->priority){
+		tempRun = RunPt->nextThread; 
+	}else{
+		tempRun = StartPt;
+	}
 	RunPt->sleepState = sleepTime;
 	if(RunPt == StartPt){
 		StartPt = (StartPt->nextThread != StartPt) ? StartPt->nextThread : 0;
@@ -665,6 +759,7 @@ unsigned long OS_MsTime(void){return SysTime;}
 // In Lab 3, you should implement the user-defined TimeSlice field
 // It is ok to limit the range of theTimeSlice to match the 24-bit SysTick
 void OS_Launch(unsigned long theTimeSlice){
+	RunPt = StartPt;
 	NVIC_ST_RELOAD_R = theTimeSlice - 1; 
 	NVIC_ST_CTRL_R = 0x00000007; 
 	StartOS(); 
@@ -691,11 +786,13 @@ int pop_OpenThreads () {
 
 void Wakeup(void){
 	int idx; tcbType *tempSleep; tcbType *temp; 
+	int numWakeUp = 0;
 	SysTime++;
 	for(idx = 0; idx < NumSleeping; idx++){
 		SleepPt->sleepState -= 1; 
 		if (!(SleepPt->sleepState)) {
 			//wake up this thread
+			numWakeUp++;
 			NumSleeping--; 
 			
 			// First fix the sleep linked list
@@ -718,7 +815,7 @@ void Wakeup(void){
 				}else{
 					temp = StartPt;
 					while(temp->nextThread != StartPt){		// search for spot in middle
-						if((temp->priority             < SleepPt->priority) &&
+						if((temp->priority             <= SleepPt->priority) &&
 							 (temp->nextThread->priority > SleepPt->priority)){
 							break;
 						}
@@ -745,6 +842,7 @@ void Wakeup(void){
 			SleepPt = (NumSleeping) ? tempSleep : 0; 
 		}
 	}
+	//NumSleeping -= numWakeUp;
 }
 
 void SysClock_Init(int period){
@@ -764,6 +862,15 @@ void SysClock_Init(int period){
 
 
 void Timer3A_Handler(void){
+	static int counter = 1000; 
 	TIMER3_ICR_R = TIMER_ICR_TATOCINT;	// acknowledge timer1A timeout
+	
+	if (counter == 0) {
+		PF2 ^= 0x04; 
+		counter = 1000; 
+	} 
+	else {
+		counter--; 
+	} 
 	(*WakeupTask)();
 }

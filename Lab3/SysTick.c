@@ -94,12 +94,13 @@ void SysTick_Wait1ms(unsigned long delay){
 void SysTick_Handler (void) {
 	//Do MAGIC
 	PE3 ^= 0x08; 
-	
+	OS_DisableInterrupts();
 	if(RunPt->nextThread->priority == StartPt->priority){
 		tempRunPt = RunPt->nextThread; 
 	}else{
 		tempRunPt = StartPt;
 	}
 	NVIC_INT_CTRL_R |= NVIC_INT_CTRL_PEND_SV; //Trigger PendSV
+	OS_EnableInterrupts();
 	PE3 ^= 0x08; 
 } 

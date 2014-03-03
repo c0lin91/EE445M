@@ -192,7 +192,7 @@ unsigned long myId = OS_Id();
 void SW1Push(void){
 	//PE1 ^= 0x02;
   if(OS_MsTime() > 20){ // debounce
-    if(OS_AddThread(&ButtonWork, 0, 0, 4)){
+    if(OS_AddThread(&ButtonWork, 0, 4)){
 			
 		//OS_AddThread(&ButtonWork,100,4)
       NumCreated++; 
@@ -260,7 +260,7 @@ unsigned long data,DCcomponent;   // 12-bit raw ADC sample, 0 to 4095
 unsigned long t;                  // time in 2.5 ms
 unsigned long myId = OS_Id(); 
   ADC_Collect(5, FS, &Producer); // start ADC sampling, channel 5, PD2, 400 Hz
-  NumCreated += OS_AddThread(&Display,NumCreated, 0,0); 
+  NumCreated += OS_AddThread(&Display, 0,0); 
   while(NumSamples < RUNLENGTH) { 
     PE2 = 0x04;
     for(t = 0; t < 64; t++){   // collect 64 ADC samples
@@ -372,9 +372,9 @@ int Finalmain (void){
   NumCreated = 0 ;
 	
 // create initial foreground threads
-	NumCreated += OS_AddThread (&Consumer		, NumCreated, 0, 1);
-	NumCreated += OS_AddThread (&PID				, NumCreated, 0, 3);
-	NumCreated += OS_AddThread (&Interpreter, NumCreated, 0, 2);
+	NumCreated += OS_AddThread (&Consumer		, 0, 1);
+	NumCreated += OS_AddThread (&PID				, 0, 3);
+	NumCreated += OS_AddThread (&Interpreter, 0, 2);
 	
 //  NumCreated += OS_AddThread(&Interpreter,128,2); 
 //  NumCreated += OS_AddThread(&Consumer,128,1); 
@@ -429,9 +429,9 @@ int Testmain1(void){  // Testmain1
   OS_Init();          // initialize, disable interrupts
   PortE_Init();       // profile user threads
   NumCreated = 0 ;
-  NumCreated += OS_AddThread(&Thread1, NumCreated, 0, 1); 
-  NumCreated += OS_AddThread(&Thread2, NumCreated, 0, 2); 
-  NumCreated += OS_AddThread(&Thread3, NumCreated, 0, 3); 
+  NumCreated += OS_AddThread(&Thread1, 0, 1); 
+  NumCreated += OS_AddThread(&Thread2, 0, 2); 
+  NumCreated += OS_AddThread(&Thread3, 0, 3); 
   // Count1 Count2 Count3 should be equal or off by one at all times
   OS_Launch(TIME_2MS); // doesn't return, interrupts enabled in here
   return 0;            // this never executes
@@ -469,9 +469,9 @@ void Thread3b(void){
 int testmain2 (void){  // Testmain2
   OS_Init();           // initialize, disable interrupts
   PortE_Init();       // profile user threads
-	NumCreated += OS_AddThread(&Thread1b, NumCreated, 0, 1); 
-  NumCreated += OS_AddThread(&Thread2b, NumCreated, 0, 2); 
-  NumCreated += OS_AddThread(&Thread3b, NumCreated, 0, 3); 
+	NumCreated += OS_AddThread(&Thread1b, 0, 1); 
+  NumCreated += OS_AddThread(&Thread2b, 0, 2); 
+  NumCreated += OS_AddThread(&Thread3b, 0, 3); 
   // Count1 Count2 Count3 should be equal on average
   // counts are larger than testmain1
  
@@ -521,7 +521,7 @@ void Thread2c(void){
   Count1 = 0;    // number of times signal is called      
   Count2 = 0;    
   Count5 = 0;    // Count2 + Count5 should equal Count1  
-  NumCreated += OS_AddThread(&Thread5c, NumCreated, 0,3); 
+  NumCreated += OS_AddThread(&Thread5c, 0,3); 
   OS_AddPeriodicThread(&BackgroundThread1c,1000,0); 
   for(;;){
     OS_Wait(&Readyc);
@@ -544,7 +544,7 @@ void Thread4c(void){ int i;
   Count4 = 0;
 }
 void BackgroundThread5c(void){   // called when Select button pushed
-  NumCreated += OS_AddThread(&Thread4c,NumCreated,0,3); 
+  NumCreated += OS_AddThread(&Thread4c,0,3); 
 }
   
 
@@ -574,9 +574,9 @@ int testmain3 (void){   // Testmain3
 //	NumCreated += OS_AddThread(&Thread_write,NumCreated, 0, 1);
 //  NumCreated += OS_AddThread(&Thread_display,NumCreated, 0, 1);
 	
-  NumCreated += OS_AddThread(&Thread2c,NumCreated, 0, 1);
-  NumCreated += OS_AddThread(&Thread3c,NumCreated, 0, 1);
-  NumCreated += OS_AddThread(&Thread4c,NumCreated, 0, 1);				// Is this supposed to be added to the TCB? -CH
+  NumCreated += OS_AddThread(&Thread2c, 0, 1);
+  NumCreated += OS_AddThread(&Thread3c, 0, 1);
+  NumCreated += OS_AddThread(&Thread4c, 0, 1);				// Is this supposed to be added to the TCB? -CH
 	
 //	OS_Wait(&Readyc);	
   OS_Launch(TIME_2MS); // doesn't return, interrupts enabled in here
@@ -644,16 +644,16 @@ void Thread4d(void){ int i;
   OS_Kill();
 }
 void BackgroundThread5d(void){   // called when Select button pushed
-  NumCreated += OS_AddThread(&Thread4d,NumCreated, 0,3); 
+  NumCreated += OS_AddThread(&Thread4d, 0,3); 
 }
 int Testmain4 (void){   // Testmain4
   Count4 = 0;          
   OS_Init();           // initialize, disable interrupts
   NumCreated = 0 ;
   OS_AddPeriodicThread(&BackgroundThread1d,TIME_1MS,0); //PERIOD
-  NumCreated += OS_AddThread(&Thread2d,NumCreated, 0,2); 
-  NumCreated += OS_AddThread(&Thread3d,NumCreated, 0,3); 
-  NumCreated += OS_AddThread(&Thread4d,NumCreated, 0,3); 
+  NumCreated += OS_AddThread(&Thread2d, 0,2); 
+  NumCreated += OS_AddThread(&Thread3d, 0,3); 
+  NumCreated += OS_AddThread(&Thread4d, 0,3); 
 	OS_AddSW1Task(&BackgroundThread5d,2);
   OS_Launch(TIME_2MS); // doesn't return, interrupts enabled in here
   return 0;            // this never executes
@@ -721,14 +721,14 @@ void TaskB(void){       // called every pB in background
 }
 
 
-int main(void){       // Testmain5 Lab 3
+int Testmain5(void){       // Testmain5 Lab 3
   PortE_Init();
 	PortF_Init();
   OS_Init();           // initialize, disable interrupts
 	UART_Init();
   NumCreated = 0 ;
-  NumCreated += OS_AddThread(&Thread6,128,0,2); 
-  NumCreated += OS_AddThread(&Thread7,128,0, 1); 
+  NumCreated += OS_AddThread(&Thread6,0,2); 
+  NumCreated += OS_AddThread(&Thread7,0, 1); 
   OS_AddPeriodicThread(&TaskA,TIME_1MS,1);           // 1 ms, higher priority
   OS_AddPeriodicThread(&TaskB,2*TIME_1MS,2);         // 2 ms, lower priority
 	OS_AddSW1Task(&SW2Push, 4);
@@ -758,7 +758,7 @@ unsigned long WaitCount3;     // number of times s is successfully waited on
 #define MAXCOUNT 20000
 void OutputThread(void){  // foreground thread
   UART_OutString("\n\rEE345M/EE380L, Lab 3 Preparation 4\n\r");
-  while(SignalCount1+SignalCount2+SignalCount3<100*MAXCOUNT){
+  while(SignalCount1+SignalCount2+SignalCount3<100*MAXCOUNT){//*100
     OS_Sleep(1000);   // 1 second
     UART_OutString(".");
   }       
@@ -772,6 +772,7 @@ void Wait1(void){  // foreground thread
   for(;;){
     OS_Wait(&s);    // three threads waiting
     WaitCount1++; 
+		Count1++;
   }
 }
 void Wait2(void){  // foreground thread
@@ -812,31 +813,80 @@ static long result;
   result = m+n;
   return result;
 }
-int testmain6(void){      // Testmain6  Lab 3
+int testmain6 (void){      // Testmain6  Lab 3
   volatile unsigned long delay;
   OS_Init();           // initialize, disable interrupts
   delay = add(3,4);
+	UART_Init(); 
   PortE_Init();
+	PortF_Init();
+	Count1 = 0;
   SignalCount1 = 0;   // number of times s is signaled
   SignalCount2 = 0;   // number of times s is signaled
-  SignalCount3 = 0;   // number of times s is signaled
+  SignalCount3 = 0;   // number of times s is signaleds
   WaitCount1 = 0;     // number of times s is successfully waited on
   WaitCount2 = 0;     // number of times s is successfully waited on
   WaitCount3 = 0;	  // number of times s is successfully waited on
   OS_InitSemaphore(&s,0);	 // this is the test semaphore
-  OS_AddPeriodicThread(&Signal1,(799*TIME_1MS)/1000,0);   // 0.799 ms, higher priority
+  OS_AddPeriodicThread(&Signal1,(799*TIME_1MS)/1000,0); //should be 0  // 0.799 ms, higher priority
   OS_AddPeriodicThread(&Signal2,(1111*TIME_1MS)/1000,1);  // 1.111 ms, lower priority
   NumCreated = 0 ;
-//  NumCreated += OS_AddThread(&Thread6,128,6);    	// idle thread to keep from crashing
-//  NumCreated += OS_AddThread(&OutputThread,128,2); 	// results output thread
-//  NumCreated += OS_AddThread(&Signal3,128,2); 	// signalling thread
-//  NumCreated += OS_AddThread(&Wait1,128,2); 	// waiting thread
-//  NumCreated += OS_AddThread(&Wait2,128,2); 	// waiting thread
-//  NumCreated += OS_AddThread(&Wait3,128,2); 	// waiting thread
+  NumCreated += OS_AddThread(&Thread6,128,6);    	// idle thread to keep from crashing
+  NumCreated += OS_AddThread(&OutputThread,128,2); 	// results output thread
+  NumCreated += OS_AddThread(&Signal3,128,2); 	// signalling thread
+  NumCreated += OS_AddThread(&Wait1,128,2); 	// waiting thread
+  NumCreated += OS_AddThread(&Wait2,128,2); 	// waiting thread
+  NumCreated += OS_AddThread(&Wait3,128,2); 	// waiting thread
  
   OS_Launch(TIME_1MS);  // 1ms, doesn't return, interrupts enabled in here
   return 0;             // this never executes
 }
+Sema4Type dummy; 
+
+void dummyThread1 (void) {
+	int i; 
+	for (i = 0; i< 100000; i++){
+		OS_Wait(&dummy); 
+	}
+	OS_Kill();
+}
+
+void dummyThread2 (void) {
+	int i; 
+	for (i = 0; i< 100000; i++){
+		OS_Signal(&dummy); 
+		OS_Suspend();
+	}
+	OS_Kill();
+}
+
+void dummyThread3(void){
+	int i; 
+	for (i = 0; i< 100000; i++){
+		OS_Wait(&dummy); 
+	}
+	OS_Kill();
+}
+
+
+int Prachimain (void) { //Prachi's main
+	OS_Init();           // initialize, disable interrupts
+ 	PortE_Init(); 
+	PortF_Init();
+	OS_InitSemaphore(&dummy, 0);
+	OS_AddPeriodicThread(&dummyThread2, 0, 0);
+	OS_AddThread (&dummyThread1, 0, 0); 
+	//OS_AddThread (&dummyThread2, 0, 0);
+	OS_AddThread (&dummyThread3, 0, 0); 	
+	OS_AddThread (&Thread6, 0, 7); 
+	OS_Launch(TIME_1MS);
+	return 0;
+}
+
+
+
+
+
 
 
 //******************* Lab 3 Measurement of context switch time**********
@@ -858,7 +908,7 @@ int Testmain7(void){       // Testmain7
   PortE_Init();
   OS_Init();           // initialize, disable interrupts
   NumCreated = 0 ;
-  NumCreated += OS_AddThread(&Thread8,NumCreated, 0, 1);
+  NumCreated += OS_AddThread(&Thread8,0, 1);
   OS_Launch(TIME_1MS/10); // 100us, doesn't return, interrupts enabled in here
   return 0;             // this never executes
 }
