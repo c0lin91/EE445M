@@ -19,6 +19,8 @@
 #define NUMTHREADS 10
 #define STACKSIZE 128
 
+typedef struct Sema4 Sema4Type;
+
 struct tcb {
 	long * stackPt; 
 	struct tcb* prevThread; 
@@ -26,6 +28,8 @@ struct tcb {
 	int threadId; 
 	int sleepState; 
 	int priority; 
+	int blockState;
+	Sema4Type *blockPtr;
 } ;
 typedef struct tcb tcbType; 
 

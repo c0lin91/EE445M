@@ -239,11 +239,14 @@ void OS_Signal(Sema4Type *semaPt){
 // output: none
 void OS_bWait(Sema4Type *semaPt){
 		OS_DisableInterrupts();
-	while(semaPt->Value <= 0){
-		OS_EnableInterrupts();
-		OS_Suspend();
-		OS_DisableInterrupts();
+  if(semaPt->Value ==0){
+		RunPt->blockState = 1;
+		RunPt->blockPtr = semaPt;
 	}
+	OS_Suspend();
+	OS_EnableInterrupts();
+	while(RunPt->blockState ==1){}
+	OS_DisableInterrupts();
 	semaPt->Value = 0;
 	OS_EnableInterrupts();
 }
@@ -255,6 +258,20 @@ void OS_bWait(Sema4Type *semaPt){
 // output: none
 void OS_bSignal(Sema4Type *semaPt){
 	int status = StartCritical();
+	tcbType *temp = StartPt;
+	while(temp->nextThread !=StartPt){
+		if((temp->blockState == 1) && (temp->blockPtr == semaPt)){
+			temp->blockState =0;
+			temp->blockPtr = 0;
+			EndCritical(status);
+			return;
+		}
+		temp = temp->nextThread;
+	}
+	if((temp->blockState == 1) && (temp->blockPtr == semaPt)){		// Check the last thread;
+			temp->blockState =0;
+			temp->blockPtr = 0;
+	}
 	semaPt->Value =1;
 	EndCritical(status);
 }
@@ -307,6 +324,7 @@ int OS_AddThread (void (*threadName) (void),int sleepState, int priority)  {
 	tcbs[threadId].threadId   = threadId; 
 	tcbs[threadId].sleepState = sleepState; 
 	tcbs[threadId].priority   = priority; 
+	tcbs[threadId].blockState = 0;
 	
 	if(StartPt){
 		//highest priority, add to front

@@ -104,10 +104,14 @@ void SysTick_Handler (void) {
 	PE3 ^= 0x08; 
 	status =StartCritical();
 	WakeUp(); 
-	if(RunPt->nextThread->priority == StartPt->priority){
+	if((RunPt->nextThread->priority == StartPt->priority)
+		  && (RunPt->nextThread->blockState != 1)){
 		tempRunPt = RunPt->nextThread; 
 	}else{
-		tempRunPt = StartPt;
+  	tempRunPt = StartPt;
+	 	while(tempRunPt->blockState ==1){
+	  	tempRunPt = tempRunPt->nextThread;
+	  }
 	}
 	NVIC_INT_CTRL_R |= NVIC_INT_CTRL_PEND_SV; //Trigger PendSV
 	EndCritical(status);
