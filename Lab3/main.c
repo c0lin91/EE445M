@@ -30,6 +30,7 @@
 #include "UART2.h"
 #include <string.h> 
 #include "Interpreter.h"
+#include <stdio.h>
 
 //*********Prototype for FFT in cr4_fft_64_stm32.s, STMicroelectronics
 void cr4_fft_64_stm32(void *pssOUT, void *pssIN, unsigned short Nbin);
@@ -192,13 +193,14 @@ unsigned long myId = OS_Id();
 void SW1Push(void){
 	//PE1 ^= 0x02;
   if(OS_MsTime() > 20){ // debounce
-    if(OS_AddThread(&ButtonWork, 0, 4)){
-			
-		//OS_AddThread(&ButtonWork,100,4)
-      NumCreated++; 
-    }
+//    if(OS_AddThread(&ButtonWork, 0, 4)){
+//			
+//		//OS_AddThread(&ButtonWork,0,4);
+//      NumCreated++; 
+//    }
     OS_ClearMsTime();  // at least 20ms between touches
   }
+	PF1 ^= 0x02;
 	//PE1 ^= 0x02;
 }
 //************SW2Push*************
@@ -207,12 +209,12 @@ void SW1Push(void){
 // background threads execute once and return
 void SW2Push(void){
   if(OS_MsTime() > 20){ // debounce
-    //if(OS_AddThread(&ButtonWork,1,0, 3)){
-    //  NumCreated++; 
-    //}
-    OS_ClearMsTime();  // at least 20ms between touches
+//    if(OS_AddThread(&ButtonWork,0, 3)){
+//      NumCreated++; 
+//    }
+//    OS_ClearMsTime();  // at least 20ms between touches
   }
-	PF2 ^= 0x04;
+	PF1 ^= 0x02;
 }
 //--------------end of Task 2-----------------------------
 
@@ -689,11 +691,44 @@ void Thread6(void){  // foreground thread
     PE0 ^= 0x01;        // debugging toggle bit 0  
   }
 }
-extern void Jitter(void);   // prints jitter information (write this)
+void Jitter(void) {   // prints jitter information (write this)
+	unsigned long static LastTime; 
+  unsigned long	thisTime;
+	unsigned long jitter; 
+	unsigned long static Filterwork = 0; 
+	unsigned long diff = OS_TimeDifference(LastTime,thisTime);
+	char buffer[40]; 
+	thisTime = OS_Time();
+	FilterWork++; 
+ if (FilterWork > 1) { 	
+	if(diff>PERIOD){
+		jitter = (diff-PERIOD+4)/8;  // in 0.1 usec
+	}else{
+		jitter = (PERIOD-diff+4)/8;  // in 0.1 usec
+	}
+	if(jitter > MaxJitter){
+		MaxJitter = jitter; // in usec
+	}       // jitter should be 0
+	if(jitter >= JitterSize){
+		jitter = JITTERSIZE-1;
+	}
+	JitterHistogram[jitter]++; 
+ }
+ LastTime = OS_Time(); 
+ sprintf(buffer, "Jitter 0.1us = %lu", MaxJitter); 
+ UART_OutString(buffer);
+ UART_OutString("\n\r"); 
+}
 void Thread7(void){  // foreground thread
+	char buffer[40]; 
   UART_OutString("\n\rEE345M/EE380L, Lab 3 Preparation 2\n\r");
-  OS_Sleep(5000);   // 10 seconds        
-  Jitter();         // print jitter information
+  OS_Sleep(10000);   // 10 seconds        
+  //Jitter();         // print jitter information
+	
+	sprintf(buffer, "Jitter TimerA 0.1us = %lu", MaxJitter); 
+	UART_OutString(buffer);
+	UART_OutString("\n\r");
+	
   UART_OutString("\n\r\n\r");
   OS_Kill();
 }
@@ -702,7 +737,7 @@ void Thread7(void){  // foreground thread
 void TaskA(void){       // called every {1000, 2990us} in background
 	static int i =0;
 	if(i == 200){
-		PF1 ^= 0x02;
+//		PF1 ^= 0x02;
 		i = 0;
 	}
 	i++;
@@ -721,7 +756,7 @@ void TaskB(void){       // called every pB in background
 }
 
 
-int Testmain5(void){       // Testmain5 Lab 3
+int main (void){       // Testmain5 Lab 3
   PortE_Init();
 	PortF_Init();
   OS_Init();           // initialize, disable interrupts
@@ -731,7 +766,7 @@ int Testmain5(void){       // Testmain5 Lab 3
   NumCreated += OS_AddThread(&Thread7,0, 1); 
   OS_AddPeriodicThread(&TaskA,TIME_1MS,1);           // 1 ms, higher priority
   OS_AddPeriodicThread(&TaskB,2*TIME_1MS,2);         // 2 ms, lower priority
-	OS_AddSW1Task(&SW2Push, 4);
+	OS_AddSW1Task(&SW1Push, 4);
 	OS_AddSW2Task(&SW2Push, 4);
 
   OS_Launch(TIME_2MS); // 2ms, doesn't return, interrupts enabled in here
@@ -814,7 +849,7 @@ static long result;
   result = m+n;
   return result;
 }
-int main (void){      // Testmain6  Lab 3
+int testmain6 (void){      // Testmain6  Lab 3
   volatile unsigned long delay;
   OS_Init();           // initialize, disable interrupts
   delay = add(3,4);

@@ -83,7 +83,7 @@ static int SysTime = 0;
 void OS_Init(void){
 	OS_DisableInterrupts(); 
 	PLL_Init();					// Incompatable with simulator (I think)
-	SysClock_Init(100000);		// give the system clock 1 ms ticks
+	SysClock_Init(1);		// give the system clock 1 us ticks
 //	SysCtClockSet(SYSCTL_SYSDIV_4 | SYSCTL_USE_PLL | SYSCTL_XTAL_6MHZ | SYSCTL_OSC_MAIN);
 	NVIC_ST_CTRL_R = 0; 
 	NVIC_ST_RELOAD_R = NVIC_ST_RELOAD_M;
@@ -155,9 +155,9 @@ void OS_Wait(Sema4Type *semaPt){
 				
 			} 
 			// Suspend current thread
-		OS_Suspend();
-			//NVIC_ST_CURRENT_R =0; 
-		//NVIC_INT_CTRL_R |= NVIC_INT_CTRL_PEND_SV; //Trigger PendSV
+		//OS_Suspend();
+			NVIC_ST_CURRENT_R =0; 
+		NVIC_INT_CTRL_R |= NVIC_INT_CTRL_PEND_SV; //Trigger PendSV
 		EndCritical(status);
 	}
 	else{
@@ -795,70 +795,11 @@ int pop_OpenThreads () {
 	return  ((idxOpenThreads != EMPTYSTACK) ? open_threads[idxOpenThreads--] : -1);
 } 
 
-void Wakeup(void){
-	int idx; tcbType *tempSleep; tcbType *temp; 
-	int numWakeUp = 0;
-	SysTime++;
-	for(idx = 0; idx < NumSleeping; idx++){
-		SleepPt->sleepState -= 1; 
-		if (!(SleepPt->sleepState)) {
-			//wake up this thread
-			numWakeUp++;
-			NumSleeping--; 
-			
-			// First fix the sleep linked list
-			tempSleep = SleepPt->nextThread;
-			SleepPt->prevThread->nextThread = SleepPt->nextThread;
-			SleepPt->nextThread->prevThread = SleepPt->prevThread;
-//			SleepPt->prevThread = RunPt; 
-//			SleepPt->nextThread = RunPt->nextThread; 
-//			RunPt->nextThread->prevThread = SleepPt; 
-//			RunPt->nextThread = SleepPt;
-			// Restore the active linked list
-			if(StartPt){
-		//highest priority, add to front
-				if(StartPt->priority > SleepPt->priority){
-					SleepPt->nextThread = StartPt;
-					SleepPt->prevThread = StartPt->prevThread;
-					StartPt->prevThread->nextThread = SleepPt;
-					StartPt->prevThread = SleepPt;
-					StartPt = SleepPt;
-				}else{
-					temp = StartPt;
-					while(temp->nextThread != StartPt){		// search for spot in middle
-						if((temp->priority             <= SleepPt->priority) &&
-							 (temp->nextThread->priority > SleepPt->priority)){
-							break;
-						}
-						temp = temp->nextThread;
-					}
-					SleepPt->nextThread = temp->nextThread;
-					SleepPt->prevThread = temp;
-					temp->nextThread->prevThread = SleepPt;
-					temp->nextThread = SleepPt;
-				}
-			}else{	// no other link in the list
-			StartPt = SleepPt;
-			SleepPt->nextThread = SleepPt;
-			SleepPt->prevThread = SleepPt;
-			}	
-			
-			//Round Robin Code (this was never 100% correct O_O)
-//			tempSleep = SleepPt->nextThread;
-//			SleepPt->prevThread = RunPt; 
-//			SleepPt->nextThread = RunPt->nextThread; 
-//			RunPt->nextThread->prevThread = SleepPt; 
-//			RunPt->nextThread = SleepPt;
-			
-			SleepPt = (NumSleeping) ? tempSleep : 0; 
-		}
-	}
-	//NumSleeping -= numWakeUp;
-}
+
 
 void SysClock_Init(int period){
 			SYSCTL_RCGC1_R |= SYSCTL_RCGC1_TIMER3; // 0) activate timer0
-			WakeupTask = &Wakeup;             // user function 
+		//	WakeupTask = &Wakeup;             // user function 
 			TIMER3_CTL_R &= ~0x00000001;     // 1) disable timer1A during setup
 			TIMER3_CFG_R = 0x00000000;       // 2) configure for 32-bit timer mode
 			TIMER3_TAMR_R = 0x00000002;      // 3) configure for periodic mode
@@ -867,21 +808,21 @@ void SysClock_Init(int period){
 			TIMER3_ICR_R = 0x00000001;       // 6) clear timer1A timeout flag
 			TIMER3_IMR_R |= 0x00000001;      // 7) arm timeout interrupt
 			NVIC_PRI8_R &= ~(7<<29); // 8) priority 0
+			//NVIC_PRI8_R |= (7<<29);
 			NVIC_EN1_R |= 0X08;    // 9) enable interrupt 21 in NVIC
 			TIMER3_CTL_R |= 0x00000001;      // 10) enable timer3A
 }
 
 
 void Timer3A_Handler(void){
-	static int counter = 1000; 
+	static int counter = 1000000; 
 	TIMER3_ICR_R = TIMER_ICR_TATOCINT;	// acknowledge timer1A timeout
-	
+	SysTime++; 
 	if (counter == 0) {
 		PF2 ^= 0x04; 
-		counter = 1000; 
+		counter = 1000000; 
 	} 
 	else {
 		counter--; 
 	} 
-	(*WakeupTask)();
 }

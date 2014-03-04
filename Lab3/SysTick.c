@@ -52,6 +52,12 @@
 extern tcbType *tempRunPt; 
 extern tcbType *RunPt; 
 extern tcbType *StartPt;
+extern tcbType *SleepPt;
+extern int NumSleeping; 
+
+void WakeUp(void); 
+
+
 // Initialize SysTick with busy wait running at bus clock.
 void SysTick_Init(){
   NVIC_ST_CTRL_R = 0;                   // disable SysTick during setup
@@ -90,11 +96,13 @@ void SysTick_Wait1ms(unsigned long delay){
   }
 }
 
+
 ////Interrupt Handler
 void SysTick_Handler (void) {
 	//Do MAGIC
 	PE3 ^= 0x08; 
 	OS_DisableInterrupts();
+	WakeUp(); 
 	if(RunPt->nextThread->priority == StartPt->priority){
 		tempRunPt = RunPt->nextThread; 
 	}else{
@@ -104,3 +112,63 @@ void SysTick_Handler (void) {
 	OS_EnableInterrupts();
 	PE3 ^= 0x08; 
 } 
+
+void WakeUp(void){
+	int idx; tcbType *tempSleep; tcbType *temp; 
+	int numWakeUp = 0;
+	for(idx = 0; idx < NumSleeping; idx++){
+		SleepPt->sleepState -= 1; 
+		if (!(SleepPt->sleepState)) {
+			//wake up this thread
+			numWakeUp++;
+			NumSleeping--; 
+			
+			// First fix the sleep linked list
+			tempSleep = SleepPt->nextThread;
+			SleepPt->prevThread->nextThread = SleepPt->nextThread;
+			SleepPt->nextThread->prevThread = SleepPt->prevThread;
+//			SleepPt->prevThread = RunPt; 
+//			SleepPt->nextThread = RunPt->nextThread; 
+//			RunPt->nextThread->prevThread = SleepPt; 
+//			RunPt->nextThread = SleepPt;
+			// Restore the active linked list
+			if(StartPt){
+		//highest priority, add to front
+				if(StartPt->priority > SleepPt->priority){
+					SleepPt->nextThread = StartPt;
+					SleepPt->prevThread = StartPt->prevThread;
+					StartPt->prevThread->nextThread = SleepPt;
+					StartPt->prevThread = SleepPt;
+					StartPt = SleepPt;
+				}else{
+					temp = StartPt;
+					while(temp->nextThread != StartPt){		// search for spot in middle
+						if((temp->priority             <= SleepPt->priority) &&
+							 (temp->nextThread->priority > SleepPt->priority)){
+							break;
+						}
+						temp = temp->nextThread;
+					}
+					SleepPt->nextThread = temp->nextThread;
+					SleepPt->prevThread = temp;
+					temp->nextThread->prevThread = SleepPt;
+					temp->nextThread = SleepPt;
+				}
+			}else{	// no other link in the list
+			StartPt = SleepPt;
+			SleepPt->nextThread = SleepPt;
+			SleepPt->prevThread = SleepPt;
+			}	
+			
+			//Round Robin Code (this was never 100% correct O_O)
+//			tempSleep = SleepPt->nextThread;
+//			SleepPt->prevThread = RunPt; 
+//			SleepPt->nextThread = RunPt->nextThread; 
+//			RunPt->nextThread->prevThread = SleepPt; 
+//			RunPt->nextThread = SleepPt;
+			
+			SleepPt = (NumSleeping) ? tempSleep : 0; 
+		}
+	}
+	//NumSleeping -= numWakeUp;
+}

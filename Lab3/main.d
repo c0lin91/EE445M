@@ -6,3 +6,4 @@
 .\main.o: UART2.h
 .\main.o: C:\Keil\ARM\ARMCC\bin\..\include\string.h
 .\main.o: Interpreter.h
+.\main.o: C:\Keil\ARM\ARMCC\bin\..\include\stdio.h
