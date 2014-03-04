@@ -35,6 +35,7 @@
 #define PF2  (*((volatile unsigned long *)0x40025010))
 #define PE1  (*((volatile unsigned long *)0x40024008))
 #define PE2  (*((volatile unsigned long *)0x40024010))
+#define PE3  (*((volatile unsigned long *)0x40024020))
 
 #define EMPTYSTACK -1
 #define MAXSTACK NUMTHREADS
@@ -87,7 +88,7 @@ void OS_Init(void){
 	NVIC_ST_CTRL_R = 0; 
 	NVIC_ST_RELOAD_R = NVIC_ST_RELOAD_M;
 	NVIC_ST_CURRENT_R = 0; 
-	NVIC_SYS_PRI3_R = (NVIC_SYS_PRI3_R & 0x00FFFFFF) | 0xE0000000; //priority 7 
+	NVIC_SYS_PRI3_R = (NVIC_SYS_PRI3_R & 0x00FFFFFF);// | 0xE0000000; //priority 7 
   //NVIC_SYS_PRI3_R &= ~(7<<21);
 	NVIC_SYS_PRI3_R |= (7<<21);
 	NVIC_ST_CTRL_R = NVIC_ST_CTRL_ENABLE+NVIC_ST_CTRL_CLK_SRC;
@@ -154,7 +155,9 @@ void OS_Wait(Sema4Type *semaPt){
 				
 			} 
 			// Suspend current thread
-		NVIC_INT_CTRL_R |= NVIC_INT_CTRL_PEND_SV; //Trigger PendSV
+		OS_Suspend();
+			//NVIC_ST_CURRENT_R =0; 
+		//NVIC_INT_CTRL_R |= NVIC_INT_CTRL_PEND_SV; //Trigger PendSV
 		EndCritical(status);
 	}
 	else{
@@ -179,6 +182,10 @@ void OS_Signal(Sema4Type *semaPt){
 		//Wake-up one thread
 		//First, figure out which one to unblock -- this implements bounded waiting
 		unblock = semaPt->oldestThread; 
+		if(tempRunPt != RunPt){
+			status++;
+			status--;
+		}
 		semaPt->oldestThread = unblock->nextThread; 
 		/**********************************************************/
 		//add it to the active list
@@ -211,7 +218,7 @@ void OS_Signal(Sema4Type *semaPt){
 	}	
 		
 		//if the thread is higher priority , then suspend this one
-		if(unblock->priority > RunPt->priority) {
+		if(unblock->priority < RunPt->priority) {
 			EndCritical(status); 
 			tempRunPt = unblock;
 			OS_Suspend(); 
@@ -412,13 +419,17 @@ int OS_AddPeriodicThread(void(*task)(void),
 }
 
 void Timer1A_Handler(void){
+	PE2 ^= 0x04;
   TIMER1_ICR_R = TIMER_ICR_TATOCINT;	// acknowledge timer1A timeout
   (*PeriodicTask1)();                // execute user task
+	PE2 ^= 0x04;
 }
 
 void Timer2A_Handler(void){
+	PE3 ^= 0x08;
   TIMER2_ICR_R = TIMER_ICR_TATOCINT;	// acknowledge timer1A timeout
   (*PeriodicTask2)();                // execute user task
+	PE3 ^= 0x08;
 }
 
 

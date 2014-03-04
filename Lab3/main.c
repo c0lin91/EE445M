@@ -772,7 +772,6 @@ void Wait1(void){  // foreground thread
   for(;;){
     OS_Wait(&s);    // three threads waiting
     WaitCount1++; 
-		Count1++;
   }
 }
 void Wait2(void){  // foreground thread
@@ -789,8 +788,10 @@ void Wait3(void){   // foreground thread
 }
 void Signal1(void){      // called every 799us in background
   if(SignalCount1<MAXCOUNT){
-    OS_Signal(&s);
-    SignalCount1++;
+		if(s.Value <0){
+			OS_Signal(&s);
+		}
+    SignalCount1++;		
   }
 }
 // edit this so it changes the periodic rate
@@ -813,7 +814,7 @@ static long result;
   result = m+n;
   return result;
 }
-int testmain6 (void){      // Testmain6  Lab 3
+int main (void){      // Testmain6  Lab 3
   volatile unsigned long delay;
   OS_Init();           // initialize, disable interrupts
   delay = add(3,4);
@@ -851,32 +852,41 @@ void dummyThread1 (void) {
 	OS_Kill();
 }
 
-void dummyThread2 (void) {
-	int i; 
-	for (i = 0; i< 100000; i++){
-		OS_Signal(&dummy); 
-		OS_Suspend();
-	}
-	OS_Kill();
-}
+//void dummyThread2 (void) {
+//	int i; 
+//	for (i = 0; i< 100000; i++){
+//		OS_Signal(&dummy); 
+//		OS_Suspend();
+//	}
+//	OS_Kill();
+//}
 
 void dummyThread3(void){
 	int i; 
-	for (i = 0; i< 100000; i++){
-		OS_Wait(&dummy); 
+	for (;;){
+	//	OS_Wait(&dummy); 
+		Count1++;
 	}
 	OS_Kill();
 }
 
+void dummyInt(void){
+	static int counter =0;
+	if(dummy.Value <0){
+	OS_Signal(&dummy);
+	}
+	counter ++;
+}
 
-int Prachimain (void) { //Prachi's main
+
+int prachimain (void) { //Prachi's main
 	OS_Init();           // initialize, disable interrupts
  	PortE_Init(); 
 	PortF_Init();
 	OS_InitSemaphore(&dummy, 0);
-	OS_AddPeriodicThread(&dummyThread2, 0, 0);
+	OS_AddPeriodicThread(&dummyInt, 0, 1);
 	OS_AddThread (&dummyThread1, 0, 0); 
-	//OS_AddThread (&dummyThread2, 0, 0);
+	//OS_AddThread (&Signal1, 0, 0);
 	OS_AddThread (&dummyThread3, 0, 0); 	
 	OS_AddThread (&Thread6, 0, 7); 
 	OS_Launch(TIME_1MS);
