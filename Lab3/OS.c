@@ -83,7 +83,7 @@ static int SysTime = 0;
 void OS_Init(void){
 	OS_DisableInterrupts(); 
 	PLL_Init();					// Incompatable with simulator (I think)
-	SysClock_Init(1);		// give the system clock 1 us ticks
+	SysClock_Init(1000);		// give the system clock 1 us ticks
 //	SysCtClockSet(SYSCTL_SYSDIV_4 | SYSCTL_USE_PLL | SYSCTL_XTAL_6MHZ | SYSCTL_OSC_MAIN);
 	NVIC_ST_CTRL_R = 0; 
 	NVIC_ST_RELOAD_R = NVIC_ST_RELOAD_M;
@@ -156,7 +156,7 @@ void OS_Wait(Sema4Type *semaPt){
 			} 
 			// Suspend current thread
 		//OS_Suspend();
-			NVIC_ST_CURRENT_R =0; 
+			//NVIC_ST_CURRENT_R =0; 
 		NVIC_INT_CTRL_R |= NVIC_INT_CTRL_PEND_SV; //Trigger PendSV
 		EndCritical(status);
 	}
@@ -216,16 +216,16 @@ void OS_Signal(Sema4Type *semaPt){
 		unblock->nextThread = unblock;
 		unblock->prevThread = unblock;
 	}	
-		
+		EndCritical(status);
 		//if the thread is higher priority , then suspend this one
-		if(unblock->priority < RunPt->priority) {
-			EndCritical(status); 
-			tempRunPt = unblock;
-			OS_Suspend(); 
-		}
-		else {
-			EndCritical(status); 
-		}
+//		if(unblock->priority < RunPt->priority) {
+//			EndCritical(status); 
+//			tempRunPt = unblock;
+//			OS_Suspend(); 
+//		}
+//		else {
+//			EndCritical(status); 
+//		}
 	}
 	else {
 		EndCritical(status); 
@@ -254,9 +254,9 @@ void OS_bWait(Sema4Type *semaPt){
 // input:  pointer to a binary semaphore
 // output: none
 void OS_bSignal(Sema4Type *semaPt){
-	OS_DisableInterrupts();
+	int status = StartCritical();
 	semaPt->Value =1;
-	OS_EnableInterrupts();
+	EndCritical(status);
 }
 
 
@@ -290,13 +290,14 @@ void SetInitialStack(int i){
 // In Lab 3, you can ignore the stackSize fields
 
 int OS_AddThread (void (*threadName) (void),int sleepState, int priority)  {
-	int threadId; 
+	int threadId, status; 
 	tcbType *temp;
 	threadId = pop_OpenThreads(); 
 	
+	status = StartCritical();
 	if(threadId == -1){ 			// Put this here to ease debugging
-		OS_DisableInterrupts(); // Should probably print error message instead
-		while(1){}
+		push_OpenThreads(-1);
+		return 0;
 	}
 	
 	//call the function that initializes stack
@@ -342,7 +343,7 @@ int OS_AddThread (void (*threadName) (void),int sleepState, int priority)  {
 //		tcbs[threadId -1].nextThread = &tcbs[threadId];
 //		tcbs[0].prevThread = &tcbs[threadId]; 
 //	} 
-	
+	EndCritical(status);
 	return 1; 
 } 	
 
@@ -564,6 +565,8 @@ void OS_Sleep(unsigned long sleepTime){
 	
 	if(RunPt->nextThread->priority == StartPt->priority){
 		tempRun = RunPt->nextThread; 
+	}else if(StartPt == RunPt){
+		tempRun = RunPt->nextThread;
 	}else{
 		tempRun = StartPt;
 	}
@@ -606,7 +609,7 @@ void OS_Kill(void){
 	if(RunPt == StartPt){ StartPt = RunPt->nextThread;}
 	RunPt->nextThread->prevThread = RunPt->prevThread;
 	RunPt->prevThread->nextThread = RunPt->nextThread;
-	NumCreated--;
+	//NumCreated--;
 	push_OpenThreads(RunPt->threadId); 	// Need to make it apparent that this space is now availible in tcbs
 	OS_EnableInterrupts();
 	OS_Suspend();
@@ -799,7 +802,7 @@ int pop_OpenThreads () {
 
 void SysClock_Init(int period){
 			SYSCTL_RCGC1_R |= SYSCTL_RCGC1_TIMER3; // 0) activate timer0
-		//	WakeupTask = &Wakeup;             // user function 
+			//WakeupTask = &Wakeup;             // user function 
 			TIMER3_CTL_R &= ~0x00000001;     // 1) disable timer1A during setup
 			TIMER3_CFG_R = 0x00000000;       // 2) configure for 32-bit timer mode
 			TIMER3_TAMR_R = 0x00000002;      // 3) configure for periodic mode
@@ -815,12 +818,12 @@ void SysClock_Init(int period){
 
 
 void Timer3A_Handler(void){
-	static int counter = 1000000; 
+	static int counter = 10000; 
 	TIMER3_ICR_R = TIMER_ICR_TATOCINT;	// acknowledge timer1A timeout
 	SysTime++; 
 	if (counter == 0) {
 		PF2 ^= 0x04; 
-		counter = 1000000; 
+		counter = 10000; 
 	} 
 	else {
 		counter--; 

@@ -100,8 +100,9 @@ void SysTick_Wait1ms(unsigned long delay){
 ////Interrupt Handler
 void SysTick_Handler (void) {
 	//Do MAGIC
+	int status;
 	PE3 ^= 0x08; 
-	OS_DisableInterrupts();
+	status =StartCritical();
 	WakeUp(); 
 	if(RunPt->nextThread->priority == StartPt->priority){
 		tempRunPt = RunPt->nextThread; 
@@ -109,13 +110,15 @@ void SysTick_Handler (void) {
 		tempRunPt = StartPt;
 	}
 	NVIC_INT_CTRL_R |= NVIC_INT_CTRL_PEND_SV; //Trigger PendSV
-	OS_EnableInterrupts();
+	EndCritical(status);
 	PE3 ^= 0x08; 
+	
 } 
 
 void WakeUp(void){
-	int idx; tcbType *tempSleep; tcbType *temp; 
+	int idx, status; tcbType *tempSleep; tcbType *temp; 
 	int numWakeUp = 0;
+	status = StartCritical();
 	for(idx = 0; idx < NumSleeping; idx++){
 		SleepPt->sleepState -= 1; 
 		if (!(SleepPt->sleepState)) {
@@ -170,5 +173,6 @@ void WakeUp(void){
 			SleepPt = (NumSleeping) ? tempSleep : 0; 
 		}
 	}
+	EndCritical(status);
 	//NumSleeping -= numWakeUp;
 }

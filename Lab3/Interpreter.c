@@ -25,6 +25,7 @@ extern unsigned long NumSamples;
 extern unsigned long NumCreated;
 extern long x[6]; // x and y were static in other file, not sure if that mattters when externing- CH
 extern long y[6];
+extern Sema4Type toDisplay; 
 int idxX = 0, idxY = 0; 
 char buffer [10]; 
 
@@ -55,23 +56,28 @@ void findExe(int func, char* cmdString) {
 //		} 
 		break; 
 	case 2:
-		ST7735_FillScreen(0);  
+		OS_bWait(&toDisplay); 
+		ST7735_FillScreen(0); 
+		OS_bSignal(&toDisplay); 
 		break; 
 	case 3: 
 		break; 
 	case 4:						// Add Perfomance
+			OS_bWait(&toDisplay); 
 			OS_DisableInterrupts(); 
-			//ST7735_FillScreen(0);  
+			//ST7735_FillScreen(0);
 			ST7735_Message(0,0,"# Data Pts  =",NumSamples);
 			ST7735_Message(0,1,"Threads Made=",NumCreated);
 			ST7735_Message(0,2,"Jitter 0.1us=",MaxJitter);
 			ST7735_Message(0,3,"DataLost    =",DataLost);
 			ST7735_Message(1,0,"FilterWork  =",FilterWork);
 		  ST7735_Message(1,1,"PIDWork     =",PIDWork);
+			OS_bSignal(&toDisplay); 
 			OS_EnableInterrupts(); 
 		break;
 	case 5:
 		//ST7735_FillScreen(0);
+		OS_bWait(&toDisplay); 
 			cmdString +=1 ;
 		 if(*cmdString == 'x'){
 			 sprintf(buffer, "x[%d] = ", idxX); 
@@ -93,6 +99,7 @@ void findExe(int func, char* cmdString) {
 		 }else{
 			  echo("Invalid Debugging parameter, enter x or y");
 		 }
+		OS_bSignal(&toDisplay); 
 		break;
 	}
 } 
@@ -122,9 +129,6 @@ void Interpreter(void){
 	int i=0;
 	int j=0;
 	
-	OS_DisableInterrupts(); 
-	UART_Init();
-	OS_EnableInterrupts(); 
 	while(1){	
 	if (!newCommand) {
 		while (RxFifo_Get(&value[value_idx])){
@@ -167,5 +171,7 @@ void Interpreter(void){
 				newCommand = 0; 
 				sendCommand(command);
 		}
+		//OS_Sleep(100);
 	}	
+	
 }

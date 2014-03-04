@@ -59,6 +59,8 @@ tcbType *RunPt;
 tcbType *SleepPt;
 tcbType *tempRunPt; 
 tcbType *StartPt;
+Sema4Type toDisplay;
+
 
 //---------------------User debugging-----------------------
 unsigned long DataLost;     // data sent by Producer, but not received by Consumer
@@ -177,11 +179,15 @@ long jitter;                    // time between measured and expected, in us
 void ButtonWork(void){
 unsigned long myId = OS_Id(); 
 	//PE1 ^= 0x02;
+	OS_bWait(&toDisplay); 
   ST7735_Message(1,0,"NumCreated =",NumCreated); 
+	//OS_bSignal(&toDisplay);
   OS_Sleep(50);     // set this to sleep for 50msec
+	//OS_bWait(&toDisplay);
   ST7735_Message(1,1,"PIDWork     =",PIDWork);
   ST7735_Message(1,2,"DataLost    =",DataLost);
   ST7735_Message(1,3,"Jitter 0.1us=",MaxJitter);
+	OS_bSignal(&toDisplay); 
  // PE1 ^= 0x02;
   OS_Kill();  // done, OS does not return from a Kill
 } 
@@ -193,11 +199,8 @@ unsigned long myId = OS_Id();
 void SW1Push(void){
 	//PE1 ^= 0x02;
   if(OS_MsTime() > 20){ // debounce
-//    if(OS_AddThread(&ButtonWork, 0, 4)){
-//			
-//		//OS_AddThread(&ButtonWork,0,4);
-//      NumCreated++; 
-//    }
+    NumCreated +=OS_AddThread(&ButtonWork, 0, 1);			
+
     OS_ClearMsTime();  // at least 20ms between touches
   }
 	PF1 ^= 0x02;
@@ -209,10 +212,8 @@ void SW1Push(void){
 // background threads execute once and return
 void SW2Push(void){
   if(OS_MsTime() > 20){ // debounce
-//    if(OS_AddThread(&ButtonWork,0, 3)){
-//      NumCreated++; 
-//    }
-//    OS_ClearMsTime();  // at least 20ms between touches
+    NumCreated+=OS_AddThread(&ButtonWork,0, 1);
+    OS_ClearMsTime();  // at least 20ms between touches
   }
 	PF1 ^= 0x02;
 }
@@ -262,7 +263,7 @@ unsigned long data,DCcomponent;   // 12-bit raw ADC sample, 0 to 4095
 unsigned long t;                  // time in 2.5 ms
 unsigned long myId = OS_Id(); 
   ADC_Collect(5, FS, &Producer); // start ADC sampling, channel 5, PD2, 400 Hz
-  NumCreated += OS_AddThread(&Display, 0,0); 
+  NumCreated += OS_AddThread(&Display, 0,1); 
   while(NumSamples < RUNLENGTH) { 
     PE2 = 0x04;
     for(t = 0; t < 64; t++){   // collect 64 ADC samples
@@ -283,14 +284,16 @@ unsigned long myId = OS_Id();
 // outputs: none
 void Display(void){ 
 unsigned long data,voltage;
+	OS_bWait(&toDisplay); 
   ST7735_Message(0,1,"Run length = ",(RUNLENGTH)/FS);   // top half used for Display
-  while(NumSamples < RUNLENGTH) { 
+  while(NumSamples <= RUNLENGTH) { 
     data = OS_MailBox_Recv();
     voltage = 3000*data/4095;               // calibrate your device so voltage is in mV
     PE3 = 0x08;
     ST7735_Message(0,2,"v(mV) =",voltage);  
     PE3 = 0x00;
   } 
+	OS_bSignal(&toDisplay); 
   OS_Kill();  // done
 } 
 
@@ -340,7 +343,7 @@ unsigned long myId = OS_Id();
 // inputs:  none
 // outputs: none
 
-void Interpreter(void);    // just a prototype, link to your interpreter
+    // just a prototype, link to your interpreter
 // add the following commands, leave other commands, if they make sense
 // 1) print performance measures 
 //    time-jitter, number of data points lost, number of calculations performed
@@ -352,22 +355,25 @@ void Interpreter(void);    // just a prototype, link to your interpreter
 
 
 //*******************final user main DEMONTRATE THIS TO TA**********
-int Finalmain (void){ 
+int main (void){ 
   OS_Init();           // initialize, disable interrupts
-  PortE_Init();
+  UART_Init(); 
+	PortE_Init();
+	PortF_Init();
 	ST7735_InitR(INITR_REDTAB);
 	ST7735_FillScreen(0);
   DataLost = 0;        // lost data between producer and consumer
   NumSamples = 0;
   MaxJitter = 0;       // in 1us units
+	OS_InitSemaphore(&toDisplay, 1);
 
 //********initialize communication channels
   OS_MailBox_Init();
   OS_Fifo_Init(128);    // ***note*** 4 is not big enough*****
 
 //*******attach background tasks***********
-  OS_AddSW1Task(&SW1Push,2);
-//  OS_AddSW2Task(&SW2Push,2);  // add this line in Lab 3
+  OS_AddSW1Task(&SW1Push,1);
+  OS_AddSW2Task(&SW2Push,2);  // add this line in Lab 3
   ADC_Init(4);  // sequencer 3, channel 4, PD3, sampling in DAS()
   OS_AddPeriodicThread(&DAS,PERIOD,1); // 2 kHz real time sampling of PD3
 
@@ -377,6 +383,7 @@ int Finalmain (void){
 	NumCreated += OS_AddThread (&Consumer		, 0, 1);
 	NumCreated += OS_AddThread (&PID				, 0, 3);
 	NumCreated += OS_AddThread (&Interpreter, 0, 2);
+
 	
 //  NumCreated += OS_AddThread(&Interpreter,128,2); 
 //  NumCreated += OS_AddThread(&Consumer,128,1); 
@@ -550,19 +557,19 @@ void BackgroundThread5c(void){   // called when Select button pushed
 }
   
 
-Sema4Type toDisplay;
-int value = 0; 
-void Thread_write (void) {
-	OS_bWait(&toDisplay); 
-	value ++; 
-	OS_bSignal (&toDisplay); 
-} 
+//Sema4Type toDisplay;
+//int value = 0; 
+//void Thread_write (void) {
+//	OS_bWait(&toDisplay); 
+//	value ++; 
+//	OS_bSignal (&toDisplay); 
+//} 
 
-void Thread_display (void){
-	OS_bWait(&toDisplay); 
-	ST7735_Message (0, 0, "I am in display thread function", value); 
-	OS_bSignal(&toDisplay); 
-} 
+//void Thread_display (void){
+//	OS_bWait(&toDisplay); 
+//	ST7735_Message (0, 0, "I am in display thread function", value); 
+//	OS_bSignal(&toDisplay); 
+//} 
 
 int testmain3 (void){   // Testmain3
   Count4 = 0;          
@@ -756,10 +763,10 @@ void TaskB(void){       // called every pB in background
 }
 
 
-int main (void){       // Testmain5 Lab 3
+int testmain5 (void){       // Testmain5 Lab 3
+	OS_Init();           // initialize, disable interrupts
   PortE_Init();
 	PortF_Init();
-  OS_Init();           // initialize, disable interrupts
 	UART_Init();
   NumCreated = 0 ;
   NumCreated += OS_AddThread(&Thread6,0,2); 
@@ -865,14 +872,14 @@ int testmain6 (void){      // Testmain6  Lab 3
   WaitCount3 = 0;	  // number of times s is successfully waited on
   OS_InitSemaphore(&s,0);	 // this is the test semaphore
   OS_AddPeriodicThread(&Signal1,(799*TIME_1MS)/1000,0); //should be 0  // 0.799 ms, higher priority
-  OS_AddPeriodicThread(&Signal2,(1111*TIME_1MS)/1000,1);  // 1.111 ms, lower priority
+	OS_AddPeriodicThread(&Signal2,(1111*TIME_1MS)/1000,1);  // 1.111 ms, lower priority
   NumCreated = 0 ;
-  NumCreated += OS_AddThread(&Thread6,128,6);    	// idle thread to keep from crashing
-  NumCreated += OS_AddThread(&OutputThread,128,2); 	// results output thread
-  NumCreated += OS_AddThread(&Signal3,128,2); 	// signalling thread
-  NumCreated += OS_AddThread(&Wait1,128,2); 	// waiting thread
-  NumCreated += OS_AddThread(&Wait2,128,2); 	// waiting thread
-  NumCreated += OS_AddThread(&Wait3,128,2); 	// waiting thread
+  NumCreated += OS_AddThread(&Thread6,0,6);    	// idle thread to keep from crashing
+  NumCreated += OS_AddThread(&OutputThread,0,2); 	// results output thread
+  NumCreated += OS_AddThread(&Signal3,0,2); 	// signalling thread
+  NumCreated += OS_AddThread(&Wait1,0,2); 	// waiting thread
+  NumCreated += OS_AddThread(&Wait2,0,2); 	// waiting thread
+  NumCreated += OS_AddThread(&Wait3,0,2); 	// waiting thread
  
   OS_Launch(TIME_1MS);  // 1ms, doesn't return, interrupts enabled in here
   return 0;             // this never executes

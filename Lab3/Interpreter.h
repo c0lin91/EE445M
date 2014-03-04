@@ -4,6 +4,7 @@ void sendCommand(char* cmdString);
 
 int skipLeadingSpace(char* string);
 
+void Interpreter(void);
 
 #endif
 
