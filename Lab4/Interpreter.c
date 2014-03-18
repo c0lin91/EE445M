@@ -8,14 +8,17 @@
 #include "UART2.h"
 #include "FIFO.h"
 #include "OS.h"
+#include "lm4f120h5qr.h"
+#include "Filter.h"
 
 
 #define RxFIFOSIZE	64
+#define Equal				0
 
 
-const char* commands[] = { "echo", "adc", "clear", "pop", "performance", "debug" };
+const char* commands[] = { "echo", "adc", "clear", "trigger", "performance", "debug", "filter" };
 
-const int totalCommands = 6; 
+const int totalCommands = 7; 
 //int mailboxFull; 		// Put extern back in when ADC file is ready
 extern unsigned long MaxJitter;
 extern unsigned long PIDWork;
@@ -28,6 +31,7 @@ extern long y[6];
 extern Sema4Type toDisplay; 
 int idxX = 0, idxY = 0; 
 char buffer [10]; 
+char filterFlag=0;
 
 int skipLeadingSpace(char* string){
 	int index =0;
@@ -42,25 +46,39 @@ void echo (char* cmdString) {
 	ST7735_DrawStr(0,y, cmdString, 0xFFFF, 0x0000);
 } 
 void findExe(int func, char* cmdString) {
+	int i;
+	cmdString++;
 	switch(func) { 
 	case 0: 
 		echo (cmdString); 
 		break;
-	case 1:
-//		if (mailboxFull) {
-//			mailboxFull = 0; // mailbox = empty
-//			ST7735_Message (0, 0, "ADC Value: ", ADC_In());
-//		} 
-//		else {
-//			ST7735_Message (0, 0, "ADC Value: Error! ", 0);
-//		} 
+	case 1:								// ADC On/Off
+		OS_bWait(&toDisplay);
+		if(strcmp(cmdString, "off") == Equal){
+			 TIMER0_CTL_R &= ~TIMER_CTL_TAEN;          // disable timer0A during setup
+			ST7735_FillScreen(0);
+		}else if(strcmp(cmdString, "on") == Equal){
+			 TIMER0_CTL_R |= TIMER_CTL_TAEN;           // enable timer0A 16-b, periodic, no interrupts
+		}else{
+			echo("Invalid parameter, enter on or off");
+		}
+		OS_bSignal(&toDisplay);
 		break; 
 	case 2:
 		OS_bWait(&toDisplay); 
 		ST7735_FillScreen(0); 
 		OS_bSignal(&toDisplay); 
 		break; 
-	case 3: 
+	case 3:
+			if(strcmp(cmdString, "software") == Equal){
+				ADC0_EMUX_R &= ~0x0F00;         // 11) seq2 is software trigger
+				ADC0_IM_R &= ~0x0004;           // 14) disable SS2 interrupts
+				ADC0_ACTSS_R |= 0x0004;         // 15) enable sample sequencer 2
+			}else if(strcmp(cmdString, "interrupt") == Equal){
+				//enable interrupt triggering
+			}else{
+				echo("Invalid trigger mode");
+			}
 		break; 
 	case 4:						// Add Perfomance
 			OS_bWait(&toDisplay); 
@@ -78,28 +96,55 @@ void findExe(int func, char* cmdString) {
 	case 5:
 		//ST7735_FillScreen(0);
 		OS_bWait(&toDisplay); 
-			cmdString +=1 ;
-		 if(*cmdString == 'x'){
-			 sprintf(buffer, "x[%d] = ", idxX); 
-			 ST7735_Message(0,0,buffer,x[idxX++]);
-			 sprintf(buffer, "x[%d] = ", idxX);
-			 ST7735_Message(0,1,buffer,x[idxX++]);
-			 idxX = idxX%64; 
+		 if(strcmp(cmdString, "adc") == Equal){
+			 for(i=0;i<64;i++){
+				 sprintf(buffer, "x[%d] = %d", i, (int)x[i]); 
+				 if(i<19){
+						ST7735_DrawStr(5, 5 + (i*8), buffer, 0xFFFF, 0x0000);
+				 }else{
+						ST7735_DrawStr(70, 5 + ((i-19)*8), buffer, 0xFFFF, 0x0000);
+				 }
+			 }
+//			 sprintf(buffer, "x[%d] = ", idxX); 
+//			 ST7735_Message(0,0,buffer,x[idxX++]);
+//			 sprintf(buffer, "x[%d] = ", idxX);
+//			 ST7735_Message(0,1,buffer,x[idxX++]);
+//			 idxX = idxX%64; 
 //			ST7735_Message(0,2,"x[2] =",x[2]);
 //			ST7735_Message(0,3,"x[3] =",x[3]);
 //			ST7735_Message(1,0,"x[4] =",x[4]);
 //		  ST7735_Message(1,1,"x[5] =",x[5]);
-		 }else if(*cmdString == 'y'){
-			ST7735_Message(0,0,"y[0] =",y[0]);
-			ST7735_Message(0,1,"y[1] =",y[1]);
+		 }else if(strcmp(cmdString, "fft") == Equal){
+			 for(i=0;i<64;i++){
+				 sprintf(buffer, "y[%d] = %d", i, (int)y[i]); 
+				 if(i<19){
+					ST7735_DrawStr(5, 5 + (i*8), buffer, 0xFFFF, 0x0000);
+				 }else{
+					 ST7735_DrawStr(70, 5 + ((i-19)*8), buffer, 0xFFFF, 0x0000);
+				 }
+			 }
+//			ST7735_Message(0,0,"y[0] =",y[0]);
+//			ST7735_Message(0,1,"y[1] =",y[1]);
 //			ST7735_Message(0,2,"y[2] =",y[2]);
 //			ST7735_Message(0,3,"y[3] =",y[3]);
 //			ST7735_Message(1,0,"y[4] =",y[4]);
 //		  ST7735_Message(1,1,"y[5] =",y[5]);
 		 }else{
-			  echo("Invalid Debugging parameter, enter x or y");
+			  echo("Invalid Debugging parameter, enter adc or fft");
 		 }
 		OS_bSignal(&toDisplay); 
+		break;
+	case 6:
+		if(strcmp(cmdString, "on") == Equal){
+			// turn digital filter on
+			filterFlag = 1; Filter_Init(); 
+			//Filter_FIR();
+		}else if(strcmp(cmdString, "off") == Equal){
+			// turn digital filter off
+			filterFlag = 0;
+		}else{
+			echo("Invalid parameter: Enter 'on' or 'off'");
+		}
 		break;
 	}
 } 

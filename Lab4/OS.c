@@ -5,6 +5,7 @@
 #include "driverlib/sysctl.h"
 #include "inc/tm4c123gh6pm.h"
 #include "PLL.h"
+#include "UART2.h"
 
 
 //80000  
@@ -33,6 +34,7 @@
 #define PF0 										(*((volatile unsigned long *)0x40025004))
 #define NVIC_EN0_INT30					0x40000000
 #define PF2  (*((volatile unsigned long *)0x40025010))
+#define PE0  (*((volatile unsigned long *)0x40024004))
 #define PE1  (*((volatile unsigned long *)0x40024008))
 #define PE2  (*((volatile unsigned long *)0x40024010))
 #define PE3  (*((volatile unsigned long *)0x40024020))
@@ -84,6 +86,7 @@ static int SysTime = 0;
 void OS_Init(void){
 	OS_DisableInterrupts(); 
 	PLL_Init();					// Incompatable with simulator (I think)
+	UART_Init();
 	SysClock_Init(1000);		// give the system clock 1 us ticks
 //	SysCtClockSet(SYSCTL_SYSDIV_4 | SYSCTL_USE_PLL | SYSCTL_XTAL_6MHZ | SYSCTL_OSC_MAIN);
 	NVIC_ST_CTRL_R = 0; 
@@ -240,6 +243,7 @@ void OS_Signal(Sema4Type *semaPt){
 // output: none
 void OS_bWait(Sema4Type *semaPt){
 		OS_DisableInterrupts();
+	PE0 ^= 1;;
   if(semaPt->Value ==0){
 		RunPt->blockState = 1;
 		RunPt->blockPtr = semaPt;
@@ -249,6 +253,7 @@ void OS_bWait(Sema4Type *semaPt){
 	while(RunPt->blockState ==1){}
 	OS_DisableInterrupts();
 	semaPt->Value = 0;
+	PE0 ^= 1; 
 	OS_EnableInterrupts();
 }
 
@@ -581,7 +586,7 @@ void OS_Sleep(unsigned long sleepTime){
 // Be sure to reset SleepPt to zero (when neccessary) in the function that wakes up functions
 	tcbType *tempRun;
 	OS_DisableInterrupts();
-	
+	PE1 ^= 0x02; 
 	if(RunPt->nextThread->priority == StartPt->priority){
 		tempRun = RunPt->nextThread; 
 	}else if(StartPt == RunPt){
@@ -614,6 +619,7 @@ void OS_Sleep(unsigned long sleepTime){
 	SleepPt = RunPt; 
 	tempRunPt = tempRun; 
 	NumSleeping++; 
+		PE1 ^= 0x02; 
 	NVIC_INT_CTRL_R |= NVIC_INT_CTRL_PEND_SV; //Trigger PendSV
 	OS_EnableInterrupts();
 }
@@ -625,11 +631,13 @@ void OS_Sleep(unsigned long sleepTime){
 // output: none
 void OS_Kill(void){
 	OS_DisableInterrupts();
+	PE2 ^= 0x04; 
 	if(RunPt == StartPt){ StartPt = RunPt->nextThread;}
 	RunPt->nextThread->prevThread = RunPt->prevThread;
 	RunPt->prevThread->nextThread = RunPt->nextThread;
 	//NumCreated--;
 	push_OpenThreads(RunPt->threadId); 	// Need to make it apparent that this space is now availible in tcbs
+		PE2 ^= 0x04; 
 	OS_EnableInterrupts();
 	OS_Suspend();
 } 

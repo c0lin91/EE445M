@@ -17,11 +17,12 @@
  ****************************************************/
 
 // ST7735.h
-// Runs on LM4F120
+// Runs on LM4F120/TM4C123
 // Low level drivers for the ST7735 160x128 LCD based off of
 // the file described above.
 // Daniel Valvano
-// June 19, 2013
+// September 12, 2013
+// Augmented 3/3/2014 to have a simple graphics facility
 
 /* This example accompanies the book
    "Embedded Systems: Real Time Interfacing to Arm Cortex M Microcontrollers",
@@ -61,63 +62,16 @@ enum initRFlags{
   INITR_BLACKTAB
 };
 
-#define ST7735_TFTWIDTH  128
-#define ST7735_TFTHEIGHT 160
 
-#define ST7735_NOP     0x00
-#define ST7735_SWRESET 0x01
-#define ST7735_RDDID   0x04
-#define ST7735_RDDST   0x09
-
-#define ST7735_SLPIN   0x10
-#define ST7735_SLPOUT  0x11
-#define ST7735_PTLON   0x12
-#define ST7735_NORON   0x13
-
-#define ST7735_INVOFF  0x20
-#define ST7735_INVON   0x21
-#define ST7735_DISPOFF 0x28
-#define ST7735_DISPON  0x29
-#define ST7735_CASET   0x2A
-#define ST7735_RASET   0x2B
-#define ST7735_RAMWR   0x2C
-#define ST7735_RAMRD   0x2E
-
-#define ST7735_PTLAR   0x30
-#define ST7735_COLMOD  0x3A
-#define ST7735_MADCTL  0x36
-
-#define ST7735_FRMCTR1 0xB1
-#define ST7735_FRMCTR2 0xB2
-#define ST7735_FRMCTR3 0xB3
-#define ST7735_INVCTR  0xB4
-#define ST7735_DISSET5 0xB6
-
-#define ST7735_PWCTR1  0xC0
-#define ST7735_PWCTR2  0xC1
-#define ST7735_PWCTR3  0xC2
-#define ST7735_PWCTR4  0xC3
-#define ST7735_PWCTR5  0xC4
-#define ST7735_VMCTR1  0xC5
-
-#define ST7735_RDID1   0xDA
-#define ST7735_RDID2   0xDB
-#define ST7735_RDID3   0xDC
-#define ST7735_RDID4   0xDD
-
-#define ST7735_PWCTR6  0xFC
-
-#define ST7735_GMCTRP1 0xE0
-#define ST7735_GMCTRN1 0xE1
 
 // Color definitions
-#define  ST7735_BLACK   0x0000
-#define  ST7735_BLUE    0x001F
-#define  ST7735_RED     0xF800
-#define  ST7735_GREEN   0x07E0
-#define ST7735_CYAN    0x07FF
+#define ST7735_BLACK   0x0000
+#define ST7735_BLUE    0xF800
+#define ST7735_RED     0x001F
+#define ST7735_GREEN   0x07E0
+#define ST7735_CYAN    0xFFE0
 #define ST7735_MAGENTA 0xF81F
-#define ST7735_YELLOW  0xFFE0
+#define ST7735_YELLOW  0x07FF
 #define ST7735_WHITE   0xFFFF
 
 // Initialization for ST7735B screens
@@ -151,14 +105,67 @@ void ST7735_DrawCharS(short x, short y, unsigned char c, short textColor, short 
 
 void ST7735_DrawChar(short x, short y, unsigned char c, short textColor, short bgColor, unsigned char size);
 
+//------------ST7735_OutString------------
+// String draw function.  
+// 16 rows (0 to 15) and 21 characters (0 to 20)
+// Requires (11 + size*size*6*8) bytes of transmission for each character
+// Input: x         columns from the left edge (0 to 20)
+//        y         rows from the top edge (0 to 15)
+//        pt        pointer to a null terminated string to be printed
+//        textColor 16-bit color of the characters
+// bgColor is Black and size is 1
+// Output: number of characters printed
+unsigned long ST7735_OutString(unsigned short x, unsigned short y, unsigned char *pt, short textColor);
+
+
+//------------ST7735_Message------------
+// String draw and number output.  
+// Input: device  0 is on top, 1 is on bottom
+//        line    row from top, 0 to 7 for each device
+//        pt      pointer to a null terminated string to be printed
+//        value   signed integer to be printed
+void ST7735_Message (unsigned long d, unsigned long l, char *pt, int value);
+
 void ST7735_SetRotation(unsigned char m);
 
 void ST7735_InvertDisplay(int i);
 
-void ST7735_Message (int device, int line, char *string, int value); 
+// *************** ST7735_PlotClear ********************
+// Clear the graphics buffer, set X coordinate to 0
+// This routine clears the display 
+// Inputs: ymin and ymax are range of the plot
+// Outputs: none
+void ST7735_PlotClear(long ymin, long ymax);
+
+// *************** ST7735_PlotPoint ********************
+// Used in the voltage versus time plot, plot one point at y
+// It does output to display 
+// Inputs: y is the y coordinate of the point plotted
+// Outputs: none
+void ST7735_PlotPoint(long y);
+
+// *************** ST7735_PlotBar ********************
+// Used in the voltage versus time bar, plot one bar at y
+// It does not output to display until RIT128x96x4ShowPlot called
+// Inputs: y is the y coordinate of the bar plotted
+// Outputs: none
+void ST7735_PlotBar(long y);
+
+// *************** ST7735_PlotdBfs ********************
+// Used in the amplitude versus frequency plot, plot bar point at y
+// 0 to 0.625V scaled on a log plot from min to max
+// It does output to display 
+// Inputs: y is the y ADC value of the bar plotted
+// Outputs: none
+void ST7735_PlotdBfs(long y);
+
+// *************** ST7735_PlotNext ********************
+// Used in all the plots to step the X coordinate one pixel
+// X steps from 0 to 127, then back to 0 again
+// It does not output to display 
+// Inputs: none
+// Outputs: none
+void ST7735_PlotNext(void);
 
 int ST7735_DrawStr (short x, short y, char *string, short textColor, short bgColor);
-
-void Jitter(void);
-
 #endif

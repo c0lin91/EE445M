@@ -31,7 +31,7 @@
 #include <string.h> 
 #include "Interpreter.h"
 #include <stdio.h>
-
+#include "Filter.h"
 //*********Prototype for FFT in cr4_fft_64_stm32.s, STMicroelectronics
 void cr4_fft_64_stm32(void *pssOUT, void *pssIN, unsigned short Nbin);
 //*********Prototype for PID in PID_stm32.s, STMicroelectronics
@@ -42,13 +42,14 @@ unsigned long NumSleeping;  // number of sleeping threads
 unsigned long PIDWork;      // current number of PID calculations finished
 unsigned long FilterWork;   // number of digital filter calculations finished
 unsigned long NumSamples;   // incremented every ADC sample, in Producer
+extern char filterFlag;
 
 #define FS 400            // producer/consumer sampling
 #define RUNLENGTH (FS * 10) //(2000 * FS) display results and quit when NumSamples==RUNLENGTH
 // 20-sec finite time experiment duration 
 
 #define PERIOD TIME_500US // DAS 2kHz sampling period in system time units
-long x[64],y[64];         // input and output arrays for FFT
+long x[128],y[128];         // input and output arrays for FFT
 
 
 
@@ -253,6 +254,35 @@ void Producer(unsigned long data){
 }
 void Display(void); 
 
+
+//******** plotV *************** 
+// Creates a plot of Voltage vs. Time
+// inputs:  none
+// outputs: none
+void plotV(void){
+	int i, pixelPos, status;
+	status = StartCritical(); 
+//	OS_bWait(&toDisplay); 
+	ST7735_FillScreen(0);
+	ST7735_DrawStr(55,152, "Time", 0xFFFF, 0x0000);
+	ST7735_DrawChar(3, 40, 'V', 0xFFFF, 0x0000, 1);
+	ST7735_DrawChar(3, 48, 'o', 0xFFFF, 0x0000, 1);
+	ST7735_DrawChar(3, 56, 'l', 0xFFFF, 0x0000, 1);
+	ST7735_DrawChar(3, 64, 't', 0xFFFF, 0x0000, 1);
+	ST7735_DrawChar(3, 72, 'a', 0xFFFF, 0x0000, 1);
+	ST7735_DrawChar(3, 80, 'g', 0xFFFF, 0x0000, 1);
+	ST7735_DrawChar(3, 88, 'e', 0xFFFF, 0x0000, 1);
+	ST7735_DrawFastVLine(10, 0, 150, 0xFFFF);
+	ST7735_DrawFastHLine(10,150,128,0xFFFF);
+	
+	for(i=0; i<128; i++){
+		pixelPos = 148 - ((x[i]* 366)/10000)            ;
+		ST7735_DrawPixel(11 + ((i* 117)/100), pixelPos, 0xFFFF); 
+	}		
+	//OS_bSignal(&toDisplay); 
+	EndCritical(status);
+}
+
 //******** Consumer *************** 
 // foreground thread, accepts data from producer
 // calculates FFT, sends DC component to Display
@@ -267,7 +297,8 @@ unsigned long myId = OS_Id();
   while(NumSamples < RUNLENGTH) { 
     PE2 = 0x04;
     for(t = 0; t < 64; t++){   // collect 64 ADC samples
-      data = OS_Fifo_Get();    // get from producer
+      //data = ADC_In(); 			// is giving actual accurate data, but has high data loss
+			data = OS_Fifo_Get();					// keeps returning 0
       x[t] = data;             // real part is 0 to 4095, imaginary part is 0
     }
     PE2 = 0x00;
@@ -275,6 +306,7 @@ unsigned long myId = OS_Id();
     DCcomponent = y[0]&0xFFFF; // Real part at frequency 0, imaginary part should be zero
     OS_MailBox_Send(DCcomponent); // called every 2.5ms*64 = 160ms
   }
+	plotV();
   OS_Kill();  // done
 }
 //******** Display *************** 
@@ -328,6 +360,7 @@ unsigned long myId = OS_Id();
   }
   for(;;){ }          // done
 }
+
 //--------------end of Task 4-----------------------------
 
 //------------------Task 5--------------------------------
@@ -355,7 +388,7 @@ unsigned long myId = OS_Id();
 
 
 //*******************final user main DEMONTRATE THIS TO TA**********
-int main (void){ 
+int finalmain (void){ 
   OS_Init();           // initialize, disable interrupts
   UART_Init(); 
 	PortE_Init();
@@ -376,7 +409,6 @@ int main (void){
   OS_AddSW2Task(&SW2Push,2);  // add this line in Lab 3
   ADC_Init(4);  // sequencer 3, channel 4, PD3, sampling in DAS()
   OS_AddPeriodicThread(&DAS,PERIOD,1); // 2 kHz real time sampling of PD3
-
   NumCreated = 0 ;
 	
 // create initial foreground threads
@@ -920,17 +952,44 @@ void dummyInt(void){
 }
 
 
-int prachimain (void) { //Prachi's main
+void dummyADC (unsigned long data) {
+//	static int points[128] = {-1};
+//	static int i, j =0;
+	long pixelPos; 
+	OS_DisableInterrupts(); 
+	if (filterFlag == 0) { 
+		pixelPos = 148 - ((data* 366)/10000) ;  
+	} else {
+			pixelPos = 148 - (((Filter_Calc(data))* 366)/10000) ;   
+	} 
+	
+	
+	ST7735_PlotBar(127); 
+	ST7735_PlotPoint(pixelPos); // called N times
+	ST7735_PlotNext();
+	OS_EnableInterrupts();		
+
+}
+
+void WaitForInterrupt (void); 
+
+int main (void) { //Prachi's main
 	OS_Init();           // initialize, disable interrupts
  	PortE_Init(); 
 	PortF_Init();
-	OS_InitSemaphore(&dummy, 0);
-	OS_AddPeriodicThread(&dummyInt, 0, 1);
-	OS_AddThread (&dummyThread1, 0, 0); 
-	//OS_AddThread (&Signal1, 0, 0);
-	OS_AddThread (&dummyThread3, 0, 0); 	
-	OS_AddThread (&Thread6, 0, 7); 
-	OS_Launch(TIME_1MS);
+	ST7735_InitR(INITR_REDTAB);
+	ST7735_FillScreen(0);
+	ST7735_PlotClear(0,127);
+//	OS_AddSW1Task(&SW1Push,1);
+//  OS_AddSW2Task(&SW2Push,2);
+	OS_InitSemaphore(&toDisplay, 1);
+	ADC_Init(4); 
+	ADC_Collect(4, 12000, &dummyADC);
+	OS_AddThread(&Interpreter, 0, 0);
+	OS_AddThread(&dummyThread3, 0, 7);
+	OS_EnableInterrupts(); 
+	OS_Launch(TIME_2MS);
+
 	return 0;
 }
 
@@ -938,7 +997,37 @@ int prachimain (void) { //Prachi's main
 
 
 
-
+//		
+//	if (i == 0) { 
+//		ST7735_FillScreen(0);
+//		ST7735_DrawStr(55,152, "Time", 0xFFFF, 0x0000);
+//		ST7735_DrawChar(3, 40, 'V', 0xFFFF, 0x0000, 1);
+//		ST7735_DrawChar(3, 48, 'o', 0xFFFF, 0x0000, 1);
+//		ST7735_DrawChar(3, 56, 'l', 0xFFFF, 0x0000, 1);
+//		ST7735_DrawChar(3, 64, 't', 0xFFFF, 0x0000, 1);
+//		ST7735_DrawChar(3, 72, 'a', 0xFFFF, 0x0000, 1);
+//		ST7735_DrawChar(3, 80, 'g', 0xFFFF, 0x0000, 1);
+//		ST7735_DrawChar(3, 88, 'e', 0xFFFF, 0x0000, 1);
+//		ST7735_DrawFastVLine(10, 0, 150, 0xFFFF);
+//		ST7735_DrawFastHLine(10,150,128,0xFFFF);
+//	}
+//	pixelPos = 148 - ((data* 366)/10000)            ;
+//	ST7735_DrawPixel(11 + ((i* 117)/100), pixelPos, 0xFFFF);    i++; 
+//	ST7735_Message(0,0,"ADC Data =",data); 
+//	if (i > 99) {
+//		i = 0;
+//		ST7735_FillScreen(0);
+//		ST7735_DrawStr(55,152, "Time", 0xFFFF, 0x0000);
+//		ST7735_DrawChar(3, 40, 'V', 0xFFFF, 0x0000, 1);
+//		ST7735_DrawChar(3, 48, 'o', 0xFFFF, 0x0000, 1);
+//		ST7735_DrawChar(3, 56, 'l', 0xFFFF, 0x0000, 1);
+//		ST7735_DrawChar(3, 64, 't', 0xFFFF, 0x0000, 1);
+//		ST7735_DrawChar(3, 72, 'a', 0xFFFF, 0x0000, 1);
+//		ST7735_DrawChar(3, 80, 'g', 0xFFFF, 0x0000, 1);
+//		ST7735_DrawChar(3, 88, 'e', 0xFFFF, 0x0000, 1);
+//		ST7735_DrawFastVLine(10, 0, 150, 0xFFFF);
+//		ST7735_DrawFastHLine(10,150,128,0xFFFF);
+//	} 	
 
 //******************* Lab 3 Measurement of context switch time**********
 // Run this to measure the time it takes to perform a task switch

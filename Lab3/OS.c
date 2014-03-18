@@ -33,6 +33,7 @@
 #define PF0 										(*((volatile unsigned long *)0x40025004))
 #define NVIC_EN0_INT30					0x40000000
 #define PF2  (*((volatile unsigned long *)0x40025010))
+#define PE0  (*((volatile unsigned long *)0x40024004))
 #define PE1  (*((volatile unsigned long *)0x40024008))
 #define PE2  (*((volatile unsigned long *)0x40024010))
 #define PE3  (*((volatile unsigned long *)0x40024020))
@@ -121,6 +122,7 @@ void OS_Wait(Sema4Type *semaPt){
 	long status; 
 	tcbType* temp; 
 	status = StartCritical(); 
+	PE0 ^= 0x01;
 	semaPt->Value = semaPt->Value - 1;
 	if(semaPt->Value < 0){
 		//save the next pt --- figure something out because this is a prioirty scheduler
@@ -163,6 +165,7 @@ void OS_Wait(Sema4Type *semaPt){
 	else{
 		EndCritical(status); 
 	}
+	PE0 ^= 0x01;
 }
 
 // ******** OS_Signal ************
@@ -580,7 +583,7 @@ void OS_Sleep(unsigned long sleepTime){
 // Be sure to reset SleepPt to zero (when neccessary) in the function that wakes up functions
 	tcbType *tempRun;
 	OS_DisableInterrupts();
-	
+	PE1 ^= 0x02;
 	if(RunPt->nextThread->priority == StartPt->priority){
 		tempRun = RunPt->nextThread; 
 	}else if(StartPt == RunPt){
@@ -614,6 +617,7 @@ void OS_Sleep(unsigned long sleepTime){
 	tempRunPt = tempRun; 
 	NumSleeping++; 
 	NVIC_INT_CTRL_R |= NVIC_INT_CTRL_PEND_SV; //Trigger PendSV
+	PE1 ^= 0x02;
 	OS_EnableInterrupts();
 }
 
@@ -624,11 +628,13 @@ void OS_Sleep(unsigned long sleepTime){
 // output: none
 void OS_Kill(void){
 	OS_DisableInterrupts();
+	PE2 ^= 0x04;
 	if(RunPt == StartPt){ StartPt = RunPt->nextThread;}
 	RunPt->nextThread->prevThread = RunPt->prevThread;
 	RunPt->prevThread->nextThread = RunPt->nextThread;
 	//NumCreated--;
 	push_OpenThreads(RunPt->threadId); 	// Need to make it apparent that this space is now availible in tcbs
+	PE2 ^= 0x04;
 	OS_EnableInterrupts();
 	OS_Suspend();
 } 

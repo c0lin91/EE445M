@@ -8,3 +8,5 @@
 .\interpreter.o: UART2.h
 .\interpreter.o: FIFO.h
 .\interpreter.o: OS.h
+.\interpreter.o: lm4f120h5qr.h
+.\interpreter.o: Filter.h

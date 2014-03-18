@@ -6,6 +6,8 @@
 
 void ADC_Init(unsigned char channelNum){
  volatile unsigned long delay;
+	int status; 
+	status = StartCritical(); 
   // **** GPIO pin initialization ****
   switch(channelNum){             // 1) activate clock
     case 0:
@@ -103,7 +105,7 @@ void ADC_Init(unsigned char channelNum){
   }                         
 //  SYSCTL_RCGC0_R |= 0x00010000; // 1) activate ADC0 (legacy code)
   SYSCTL_RCGCADC_R |= 0x00000001; // 1) activate ADC0
-  SYSCTL_RCGCGPIO_R |= SYSCTL_RCGCGPIO_R4; // 1) activate clock for Port E
+  SYSCTL_RCGCGPIO_R |= SYSCTL_RCGCGPIO_R3; // 1) activate clock for Port D
   delay = SYSCTL_RCGCGPIO_R;      // 2) allow time for clock to stabilize
   delay = SYSCTL_RCGCGPIO_R;
   ADC0_PC_R &= ~0xF;              // 8) clear max sample rate field
@@ -115,6 +117,8 @@ void ADC_Init(unsigned char channelNum){
   ADC0_SSCTL2_R = 0x0060;         // 13) no TS0 D0 IE0 END0 TS1 D1, yes IE1 END1
   ADC0_IM_R &= ~0x0004;           // 14) disable SS2 interrupts
   ADC0_ACTSS_R |= 0x0004;         // 15) enable sample sequencer 2
+	
+	EndCritical(status); 
 }
 	
  	
@@ -132,6 +136,9 @@ void (*ADCtask) (unsigned long);
 
 void ADC_Collect(unsigned int channelNum, unsigned int fs, void (*task) (unsigned long)){
  volatile unsigned long delay;
+	int status;
+	int period = 80000000/fs; 
+	status = StartCritical();
 	ADCtask = task ; 
   // **** GPIO pin initialization ****
   switch(channelNum){             // 1) activate clock
@@ -228,7 +235,6 @@ void ADC_Collect(unsigned int channelNum, unsigned int fs, void (*task) (unsigne
       GPIO_PORTB_AMSEL_R |= 0x20; // 6.11) enable analog functionality on PB5
       break;
   }
- // DisableInterrupts();
   // **** general initialization ****
   SYSCTL_RCGC0_R |= SYSCTL_RCGC0_ADC0;      // activate ADC0 (legacy code)
   SYSCTL_RCGC1_R |= SYSCTL_RCGC1_TIMER0;    // activate timer0 (legacy code)
@@ -238,8 +244,8 @@ void ADC_Collect(unsigned int channelNum, unsigned int fs, void (*task) (unsigne
   TIMER0_CFG_R = TIMER_CFG_16_BIT;          // configure for 16-bit timer mode
   // **** timer0A initialization ****
   TIMER0_TAMR_R = TIMER_TAMR_TAMR_PERIOD;   // configure for periodic mode, default down-count settings
-  TIMER0_TAPR_R = 49;                 // prescale value for trigger (49 = 1us time) (used to be 0) -CH
-  TIMER0_TAILR_R = 700,000;                  // start value for trigger (used to be 125,000) - CH
+  TIMER0_TAPR_R = 2;                 // prescale value for trigger (49 = 1us time) (used to be 0) -CH
+  TIMER0_TAILR_R = (period-1)/2;                  // start value for trigger (used to be 125,000) - CH
   TIMER0_IMR_R &= ~TIMER_IMR_TATOIM;        // disable timeout (rollover) interrupt
   TIMER0_CTL_R |= TIMER_CTL_TAEN;           // enable timer0A 16-b, periodic, no interrupts
   // **** ADC initialization ****
@@ -266,8 +272,8 @@ void ADC_Collect(unsigned int channelNum, unsigned int fs, void (*task) (unsigne
   // **** interrupt initialization ****
                                             // ADC3=priority 2
   NVIC_PRI4_R = (NVIC_PRI4_R&0xFFFF00FF)|0x00004000; // bits 13-15
-  NVIC_EN0_R = NVIC_EN0_INT17;              // enable interrupt 17 in NVIC    
-	
+  NVIC_EN0_R = NVIC_EN0_INT17;              // enable interrupt 17	in NVIC    
+	EndCritical(status);
 }
 
 

@@ -4,3 +4,4 @@
 .\os.o: ..\driverlib/sysctl.h
 .\os.o: ..\inc/tm4c123gh6pm.h
 .\os.o: PLL.h
+.\os.o: UART2.h

@@ -265,12 +265,12 @@ unsigned long myId = OS_Id();
   ADC_Collect(5, FS, &Producer); // start ADC sampling, channel 5, PD2, 400 Hz
   NumCreated += OS_AddThread(&Display, 0,1); 
   while(NumSamples < RUNLENGTH) { 
-    PE2 = 0x04;
+   // PE2 = 0x04;
     for(t = 0; t < 64; t++){   // collect 64 ADC samples
       data = OS_Fifo_Get();    // get from producer
       x[t] = data;             // real part is 0 to 4095, imaginary part is 0
     }
-    PE2 = 0x00;
+   // PE2 = 0x00;
     cr4_fft_64_stm32(y,x,64);  // complex FFT of last 64 ADC values
     DCcomponent = y[0]&0xFFFF; // Real part at frequency 0, imaginary part should be zero
     OS_MailBox_Send(DCcomponent); // called every 2.5ms*64 = 160ms
