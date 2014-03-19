@@ -31,7 +31,7 @@
 long StartCritical (void);    // previous I bit, disable interrupts
 void EndCritical(long sr);    // restore I bit to previous value
 
-typedef int ADCDataType;
+typedef long ADCDataType;
 
 // initialize index FIFO
 void ADCFifo_Init(void);

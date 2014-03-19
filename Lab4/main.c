@@ -32,10 +32,14 @@
 #include "Interpreter.h"
 #include <stdio.h>
 #include "Filter.h"
+#include "FIFO.h" 
 //*********Prototype for FFT in cr4_fft_64_stm32.s, STMicroelectronics
 void cr4_fft_64_stm32(void *pssOUT, void *pssIN, unsigned short Nbin);
 //*********Prototype for PID in PID_stm32.s, STMicroelectronics
 short PID_stm32(short Error, short *Coeff);
+void WaitForInterrupt (void); 
+void ButtonPush1(void);
+void switchWork1(void);
 
 unsigned long NumCreated;   // number of foreground threads created
 unsigned long NumSleeping;  // number of sleeping threads
@@ -43,6 +47,8 @@ unsigned long PIDWork;      // current number of PID calculations finished
 unsigned long FilterWork;   // number of digital filter calculations finished
 unsigned long NumSamples;   // incremented every ADC sample, in Producer
 extern char filterFlag;
+char switchFlag = 0;
+extern char fftActive;
 
 #define FS 400            // producer/consumer sampling
 #define RUNLENGTH (FS * 10) //(2000 * FS) display results and quit when NumSamples==RUNLENGTH
@@ -52,7 +58,11 @@ extern char filterFlag;
 long x[128],y[128];         // input and output arrays for FFT
 
 
+#define ADCFIFOSIZE 64 // must be a power of 2
+#define ADCFIFOSUCCESS 1
+#define ADCFIFOFAIL    0
 
+AddIndexFifo(ADC,ADCFIFOSIZE,long, ADCFIFOSUCCESS,ADCFIFOFAIL)
 
 tcbType tcbs[NUMTHREADS];
 long Stacks [NUMTHREADS][STACKSIZE];
@@ -198,13 +208,16 @@ unsigned long myId = OS_Id();
 // Adds another foreground task
 // background threads execute once and return
 void SW1Push(void){
-	//PE1 ^= 0x02;
- // if(OS_MsTime() > 20){ // debounce
-    NumCreated +=OS_AddThread(&ButtonWork, 0, 0);			
-
- //   OS_ClearMsTime();  // at least 20ms between touches
- // }
+	int i, pixelPos;
+	switchFlag = 0;
 	PF1 ^= 0x02;
+	for(i=0; i<64;i++){
+		pixelPos = 148 - ((x[i]* 366)/10000) ;
+		ST7735_PlotBar(127);
+		ST7735_PlotPoint(pixelPos); // called N times
+		ST7735_PlotNext();
+	}
+	
 	//PE1 ^= 0x02;
 }
 //************SW2Push*************
@@ -212,10 +225,7 @@ void SW1Push(void){
 // Adds another foreground task
 // background threads execute once and return
 void SW2Push(void){
- // if(OS_MsTime() > 20){ // debounce
-    NumCreated+=OS_AddThread(&ButtonWork,0, 0);
-  //  OS_ClearMsTime();  // at least 20ms between touches
- // }
+	switchFlag = 1;
 	PF1 ^= 0x02;
 }
 //--------------end of Task 2-----------------------------
@@ -951,28 +961,57 @@ void dummyInt(void){
 	counter ++;
 }
 
+void switchWork1(void){
+	while(switchFlag == 0){
+		// check for another button push
+		//if Sw1 is pushed
+			// output fifo data to graph
+	}
+	OS_Kill();
+}
 
-void dummyADC (unsigned long data) {
+static int idxX = 0; 
+void switchWork2 (unsigned long data) {
 //	static int points[128] = {-1};
 //	static int i, j =0;
 	long pixelPos; 
+	static long i;
 	OS_DisableInterrupts(); 
-	if (filterFlag == 0) { 
-		pixelPos = 148 - ((data* 366)/10000) ;  
-	} else {
-			pixelPos = 148 - (((Filter_Calc(data))* 366)/10000) ;   
-	} 
-	
-	
-	ST7735_PlotBar(127); 
-	ST7735_PlotPoint(pixelPos); // called N times
-	ST7735_PlotNext();
-	OS_EnableInterrupts();		
+	ADCFifo_Get(&x[i]);
+	i=(i+1) % 64;
+	if((switchFlag == 1) && (!fftActive)){
+		if (filterFlag == 0) { 
+			pixelPos = 148 - ((data* 366)/10000) ;  
+		} else {
+				pixelPos = 148 - (((Filter_Calc(data))* 366)/10000) ;   
+		} 
+		ST7735_PlotBar(127);  // clip large magnitudes
+		ST7735_PlotPoint(pixelPos); // called N times
+		ST7735_PlotNext();
+}
+	OS_EnableInterrupts();
 
 }
 
-void WaitForInterrupt (void); 
+ void fft (void) {
+	 int DCcomponent, i, status, pixelPos; 
+	 while(fftActive){
+		status = StartCritical ();
+		cr4_fft_64_stm32(y,x,64);  // complex FFT of last 64 ADC values
+	// ST7735_PlotClear(0,1023);  // clip large magnitudes
 
+		for (i = 0; i < 64; i++) {  
+			DCcomponent = y[i]&0xFFFF; // Real part at frequency 0, imaginary part should be zero
+			DCcomponent = (DCcomponent < 0) ? -DCcomponent : DCcomponent; 
+			pixelPos = 148 - ((DCcomponent* 366)/10000) ;
+			ST7735_PlotBar(127);  // clip large magnitudes
+			ST7735_PlotPoint(pixelPos); // called 4 times
+			ST7735_PlotNext();
+	 } 
+	 EndCritical(status); 
+ }
+	OS_Kill();
+ }
 int main (void) { //Prachi's main
 	OS_Init();           // initialize, disable interrupts
  	PortE_Init(); 
@@ -980,76 +1019,16 @@ int main (void) { //Prachi's main
 	ST7735_InitR(INITR_REDTAB);
 	ST7735_FillScreen(0);
 	ST7735_PlotClear(0,127);
-//	OS_AddSW1Task(&SW1Push,1);
-//  OS_AddSW2Task(&SW2Push,2);
+	OS_AddSW1Task(&SW1Push,1);
+  OS_AddSW2Task(&SW2Push,2);
 	OS_InitSemaphore(&toDisplay, 1);
 	ADC_Init(4); 
-	ADC_Collect(4, 12000, &dummyADC);
+	ADC_Collect(4, 12000, &switchWork2);
 	OS_AddThread(&Interpreter, 0, 0);
 	OS_AddThread(&dummyThread3, 0, 7);
 	OS_EnableInterrupts(); 
 	OS_Launch(TIME_2MS);
 
 	return 0;
-}
-
-
-
-
-
-//		
-//	if (i == 0) { 
-//		ST7735_FillScreen(0);
-//		ST7735_DrawStr(55,152, "Time", 0xFFFF, 0x0000);
-//		ST7735_DrawChar(3, 40, 'V', 0xFFFF, 0x0000, 1);
-//		ST7735_DrawChar(3, 48, 'o', 0xFFFF, 0x0000, 1);
-//		ST7735_DrawChar(3, 56, 'l', 0xFFFF, 0x0000, 1);
-//		ST7735_DrawChar(3, 64, 't', 0xFFFF, 0x0000, 1);
-//		ST7735_DrawChar(3, 72, 'a', 0xFFFF, 0x0000, 1);
-//		ST7735_DrawChar(3, 80, 'g', 0xFFFF, 0x0000, 1);
-//		ST7735_DrawChar(3, 88, 'e', 0xFFFF, 0x0000, 1);
-//		ST7735_DrawFastVLine(10, 0, 150, 0xFFFF);
-//		ST7735_DrawFastHLine(10,150,128,0xFFFF);
-//	}
-//	pixelPos = 148 - ((data* 366)/10000)            ;
-//	ST7735_DrawPixel(11 + ((i* 117)/100), pixelPos, 0xFFFF);    i++; 
-//	ST7735_Message(0,0,"ADC Data =",data); 
-//	if (i > 99) {
-//		i = 0;
-//		ST7735_FillScreen(0);
-//		ST7735_DrawStr(55,152, "Time", 0xFFFF, 0x0000);
-//		ST7735_DrawChar(3, 40, 'V', 0xFFFF, 0x0000, 1);
-//		ST7735_DrawChar(3, 48, 'o', 0xFFFF, 0x0000, 1);
-//		ST7735_DrawChar(3, 56, 'l', 0xFFFF, 0x0000, 1);
-//		ST7735_DrawChar(3, 64, 't', 0xFFFF, 0x0000, 1);
-//		ST7735_DrawChar(3, 72, 'a', 0xFFFF, 0x0000, 1);
-//		ST7735_DrawChar(3, 80, 'g', 0xFFFF, 0x0000, 1);
-//		ST7735_DrawChar(3, 88, 'e', 0xFFFF, 0x0000, 1);
-//		ST7735_DrawFastVLine(10, 0, 150, 0xFFFF);
-//		ST7735_DrawFastHLine(10,150,128,0xFFFF);
-//	} 	
-
-//******************* Lab 3 Measurement of context switch time**********
-// Run this to measure the time it takes to perform a task switch
-// UART0 not needed 
-// SYSTICK interrupts, period established by OS_Launch
-// first timer not needed
-// second timer not needed
-// SW1 not needed, 
-// SW2 not needed
-// logic analyzer on PF1 for systick interrupt (in your OS)
-//                on PE0 to measure context switch time
-void Thread8(void){       // only thread running
-  while(1){
-    PE0 ^= 0x01;      // debugging profile  
-  }
-}
-int Testmain7(void){       // Testmain7
-  PortE_Init();
-  OS_Init();           // initialize, disable interrupts
-  NumCreated = 0 ;
-  NumCreated += OS_AddThread(&Thread8,0, 1);
-  OS_Launch(TIME_1MS/10); // 100us, doesn't return, interrupts enabled in here
-  return 0;             // this never executes
 }
 

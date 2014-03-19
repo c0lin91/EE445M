@@ -1,12 +1,6 @@
 
-#include "FIFO.h"
 #define N 51
 
-#define ADCFIFOSIZE 64 // must be a power of 2
-#define ADCFIFOSUCCESS 1
-#define ADCFIFOFAIL    0
-
-AddIndexFifo(ADC,ADCFIFOSIZE,int, ADCFIFOSUCCESS,ADCFIFOFAIL)
  
 int input  [N]; 
 int output [N]; 
@@ -58,7 +52,7 @@ int Filter_FIR(void)
 	int i; 
 	static int count = 0;
 
-	ADCFifo_Get(newestInput); //may need some sort of semaphore for this ADC FIFO
+//	ADCFifo_Get(newestInput); //may need some sort of semaphore for this ADC FIFO
 //	*newestInput = 2024; 
 	
 	tempOutput = 0; 

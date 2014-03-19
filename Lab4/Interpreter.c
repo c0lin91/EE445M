@@ -15,8 +15,9 @@
 #define RxFIFOSIZE	64
 #define Equal				0
 
+void fft (void); 
 
-const char* commands[] = { "echo", "adc", "clear", "trigger", "performance", "debug", "filter" };
+const char* commands[] = { "echo", "adc", "clear", "fft", "performance", "debug", "filter" };
 
 const int totalCommands = 7; 
 //int mailboxFull; 		// Put extern back in when ADC file is ready
@@ -32,6 +33,7 @@ extern Sema4Type toDisplay;
 int idxX = 0, idxY = 0; 
 char buffer [10]; 
 char filterFlag=0;
+char fftActive =0;
 
 int skipLeadingSpace(char* string){
 	int index =0;
@@ -69,15 +71,15 @@ void findExe(int func, char* cmdString) {
 		ST7735_FillScreen(0); 
 		OS_bSignal(&toDisplay); 
 		break; 
-	case 3:
-			if(strcmp(cmdString, "software") == Equal){
-				ADC0_EMUX_R &= ~0x0F00;         // 11) seq2 is software trigger
-				ADC0_IM_R &= ~0x0004;           // 14) disable SS2 interrupts
-				ADC0_ACTSS_R |= 0x0004;         // 15) enable sample sequencer 2
-			}else if(strcmp(cmdString, "interrupt") == Equal){
-				//enable interrupt triggering
+	case 3: //FFT
+			if(strcmp(cmdString, "on") == Equal){
+				fftActive = 1;
+				OS_AddThread(&fft, 0, 0);
+			}else if(strcmp(cmdString, "off") == Equal){
+				fftActive = 0;
+				ST7735_FillScreen(0);
 			}else{
-				echo("Invalid trigger mode");
+				echo("Invalid fft mode");
 			}
 		break; 
 	case 4:						// Add Perfomance

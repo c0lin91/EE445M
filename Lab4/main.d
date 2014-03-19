@@ -8,3 +8,4 @@
 .\main.o: Interpreter.h
 .\main.o: C:\Keil\ARM\ARMCC\bin\..\include\stdio.h
 .\main.o: Filter.h
+.\main.o: FIFO.h
