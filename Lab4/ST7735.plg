@@ -3,323 +3,79 @@
 <pre>
 <h1>µVision Build Log</h1>
 <h2>Project:</h2>
-\\vmware-host\Shared Folders\Desktop\git\EE445M\Lab4\Lab3.uvproj
-Project File Date:  03/05/2014
+C:\Users\Colin\Documents\GitHub\EE445M\Lab4\Lab3.uvproj
+Project File Date:  03/06/2014
 
 <h2>Output:</h2>
-Rebuild target 'Lab3'
-assembling startup.s...
-compiling ADC.c...
-compiling Interpreter.c...
-compiling OS.c...
-OS.c(433): warning:  #61-D: integer operation result is out of range
-OS.c(845): warning:  #61-D: integer operation result is out of range
-compiling PLL.c...
-compiling ST7735.c...
-ST7735.c(1405): warning:  #186-D: pointless comparison of unsigned integer with zero
-compiling SysTick.c...
-compiling UART2.c...
-assembling cr4_fft_64_stm32.s...
-assembling osasm.s...
-assembling PID_stm32.s...
-compiling main.c...
-main.c(953): warning:  #111-D: statement is unreachable
-main.c(997): warning:  #177-D: variable "i" was declared but never referenced
-main.c(973): warning:  #177-D: variable "idxX" was declared but never referenced
-compiling Filter.c...
-Filter.c(27): warning:  #223-D: function "StartCritical" declared implicitly
-Filter.c(44): warning:  #223-D: function "EndCritical" declared implicitly
-Filter.c(53): warning:  #177-D: variable "count" was declared but never referenced
-linking...
-Program Size: Code=13796 RO-data=2216 RW-data=336 ZI-data=9176  
-".\ST7735.axf" - 0 Errors, 9 Warning(s).
-Load "\\\\vmware-host\\Shared Folders\\Desktop\\git\\EE445M\\Lab4\\ST7735.axf" 
-Connecting: Mode=JTAG, Speed=1000000Hz
-Erase Done.
-Programming Done.
-Verify OK.
-Rebuild target 'Lab3'
-assembling startup.s...
-compiling ADC.c...
-compiling Interpreter.c...
-compiling OS.c...
-OS.c(433): warning:  #61-D: integer operation result is out of range
-OS.c(845): warning:  #61-D: integer operation result is out of range
-compiling PLL.c...
-compiling ST7735.c...
-ST7735.c(1405): warning:  #186-D: pointless comparison of unsigned integer with zero
-compiling SysTick.c...
-compiling UART2.c...
-assembling cr4_fft_64_stm32.s...
-assembling osasm.s...
-assembling PID_stm32.s...
-compiling main.c...
-main.c(953): warning:  #111-D: statement is unreachable
-main.c(973): warning:  #177-D: variable "idxX" was declared but never referenced
-compiling Filter.c...
-Filter.c(27): warning:  #223-D: function "StartCritical" declared implicitly
-Filter.c(44): warning:  #223-D: function "EndCritical" declared implicitly
-Filter.c(53): warning:  #177-D: variable "count" was declared but never referenced
-linking...
-Program Size: Code=13796 RO-data=2216 RW-data=336 ZI-data=9176  
-".\ST7735.axf" - 0 Errors, 8 Warning(s).
-Load "\\\\vmware-host\\Shared Folders\\Desktop\\git\\EE445M\\Lab4\\ST7735.axf" 
-Connecting: Mode=JTAG, Speed=1000000Hz
-Erase Done.
-Programming Done.
-Verify OK.
-Rebuild target 'Lab3'
-assembling startup.s...
-compiling ADC.c...
-compiling Interpreter.c...
-compiling OS.c...
-OS.c(433): warning:  #61-D: integer operation result is out of range
-OS.c(845): warning:  #61-D: integer operation result is out of range
-compiling PLL.c...
-compiling ST7735.c...
-ST7735.c(1405): warning:  #186-D: pointless comparison of unsigned integer with zero
-compiling SysTick.c...
-compiling UART2.c...
-assembling cr4_fft_64_stm32.s...
-assembling osasm.s...
-assembling PID_stm32.s...
-compiling main.c...
-main.c(953): warning:  #111-D: statement is unreachable
-main.c(973): warning:  #177-D: variable "idxX" was declared but never referenced
-compiling Filter.c...
-Filter.c(27): warning:  #223-D: function "StartCritical" declared implicitly
-Filter.c(44): warning:  #223-D: function "EndCritical" declared implicitly
-Filter.c(53): warning:  #177-D: variable "count" was declared but never referenced
-linking...
-Program Size: Code=13808 RO-data=2216 RW-data=336 ZI-data=9176  
-".\ST7735.axf" - 0 Errors, 8 Warning(s).
-Load "\\\\vmware-host\\Shared Folders\\Desktop\\git\\EE445M\\Lab4\\ST7735.axf" 
-Connecting: Mode=JTAG, Speed=1000000Hz
-Erase Done.
-Programming Done.
-Verify OK.
-Rebuild target 'Lab3'
-assembling startup.s...
-compiling ADC.c...
-compiling Interpreter.c...
-compiling OS.c...
-OS.c(433): warning:  #61-D: integer operation result is out of range
-OS.c(845): warning:  #61-D: integer operation result is out of range
-compiling PLL.c...
-compiling ST7735.c...
-ST7735.c(1405): warning:  #186-D: pointless comparison of unsigned integer with zero
-compiling SysTick.c...
-compiling UART2.c...
-assembling cr4_fft_64_stm32.s...
-assembling osasm.s...
-assembling PID_stm32.s...
-compiling main.c...
-main.c(953): warning:  #111-D: statement is unreachable
-main.c(973): warning:  #177-D: variable "idxX" was declared but never referenced
-compiling Filter.c...
-Filter.c(27): warning:  #223-D: function "StartCritical" declared implicitly
-Filter.c(44): warning:  #223-D: function "EndCritical" declared implicitly
-Filter.c(53): warning:  #177-D: variable "count" was declared but never referenced
-linking...
-Program Size: Code=13804 RO-data=2216 RW-data=336 ZI-data=9176  
-".\ST7735.axf" - 0 Errors, 8 Warning(s).
-Load "\\\\vmware-host\\Shared Folders\\Desktop\\git\\EE445M\\Lab4\\ST7735.axf" 
-Connecting: Mode=JTAG, Speed=1000000Hz
-Erase Done.
-Programming Done.
-Verify OK.
-Build target 'Lab3'
-compiling main.c...
-main.c(953): warning:  #111-D: statement is unreachable
-main.c(973): warning:  #177-D: variable "idxX" was declared but never referenced
-linking...
-Program Size: Code=13808 RO-data=2216 RW-data=336 ZI-data=9176  
-".\ST7735.axf" - 0 Errors, 2 Warning(s).
-Load "\\\\vmware-host\\Shared Folders\\Desktop\\git\\EE445M\\Lab4\\ST7735.axf" 
-Connecting: Mode=JTAG, Speed=1000000Hz
-Erase Done.
-Programming Done.
-Verify OK.
-Build target 'Lab3'
-compiling main.c...
-main.c(953): warning:  #111-D: statement is unreachable
-main.c(973): warning:  #177-D: variable "idxX" was declared but never referenced
-linking...
-Program Size: Code=13820 RO-data=2216 RW-data=336 ZI-data=9176  
-".\ST7735.axf" - 0 Errors, 2 Warning(s).
-Load "\\\\vmware-host\\Shared Folders\\Desktop\\git\\EE445M\\Lab4\\ST7735.axf" 
-Connecting: Mode=JTAG, Speed=1000000Hz
-Erase Done.
-Programming Done.
-Verify OK.
-Build target 'Lab3'
-compiling main.c...
-main.c(953): warning:  #111-D: statement is unreachable
-main.c(973): warning:  #177-D: variable "idxX" was declared but never referenced
-linking...
-Program Size: Code=13808 RO-data=2216 RW-data=336 ZI-data=9176  
-".\ST7735.axf" - 0 Errors, 2 Warning(s).
-Load "\\\\vmware-host\\Shared Folders\\Desktop\\git\\EE445M\\Lab4\\ST7735.axf" 
-Connecting: Mode=JTAG, Speed=1000000Hz
-Erase Done.
-Programming Done.
-Verify OK.
-Build target 'Lab3'
-compiling main.c...
-main.c(953): warning:  #111-D: statement is unreachable
-main.c(973): warning:  #177-D: variable "idxX" was declared but never referenced
-linking...
-Program Size: Code=13812 RO-data=2216 RW-data=336 ZI-data=9176  
-".\ST7735.axf" - 0 Errors, 2 Warning(s).
-Load "\\\\vmware-host\\Shared Folders\\Desktop\\git\\EE445M\\Lab4\\ST7735.axf" 
-Connecting: Mode=JTAG, Speed=1000000Hz
-Erase Done.
-Programming Done.
-Verify OK.
-Build target 'Lab3'
-compiling main.c...
-main.c(953): warning:  #111-D: statement is unreachable
-main.c(973): warning:  #177-D: variable "idxX" was declared but never referenced
-linking...
-Program Size: Code=13808 RO-data=2216 RW-data=336 ZI-data=9176  
-".\ST7735.axf" - 0 Errors, 2 Warning(s).
-Load "\\\\vmware-host\\Shared Folders\\Desktop\\git\\EE445M\\Lab4\\ST7735.axf" 
-Connecting: Mode=JTAG, Speed=1000000Hz
-Erase Done.
-Programming Done.
-Verify OK.
-Rebuild target 'Lab3'
-assembling startup.s...
-compiling ADC.c...
-compiling Interpreter.c...
-compiling OS.c...
-OS.c(433): warning:  #61-D: integer operation result is out of range
-OS.c(845): warning:  #61-D: integer operation result is out of range
-compiling PLL.c...
-compiling ST7735.c...
-ST7735.c(1405): warning:  #186-D: pointless comparison of unsigned integer with zero
-compiling SysTick.c...
-compiling UART2.c...
-assembling cr4_fft_64_stm32.s...
-assembling osasm.s...
-assembling PID_stm32.s...
-compiling main.c...
-main.c(953): warning:  #111-D: statement is unreachable
-main.c(973): warning:  #177-D: variable "idxX" was declared but never referenced
-compiling Filter.c...
-Filter.c(27): warning:  #223-D: function "StartCritical" declared implicitly
-Filter.c(44): warning:  #223-D: function "EndCritical" declared implicitly
-Filter.c(53): warning:  #177-D: variable "count" was declared but never referenced
-linking...
-Program Size: Code=13812 RO-data=2216 RW-data=336 ZI-data=9176  
-".\ST7735.axf" - 0 Errors, 8 Warning(s).
-Load "\\\\vmware-host\\Shared Folders\\Desktop\\git\\EE445M\\Lab4\\ST7735.axf" 
-Connecting: Mode=JTAG, Speed=1000000Hz
-Erase Done.
-Programming Done.
-Verify OK.
-Build target 'Lab3'
-compiling main.c...
-main.c(953): warning:  #111-D: statement is unreachable
-main.c(973): warning:  #177-D: variable "idxX" was declared but never referenced
-linking...
-Program Size: Code=13812 RO-data=2216 RW-data=336 ZI-data=9176  
-".\ST7735.axf" - 0 Errors, 2 Warning(s).
-Load "\\\\vmware-host\\Shared Folders\\Desktop\\git\\EE445M\\Lab4\\ST7735.axf" 
-Connecting: Mode=JTAG, Speed=1000000Hz
-Erase Done.
-Programming Done.
-Verify OK.
-Build target 'Lab3'
-compiling main.c...
-main.c(953): warning:  #111-D: statement is unreachable
-main.c(973): warning:  #177-D: variable "idxX" was declared but never referenced
-linking...
-Program Size: Code=13800 RO-data=2216 RW-data=336 ZI-data=9176  
-".\ST7735.axf" - 0 Errors, 2 Warning(s).
-Load "\\\\vmware-host\\Shared Folders\\Desktop\\git\\EE445M\\Lab4\\ST7735.axf" 
-Connecting: Mode=JTAG, Speed=1000000Hz
-Erase Done.
-Programming Done.
-Verify OK.
-Build target 'Lab3'
-compiling main.c...
-main.c(953): warning:  #111-D: statement is unreachable
-main.c(973): warning:  #177-D: variable "idxX" was declared but never referenced
-linking...
-Program Size: Code=13800 RO-data=2216 RW-data=336 ZI-data=9176  
-".\ST7735.axf" - 0 Errors, 2 Warning(s).
-Load "\\\\vmware-host\\Shared Folders\\Desktop\\git\\EE445M\\Lab4\\ST7735.axf" 
-Connecting: Mode=JTAG, Speed=1000000Hz
-Erase Done.
-Programming Done.
-Verify OK.
-Rebuild target 'Lab3'
-assembling startup.s...
-compiling ADC.c...
-compiling Interpreter.c...
-compiling OS.c...
-OS.c(433): warning:  #61-D: integer operation result is out of range
-OS.c(845): warning:  #61-D: integer operation result is out of range
-compiling PLL.c...
-compiling ST7735.c...
-ST7735.c(1405): warning:  #186-D: pointless comparison of unsigned integer with zero
-compiling SysTick.c...
-compiling UART2.c...
-assembling cr4_fft_64_stm32.s...
-assembling osasm.s...
-assembling PID_stm32.s...
-compiling main.c...
-main.c(953): warning:  #111-D: statement is unreachable
-main.c(973): warning:  #177-D: variable "idxX" was declared but never referenced
-compiling Filter.c...
-Filter.c(27): warning:  #223-D: function "StartCritical" declared implicitly
-Filter.c(44): warning:  #223-D: function "EndCritical" declared implicitly
-Filter.c(53): warning:  #177-D: variable "count" was declared but never referenced
-linking...
-Program Size: Code=13800 RO-data=2216 RW-data=336 ZI-data=9176  
-".\ST7735.axf" - 0 Errors, 8 Warning(s).
 Build target 'Lab3'
 linking...
-Program Size: Code=13800 RO-data=2216 RW-data=336 ZI-data=9176  
+Program Size: Code=14524 RO-data=2216 RW-data=336 ZI-data=9176  
 ".\ST7735.axf" - 0 Errors, 0 Warning(s).
-Load "\\\\vmware-host\\Shared Folders\\Desktop\\git\\EE445M\\Lab4\\ST7735.axf" 
+Build target 'Lab3'
+compiling Interpreter.c...
+linking...
+Program Size: Code=14524 RO-data=2216 RW-data=336 ZI-data=9176  
+".\ST7735.axf" - 0 Errors, 0 Warning(s).
+Load "C:\\Users\\Colin\\Documents\\GitHub\\EE445M\\Lab4\\ST7735.axf" 
 Connecting: Mode=JTAG, Speed=1000000Hz
 Erase Done.
 Programming Done.
 Verify OK.
 Build target 'Lab3'
+compiling Interpreter.c...
+Interpreter.c(54): warning:  #111-D: statement is unreachable
 compiling main.c...
-main.c(953): warning:  #111-D: statement is unreachable
-main.c(973): warning:  #177-D: variable "idxX" was declared but never referenced
+main.c(955): warning:  #111-D: statement is unreachable
+main.c(975): warning:  #177-D: variable "idxX" was declared but never referenced
 linking...
-Program Size: Code=13804 RO-data=2216 RW-data=336 ZI-data=9176  
-".\ST7735.axf" - 0 Errors, 2 Warning(s).
-Load "\\\\vmware-host\\Shared Folders\\Desktop\\git\\EE445M\\Lab4\\ST7735.axf" 
+.\ST7735.axf: Error: L6218E: Undefined symbol debug (referred from interpreter.o).
+.\ST7735.axf: Error: L6218E: Undefined symbol fftToggle (referred from interpreter.o).
+.\ST7735.axf: Error: L6218E: Undefined symbol filter (referred from interpreter.o).
+.\ST7735.axf: Error: L6218E: Undefined symbol performance (referred from interpreter.o).
+".\ST7735.axf" - 4 Errors, 3 Warning(s).
+Target not created
+Load "C:\\Users\\Colin\\Documents\\GitHub\\EE445M\\Lab4\\ST7735.axf" 
+_____^
+*** error 56: cannot open file
+Build target 'Lab3'
+compiling Interpreter.c...
+Interpreter.c(54): warning:  #111-D: statement is unreachable
+linking...
+Program Size: Code=11604 RO-data=2216 RW-data=364 ZI-data=9164  
+".\ST7735.axf" - 0 Errors, 1 Warning(s).
+Load "C:\\Users\\Colin\\Documents\\GitHub\\EE445M\\Lab4\\ST7735.axf" 
 Connecting: Mode=JTAG, Speed=1000000Hz
 Erase Done.
 Programming Done.
 Verify OK.
 Build target 'Lab3'
-compiling main.c...
-main.c(953): warning:  #111-D: statement is unreachable
-main.c(973): warning:  #177-D: variable "idxX" was declared but never referenced
+compiling Interpreter.c...
+Interpreter.c(54): warning:  #111-D: statement is unreachable
 linking...
-Program Size: Code=13804 RO-data=2216 RW-data=336 ZI-data=9176  
-".\ST7735.axf" - 0 Errors, 2 Warning(s).
-Load "\\\\vmware-host\\Shared Folders\\Desktop\\git\\EE445M\\Lab4\\ST7735.axf" 
+Program Size: Code=14572 RO-data=2216 RW-data=364 ZI-data=9180  
+".\ST7735.axf" - 0 Errors, 1 Warning(s).
+Load "C:\\Users\\Colin\\Documents\\GitHub\\EE445M\\Lab4\\ST7735.axf" 
 Connecting: Mode=JTAG, Speed=1000000Hz
 Erase Done.
 Programming Done.
 Verify OK.
 Build target 'Lab3'
-compiling main.c...
-main.c(953): warning:  #111-D: statement is unreachable
-main.c(973): warning:  #177-D: variable "idxX" was declared but never referenced
+compiling Interpreter.c...
+Interpreter.c(51): warning:  #177-D: variable "i" was declared but never referenced
 linking...
-Program Size: Code=13812 RO-data=2216 RW-data=336 ZI-data=9176  
-".\ST7735.axf" - 0 Errors, 2 Warning(s).
-Load "\\\\vmware-host\\Shared Folders\\Desktop\\git\\EE445M\\Lab4\\ST7735.axf" 
+Program Size: Code=14600 RO-data=2216 RW-data=364 ZI-data=9180  
+".\ST7735.axf" - 0 Errors, 1 Warning(s).
+Load "C:\\Users\\Colin\\Documents\\GitHub\\EE445M\\Lab4\\ST7735.axf" 
+Connecting: Mode=JTAG, Speed=1000000Hz
+Erase Done.
+Programming Done.
+Verify OK.
+Build target 'Lab3'
+compiling Interpreter.c...
+linking...
+Program Size: Code=14596 RO-data=2216 RW-data=364 ZI-data=9180  
+".\ST7735.axf" - 0 Errors, 0 Warning(s).
+Load "C:\\Users\\Colin\\Documents\\GitHub\\EE445M\\Lab4\\ST7735.axf" 
 Connecting: Mode=JTAG, Speed=1000000Hz
 Erase Done.
 Programming Done.
@@ -340,230 +96,15 @@ assembling cr4_fft_64_stm32.s...
 assembling osasm.s...
 assembling PID_stm32.s...
 compiling main.c...
-main.c(953): warning:  #111-D: statement is unreachable
-main.c(973): warning:  #177-D: variable "idxX" was declared but never referenced
-compiling Filter.c...
-Filter.c(27): warning:  #223-D: function "StartCritical" declared implicitly
-Filter.c(44): warning:  #223-D: function "EndCritical" declared implicitly
-Filter.c(53): warning:  #177-D: variable "count" was declared but never referenced
-linking...
-Program Size: Code=13800 RO-data=2216 RW-data=336 ZI-data=9176  
-".\ST7735.axf" - 0 Errors, 8 Warning(s).
-Load "\\\\vmware-host\\Shared Folders\\Desktop\\git\\EE445M\\Lab4\\ST7735.axf" 
-Connecting: Mode=JTAG, Speed=1000000Hz
-Erase Done.
-Programming Done.
-Verify OK.
-Build target 'Lab3'
-compiling main.c...
-main.c(953): warning:  #111-D: statement is unreachable
-main.c(973): warning:  #177-D: variable "idxX" was declared but never referenced
-linking...
-Program Size: Code=13800 RO-data=2216 RW-data=336 ZI-data=9176  
-".\ST7735.axf" - 0 Errors, 2 Warning(s).
-Load "\\\\vmware-host\\Shared Folders\\Desktop\\git\\EE445M\\Lab4\\ST7735.axf" 
-Connecting: Mode=JTAG, Speed=1000000Hz
-Erase Done.
-Programming Done.
-Verify OK.
-Build target 'Lab3'
-compiling main.c...
-main.c(953): warning:  #111-D: statement is unreachable
-main.c(973): warning:  #177-D: variable "idxX" was declared but never referenced
-linking...
-Program Size: Code=13804 RO-data=2216 RW-data=336 ZI-data=9176  
-".\ST7735.axf" - 0 Errors, 2 Warning(s).
-Load "\\\\vmware-host\\Shared Folders\\Desktop\\git\\EE445M\\Lab4\\ST7735.axf" 
-Connecting: Mode=JTAG, Speed=1000000Hz
-Erase Done.
-Programming Done.
-Verify OK.
-Build target 'Lab3'
-compiling main.c...
-main.c(953): warning:  #111-D: statement is unreachable
-main.c(973): warning:  #177-D: variable "idxX" was declared but never referenced
-linking...
-Program Size: Code=13804 RO-data=2216 RW-data=336 ZI-data=9176  
-".\ST7735.axf" - 0 Errors, 2 Warning(s).
-Load "\\\\vmware-host\\Shared Folders\\Desktop\\git\\EE445M\\Lab4\\ST7735.axf" 
-Connecting: Mode=JTAG, Speed=1000000Hz
-Erase Done.
-Programming Done.
-Verify OK.
-Build target 'Lab3'
-compiling main.c...
-main.c(953): warning:  #111-D: statement is unreachable
-main.c(973): warning:  #177-D: variable "idxX" was declared but never referenced
-linking...
-Program Size: Code=13804 RO-data=2216 RW-data=336 ZI-data=9176  
-".\ST7735.axf" - 0 Errors, 2 Warning(s).
-Load "\\\\vmware-host\\Shared Folders\\Desktop\\git\\EE445M\\Lab4\\ST7735.axf" 
-Connecting: Mode=JTAG, Speed=1000000Hz
-Erase Done.
-Programming Done.
-Verify OK.
-Build target 'Lab3'
+main.c(955): warning:  #111-D: statement is unreachable
+main.c(975): warning:  #177-D: variable "idxX" was declared but never referenced
 compiling Filter.c...
 Filter.c(26): warning:  #177-D: variable "status" was declared but never referenced
 Filter.c(51): warning:  #177-D: variable "count" was declared but never referenced
 linking...
-Program Size: Code=13780 RO-data=2216 RW-data=336 ZI-data=9176  
-".\ST7735.axf" - 0 Errors, 2 Warning(s).
-Rebuild target 'Lab3'
-assembling startup.s...
-compiling ADC.c...
-compiling Interpreter.c...
-compiling OS.c...
-OS.c(433): warning:  #61-D: integer operation result is out of range
-OS.c(845): warning:  #61-D: integer operation result is out of range
-compiling PLL.c...
-compiling ST7735.c...
-ST7735.c(1405): warning:  #186-D: pointless comparison of unsigned integer with zero
-compiling SysTick.c...
-compiling UART2.c...
-assembling cr4_fft_64_stm32.s...
-assembling osasm.s...
-assembling PID_stm32.s...
-compiling main.c...
-main.c(953): warning:  #111-D: statement is unreachable
-main.c(973): warning:  #177-D: variable "idxX" was declared but never referenced
-compiling Filter.c...
-Filter.c(26): warning:  #177-D: variable "status" was declared but never referenced
-Filter.c(51): warning:  #177-D: variable "count" was declared but never referenced
-linking...
-Program Size: Code=13780 RO-data=2216 RW-data=336 ZI-data=9176  
+Program Size: Code=14596 RO-data=2216 RW-data=364 ZI-data=9180  
 ".\ST7735.axf" - 0 Errors, 7 Warning(s).
-Load "\\\\vmware-host\\Shared Folders\\Desktop\\git\\EE445M\\Lab4\\ST7735.axf" 
-Connecting: Mode=JTAG, Speed=1000000Hz
-Erase Done.
-Programming Done.
-Verify OK.
-Build target 'Lab3'
-compiling main.c...
-main.c(953): warning:  #111-D: statement is unreachable
-main.c(973): warning:  #177-D: variable "idxX" was declared but never referenced
-linking...
-Program Size: Code=13780 RO-data=2216 RW-data=336 ZI-data=9176  
-".\ST7735.axf" - 0 Errors, 2 Warning(s).
-Load "\\\\vmware-host\\Shared Folders\\Desktop\\git\\EE445M\\Lab4\\ST7735.axf" 
-Connecting: Mode=JTAG, Speed=1000000Hz
-Erase Done.
-Programming Done.
-Verify OK.
-Build target 'Lab3'
-compiling main.c...
-main.c(953): warning:  #111-D: statement is unreachable
-main.c(973): warning:  #177-D: variable "idxX" was declared but never referenced
-linking...
-Program Size: Code=13764 RO-data=2216 RW-data=336 ZI-data=9176  
-".\ST7735.axf" - 0 Errors, 2 Warning(s).
-Load "\\\\vmware-host\\Shared Folders\\Desktop\\git\\EE445M\\Lab4\\ST7735.axf" 
-Connecting: Mode=JTAG, Speed=1000000Hz
-Erase Done.
-Programming Done.
-Verify OK.
-Build target 'Lab3'
-compiling main.c...
-main.c(953): warning:  #111-D: statement is unreachable
-main.c(973): warning:  #177-D: variable "idxX" was declared but never referenced
-linking...
-Program Size: Code=13780 RO-data=2216 RW-data=336 ZI-data=9176  
-".\ST7735.axf" - 0 Errors, 2 Warning(s).
-Load "\\\\vmware-host\\Shared Folders\\Desktop\\git\\EE445M\\Lab4\\ST7735.axf" 
-Connecting: Mode=JTAG, Speed=1000000Hz
-Erase Done.
-Programming Done.
-Verify OK.
-Build target 'Lab3'
-compiling main.c...
-main.c(953): warning:  #111-D: statement is unreachable
-main.c(973): warning:  #177-D: variable "idxX" was declared but never referenced
-linking...
-Program Size: Code=13780 RO-data=2216 RW-data=336 ZI-data=9176  
-".\ST7735.axf" - 0 Errors, 2 Warning(s).
-Load "\\\\vmware-host\\Shared Folders\\Desktop\\git\\EE445M\\Lab4\\ST7735.axf" 
-Connecting: Mode=JTAG, Speed=1000000Hz
-Erase Done.
-Programming Done.
-Verify OK.
-Build target 'Lab3'
-compiling main.c...
-main.c(953): warning:  #111-D: statement is unreachable
-main.c(973): warning:  #177-D: variable "idxX" was declared but never referenced
-linking...
-Program Size: Code=13780 RO-data=2216 RW-data=336 ZI-data=9176  
-".\ST7735.axf" - 0 Errors, 2 Warning(s).
-Load "\\\\vmware-host\\Shared Folders\\Desktop\\git\\EE445M\\Lab4\\ST7735.axf" 
-Connecting: Mode=JTAG, Speed=1000000Hz
-Erase Done.
-Programming Done.
-Verify OK.
-Build target 'Lab3'
-compiling main.c...
-main.c(953): warning:  #111-D: statement is unreachable
-main.c(973): warning:  #177-D: variable "idxX" was declared but never referenced
-linking...
-Program Size: Code=13780 RO-data=2216 RW-data=336 ZI-data=9176  
-".\ST7735.axf" - 0 Errors, 2 Warning(s).
-Load "\\\\vmware-host\\Shared Folders\\Desktop\\git\\EE445M\\Lab4\\ST7735.axf" 
-Connecting: Mode=JTAG, Speed=1000000Hz
-Erase Done.
-Programming Done.
-Verify OK.
-Build target 'Lab3'
-compiling main.c...
-main.c(953): warning:  #111-D: statement is unreachable
-main.c(973): warning:  #177-D: variable "idxX" was declared but never referenced
-linking...
-Program Size: Code=13780 RO-data=2216 RW-data=336 ZI-data=9176  
-".\ST7735.axf" - 0 Errors, 2 Warning(s).
-Build target 'Lab3'
-compiling main.c...
-main.c(953): warning:  #111-D: statement is unreachable
-main.c(973): warning:  #177-D: variable "idxX" was declared but never referenced
-linking...
-Program Size: Code=13780 RO-data=2216 RW-data=336 ZI-data=9176  
-".\ST7735.axf" - 0 Errors, 2 Warning(s).
-Load "\\\\vmware-host\\Shared Folders\\Desktop\\git\\EE445M\\Lab4\\ST7735.axf" 
-Connecting: Mode=JTAG, Speed=1000000Hz
-Erase Failed!
-Build target 'Lab3'
-linking...
-Program Size: Code=13780 RO-data=2216 RW-data=336 ZI-data=9176  
-".\ST7735.axf" - 0 Errors, 0 Warning(s).
-Load "\\\\vmware-host\\Shared Folders\\Desktop\\git\\EE445M\\Lab4\\ST7735.axf" 
-Connecting: Mode=JTAG, Speed=1000000Hz
-Erase Done.
-Programming Done.
-Verify OK.
-Build target 'Lab3'
-compiling main.c...
-main.c(953): warning:  #111-D: statement is unreachable
-main.c(973): warning:  #177-D: variable "idxX" was declared but never referenced
-linking...
-Program Size: Code=13780 RO-data=2216 RW-data=336 ZI-data=9176  
-".\ST7735.axf" - 0 Errors, 2 Warning(s).
-Build target 'Lab3'
-linking...
-Program Size: Code=13780 RO-data=2216 RW-data=336 ZI-data=9176  
-".\ST7735.axf" - 0 Errors, 0 Warning(s).
-Load "\\\\vmware-host\\Shared Folders\\Desktop\\git\\EE445M\\Lab4\\ST7735.axf" 
-Connecting: Mode=JTAG, Speed=1000000Hz
-Erase Done.
-Programming Done.
-Verify OK.
-Build target 'Lab3'
-compiling main.c...
-main.c(953): warning:  #111-D: statement is unreachable
-main.c(973): warning:  #177-D: variable "idxX" was declared but never referenced
-linking...
-Program Size: Code=13780 RO-data=2216 RW-data=336 ZI-data=9176  
-".\ST7735.axf" - 0 Errors, 2 Warning(s).
-Build target 'Lab3'
-linking...
-Program Size: Code=13780 RO-data=2216 RW-data=336 ZI-data=9176  
-".\ST7735.axf" - 0 Errors, 0 Warning(s).
-Load "\\\\vmware-host\\Shared Folders\\Desktop\\git\\EE445M\\Lab4\\ST7735.axf" 
+Load "C:\\Users\\Colin\\Documents\\GitHub\\EE445M\\Lab4\\ST7735.axf" 
 Connecting: Mode=JTAG, Speed=1000000Hz
 Erase Done.
 Programming Done.
@@ -571,9 +112,9 @@ Verify OK.
 Build target 'Lab3'
 compiling Interpreter.c...
 linking...
-Program Size: Code=13700 RO-data=2216 RW-data=336 ZI-data=9176  
+Program Size: Code=14596 RO-data=2216 RW-data=364 ZI-data=9180  
 ".\ST7735.axf" - 0 Errors, 0 Warning(s).
-Load "\\\\vmware-host\\Shared Folders\\Desktop\\git\\EE445M\\Lab4\\ST7735.axf" 
+Load "C:\\Users\\Colin\\Documents\\GitHub\\EE445M\\Lab4\\ST7735.axf" 
 Connecting: Mode=JTAG, Speed=1000000Hz
 Erase Done.
 Programming Done.
@@ -581,9 +122,9 @@ Verify OK.
 Build target 'Lab3'
 compiling Interpreter.c...
 linking...
-Program Size: Code=13700 RO-data=2216 RW-data=336 ZI-data=9176  
+Program Size: Code=14564 RO-data=2216 RW-data=364 ZI-data=9180  
 ".\ST7735.axf" - 0 Errors, 0 Warning(s).
-Load "\\\\vmware-host\\Shared Folders\\Desktop\\git\\EE445M\\Lab4\\ST7735.axf" 
+Load "C:\\Users\\Colin\\Documents\\GitHub\\EE445M\\Lab4\\ST7735.axf" 
 Connecting: Mode=JTAG, Speed=1000000Hz
 Erase Done.
 Programming Done.
@@ -591,9 +132,9 @@ Verify OK.
 Build target 'Lab3'
 compiling Interpreter.c...
 linking...
-Program Size: Code=13680 RO-data=2216 RW-data=336 ZI-data=9176  
+Program Size: Code=14668 RO-data=2216 RW-data=364 ZI-data=9180  
 ".\ST7735.axf" - 0 Errors, 0 Warning(s).
-Load "\\\\vmware-host\\Shared Folders\\Desktop\\git\\EE445M\\Lab4\\ST7735.axf" 
+Load "C:\\Users\\Colin\\Documents\\GitHub\\EE445M\\Lab4\\ST7735.axf" 
 Connecting: Mode=JTAG, Speed=1000000Hz
 Erase Done.
 Programming Done.
@@ -601,188 +142,55 @@ Verify OK.
 Build target 'Lab3'
 compiling Interpreter.c...
 linking...
-Program Size: Code=13676 RO-data=2216 RW-data=336 ZI-data=9176  
+Program Size: Code=14668 RO-data=2216 RW-data=364 ZI-data=9180  
 ".\ST7735.axf" - 0 Errors, 0 Warning(s).
-Load "\\\\vmware-host\\Shared Folders\\Desktop\\git\\EE445M\\Lab4\\ST7735.axf" 
+Load "C:\\Users\\Colin\\Documents\\GitHub\\EE445M\\Lab4\\ST7735.axf" 
 Connecting: Mode=JTAG, Speed=1000000Hz
 Erase Done.
 Programming Done.
 Verify OK.
 Build target 'Lab3'
-compiling main.c...
-main.c(953): warning:  #111-D: statement is unreachable
-main.c(973): warning:  #177-D: variable "idxX" was declared but never referenced
-linking...
-Program Size: Code=13688 RO-data=2216 RW-data=336 ZI-data=9176  
-".\ST7735.axf" - 0 Errors, 2 Warning(s).
-Load "\\\\vmware-host\\Shared Folders\\Desktop\\git\\EE445M\\Lab4\\ST7735.axf" 
-Connecting: Mode=JTAG, Speed=1000000Hz
-Erase Done.
-Programming Done.
-Verify OK.
-Build target 'Lab3'
-compiling main.c...
-main.c(953): warning:  #111-D: statement is unreachable
-main.c(973): warning:  #177-D: variable "idxX" was declared but never referenced
-linking...
-Program Size: Code=13688 RO-data=2216 RW-data=336 ZI-data=9176  
-".\ST7735.axf" - 0 Errors, 2 Warning(s).
-Load "\\\\vmware-host\\Shared Folders\\Desktop\\git\\EE445M\\Lab4\\ST7735.axf" 
-Connecting: Mode=JTAG, Speed=1000000Hz
-Erase Done.
-Programming Done.
-Verify OK.
-Build target 'Lab3'
-compiling main.c...
-main.c(953): warning:  #111-D: statement is unreachable
-main.c(973): warning:  #177-D: variable "idxX" was declared but never referenced
-linking...
-Program Size: Code=13692 RO-data=2216 RW-data=336 ZI-data=9176  
-".\ST7735.axf" - 0 Errors, 2 Warning(s).
-Load "\\\\vmware-host\\Shared Folders\\Desktop\\git\\EE445M\\Lab4\\ST7735.axf" 
-Connecting: Mode=JTAG, Speed=1000000Hz
-Erase Done.
-Programming Done.
-Verify OK.
-Build target 'Lab3'
-compiling main.c...
-main.c(953): warning:  #111-D: statement is unreachable
-main.c(973): warning:  #177-D: variable "idxX" was declared but never referenced
-linking...
-Program Size: Code=13692 RO-data=2216 RW-data=336 ZI-data=9176  
-".\ST7735.axf" - 0 Errors, 2 Warning(s).
-Build target 'Lab3'
-compiling main.c...
-main.c(953): warning:  #111-D: statement is unreachable
-main.c(973): warning:  #177-D: variable "idxX" was declared but never referenced
-linking...
-Program Size: Code=13692 RO-data=2216 RW-data=336 ZI-data=9176  
-".\ST7735.axf" - 0 Errors, 2 Warning(s).
-Load "\\\\vmware-host\\Shared Folders\\Desktop\\git\\EE445M\\Lab4\\ST7735.axf" 
-Connecting: Mode=JTAG, Speed=1000000Hz
-Erase Done.
-Programming Done.
-Verify OK.
-Build target 'Lab3'
-compiling main.c...
-main.c(955): warning:  #111-D: statement is unreachable
-main.c(975): warning:  #177-D: variable "idxX" was declared but never referenced
-linking...
-Program Size: Code=14524 RO-data=2216 RW-data=336 ZI-data=9176  
-".\ST7735.axf" - 0 Errors, 2 Warning(s).
-Load "\\\\vmware-host\\Shared Folders\\Desktop\\git\\EE445M\\Lab4\\ST7735.axf" 
-Connecting: Mode=JTAG, Speed=1000000Hz
-Erase Done.
-Programming Done.
-Verify OK.
-Build target 'Lab3'
-compiling main.c...
-main.c(955): warning:  #111-D: statement is unreachable
-main.c(975): warning:  #177-D: variable "idxX" was declared but never referenced
-linking...
-Program Size: Code=14524 RO-data=2216 RW-data=336 ZI-data=9176  
-".\ST7735.axf" - 0 Errors, 2 Warning(s).
-Load "\\\\vmware-host\\Shared Folders\\Desktop\\git\\EE445M\\Lab4\\ST7735.axf" 
-Connecting: Mode=JTAG, Speed=1000000Hz
-Erase Done.
-Programming Done.
-Verify OK.
-Rebuild target 'Lab3'
-assembling startup.s...
-compiling ADC.c...
 compiling Interpreter.c...
-compiling OS.c...
-OS.c(433): warning:  #61-D: integer operation result is out of range
-OS.c(845): warning:  #61-D: integer operation result is out of range
-compiling PLL.c...
-compiling ST7735.c...
-ST7735.c(1405): warning:  #186-D: pointless comparison of unsigned integer with zero
-compiling SysTick.c...
-compiling UART2.c...
-assembling cr4_fft_64_stm32.s...
-assembling osasm.s...
-assembling PID_stm32.s...
-compiling main.c...
-main.c(955): warning:  #111-D: statement is unreachable
-main.c(975): warning:  #177-D: variable "idxX" was declared but never referenced
-compiling Filter.c...
-Filter.c(26): warning:  #177-D: variable "status" was declared but never referenced
-Filter.c(51): warning:  #177-D: variable "count" was declared but never referenced
+Interpreter.c(83): warning:  #550-D: variable "i" was set but never used
 linking...
-Program Size: Code=14524 RO-data=2216 RW-data=336 ZI-data=9176  
-".\ST7735.axf" - 0 Errors, 7 Warning(s).
-Load "\\\\vmware-host\\Shared Folders\\Desktop\\git\\EE445M\\Lab4\\ST7735.axf" 
+Program Size: Code=14636 RO-data=2216 RW-data=364 ZI-data=9180  
+".\ST7735.axf" - 0 Errors, 1 Warning(s).
+Load "C:\\Users\\Colin\\Documents\\GitHub\\EE445M\\Lab4\\ST7735.axf" 
 Connecting: Mode=JTAG, Speed=1000000Hz
 Erase Done.
 Programming Done.
 Verify OK.
 Build target 'Lab3'
-compiling main.c...
-main.c(955): warning:  #111-D: statement is unreachable
-main.c(975): warning:  #177-D: variable "idxX" was declared but never referenced
+compiling Interpreter.c...
 linking...
-Program Size: Code=14532 RO-data=2216 RW-data=336 ZI-data=9176  
-".\ST7735.axf" - 0 Errors, 2 Warning(s).
-Load "\\\\vmware-host\\Shared Folders\\Desktop\\git\\EE445M\\Lab4\\ST7735.axf" 
+Program Size: Code=14636 RO-data=2216 RW-data=364 ZI-data=9180  
+".\ST7735.axf" - 0 Errors, 0 Warning(s).
+Load "C:\\Users\\Colin\\Documents\\GitHub\\EE445M\\Lab4\\ST7735.axf" 
 Connecting: Mode=JTAG, Speed=1000000Hz
 Erase Done.
 Programming Done.
 Verify OK.
 Build target 'Lab3'
-compiling main.c...
-main.c(955): warning:  #111-D: statement is unreachable
-main.c(975): warning:  #177-D: variable "idxX" was declared but never referenced
+compiling Interpreter.c...
 linking...
-Program Size: Code=14524 RO-data=2216 RW-data=336 ZI-data=9176  
-".\ST7735.axf" - 0 Errors, 2 Warning(s).
-Build target 'Lab3'
-compiling main.c...
-main.c(955): warning:  #111-D: statement is unreachable
-main.c(975): warning:  #177-D: variable "idxX" was declared but never referenced
-linking...
-Program Size: Code=14524 RO-data=2216 RW-data=336 ZI-data=9176  
-".\ST7735.axf" - 0 Errors, 2 Warning(s).
-Load "\\\\vmware-host\\Shared Folders\\Desktop\\git\\EE445M\\Lab4\\ST7735.axf" 
+Program Size: Code=14636 RO-data=2216 RW-data=364 ZI-data=9180  
+".\ST7735.axf" - 0 Errors, 0 Warning(s).
+Load "C:\\Users\\Colin\\Documents\\GitHub\\EE445M\\Lab4\\ST7735.axf" 
 Connecting: Mode=JTAG, Speed=1000000Hz
 Erase Done.
 Programming Done.
 Verify OK.
 Build target 'Lab3'
-compiling main.c...
-main.c(955): warning:  #111-D: statement is unreachable
-main.c(975): warning:  #177-D: variable "idxX" was declared but never referenced
+compiling Interpreter.c...
 linking...
-Program Size: Code=14524 RO-data=2216 RW-data=336 ZI-data=9176  
-".\ST7735.axf" - 0 Errors, 2 Warning(s).
-Load "\\\\vmware-host\\Shared Folders\\Desktop\\git\\EE445M\\Lab4\\ST7735.axf" 
-Connecting: Mode=JTAG, Speed=1000000Hz
-Erase Done.
-Programming Done.
-Verify OK.
+Program Size: Code=14680 RO-data=2216 RW-data=364 ZI-data=9180  
+".\ST7735.axf" - 0 Errors, 0 Warning(s).
 Build target 'Lab3'
-compiling ST7735.c...
-ST7735.c(1405): warning:  #186-D: pointless comparison of unsigned integer with zero
-compiling main.c...
-main.c(955): warning:  #111-D: statement is unreachable
-main.c(975): warning:  #177-D: variable "idxX" was declared but never referenced
+compiling Interpreter.c...
 linking...
-Program Size: Code=14520 RO-data=2216 RW-data=336 ZI-data=9176  
-".\ST7735.axf" - 0 Errors, 3 Warning(s).
-Load "\\\\vmware-host\\Shared Folders\\Desktop\\git\\EE445M\\Lab4\\ST7735.axf" 
-Connecting: Mode=JTAG, Speed=1000000Hz
-Erase Done.
-Programming Done.
-Verify OK.
-Build target 'Lab3'
-compiling ST7735.c...
-ST7735.c(1405): warning:  #186-D: pointless comparison of unsigned integer with zero
-compiling main.c...
-main.c(955): warning:  #111-D: statement is unreachable
-main.c(975): warning:  #177-D: variable "idxX" was declared but never referenced
-linking...
-Program Size: Code=14524 RO-data=2216 RW-data=336 ZI-data=9176  
-".\ST7735.axf" - 0 Errors, 3 Warning(s).
-Load "\\\\vmware-host\\Shared Folders\\Desktop\\git\\EE445M\\Lab4\\ST7735.axf" 
+Program Size: Code=14688 RO-data=2216 RW-data=364 ZI-data=9180  
+".\ST7735.axf" - 0 Errors, 0 Warning(s).
+Load "C:\\Users\\Colin\\Documents\\GitHub\\EE445M\\Lab4\\ST7735.axf" 
 Connecting: Mode=JTAG, Speed=1000000Hz
 Erase Done.
 Programming Done.
