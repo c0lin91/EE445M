@@ -32,7 +32,9 @@
 #include "Interpreter.h"
 #include <stdio.h>
 #include "Filter.h"
-#include "FIFO.h" 
+#include "FIFO.h"
+#include "math.h" 
+
 //*********Prototype for FFT in cr4_fft_64_stm32.s, STMicroelectronics
 void cr4_fft_64_stm32(void *pssOUT, void *pssIN, unsigned short Nbin);
 //*********Prototype for PID in PID_stm32.s, STMicroelectronics
@@ -983,7 +985,7 @@ void switchWork2 (unsigned long data) {
 		if (filterFlag == 0) { 
 			pixelPos = 148 - ((data* 366)/10000) ;  
 		} else {
-				pixelPos = 148 - (((Filter_Calc(data))* 366)/10000) ;   
+				pixelPos = 60 - (((Filter_Calc(data))* 366)/10000)  ;   
 		} 
 		ST7735_PlotBar(127);  // clip large magnitudes
 		ST7735_PlotPoint(pixelPos); // called N times
@@ -994,18 +996,22 @@ void switchWork2 (unsigned long data) {
 }
 
  void fft (void) {
-	 int DCcomponent, i, status, pixelPos; 
+	 int DCcomponent, ImComp, i, status, pixelPos; 
 	 while(fftActive){
 		status = StartCritical ();
 		cr4_fft_64_stm32(y,x,64);  // complex FFT of last 64 ADC values
-	// ST7735_PlotClear(0,1023);  // clip large magnitudes
-
+	  ST7735_PlotClear(0,127);  // clip large magnitudes
+			
 		for (i = 0; i < 64; i++) {  
-			DCcomponent = y[i]&0xFFFF; // Real part at frequency 0, imaginary part should be zero
-			DCcomponent = (DCcomponent < 0) ? -DCcomponent : DCcomponent; 
-			pixelPos = 148 - ((DCcomponent* 366)/10000) ;
-			ST7735_PlotBar(127);  // clip large magnitudes
-			ST7735_PlotPoint(pixelPos); // called 4 times
+			DCcomponent = (y[i]&0xFFFF); // Real part at frequency 0, imaginary part should be zero
+			ImComp = (y[i] & 0xFFFF0000) >> 15; 
+			y[i] = sqrt(DCcomponent*DCcomponent + ImComp*ImComp); 
+			DCcomponent = y[i]; 
+			//DCcomponent = (DCcomponent < 0) ? -DCcomponent : DCcomponent; 
+			//pixelPos = 148 - ((DCcomponent* 366)/10000) ;
+			pixelPos = (DCcomponent/5); 
+			ST7735_PlotBar(pixelPos);  // clip large magnitudes
+			//ST7735_PlotPoint(pixelPos); // called 4 times
 			ST7735_PlotNext();
 	 } 
 	 EndCritical(status); 
@@ -1023,7 +1029,7 @@ int main (void) { //Prachi's main
   OS_AddSW2Task(&SW2Push,2);
 	OS_InitSemaphore(&toDisplay, 1);
 	ADC_Init(4); 
-	ADC_Collect(4, 12000, &switchWork2);
+	ADC_Collect(4, 400, &switchWork2);
 	OS_AddThread(&Interpreter, 0, 0);
 	OS_AddThread(&dummyThread3, 0, 7);
 	OS_EnableInterrupts(); 

@@ -24,7 +24,6 @@ short Filter_Calc (short newData) {
 	int i; long sum; short *tempPt; 
 	const short *apt;
   long status;	
-	status = StartCritical();
 	if (pt == &Data[0]) {
 		pt = &Data[50]; 
 	} else { 
@@ -41,7 +40,6 @@ short Filter_Calc (short newData) {
 		apt++; 
 		tempPt++; 
 	}
-	EndCritical(status);
 	return sum/256; 
 }
 int Filter_FIR(void) 

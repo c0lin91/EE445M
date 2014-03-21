@@ -462,6 +462,16 @@
               <FileType>5</FileType>
               <FilePath>.\FIFO.h</FilePath>
             </File>
+            <File>
+              <FileName>efile.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>.\efile.c</FilePath>
+            </File>
+            <File>
+              <FileName>edisk.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>.\edisk.c</FilePath>
+            </File>
           </Files>
         </Group>
         <Group>

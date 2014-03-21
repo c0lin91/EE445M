@@ -100,12 +100,13 @@ void findExe(int func, char* cmdString) {
 		OS_bWait(&toDisplay); 
 		 if(strcmp(cmdString, "adc") == Equal){
 			 for(i=0;i<64;i++){
-				 sprintf(buffer, "x[%d] = %d", i, (int)x[i]); 
-				 if(i<19){
-						ST7735_DrawStr(5, 5 + (i*8), buffer, 0xFFFF, 0x0000);
-				 }else{
-						ST7735_DrawStr(70, 5 + ((i-19)*8), buffer, 0xFFFF, 0x0000);
-				 }
+				 sprintf(buffer, "%d\r",(int)x[i]); 
+				 UART_OutString(buffer); 
+//				 if(i<19){
+//						ST7735_DrawStr(5, 5 + (i*8), buffer, 0xFFFF, 0x0000);
+//				 }else{
+//						ST7735_DrawStr(70, 5 + ((i-19)*8), buffer, 0xFFFF, 0x0000);
+//				 }
 			 }
 //			 sprintf(buffer, "x[%d] = ", idxX); 
 //			 ST7735_Message(0,0,buffer,x[idxX++]);
@@ -118,12 +119,13 @@ void findExe(int func, char* cmdString) {
 //		  ST7735_Message(1,1,"x[5] =",x[5]);
 		 }else if(strcmp(cmdString, "fft") == Equal){
 			 for(i=0;i<64;i++){
-				 sprintf(buffer, "y[%d] = %d", i, (int)y[i]); 
-				 if(i<19){
-					ST7735_DrawStr(5, 5 + (i*8), buffer, 0xFFFF, 0x0000);
-				 }else{
-					 ST7735_DrawStr(70, 5 + ((i-19)*8), buffer, 0xFFFF, 0x0000);
-				 }
+				 sprintf(buffer, "%d\r",(int)y[i]); 
+				 UART_OutString(buffer); 
+//				 if(i<19){
+//					ST7735_DrawStr(5, 5 + (i*8), buffer, 0xFFFF, 0x0000);
+//				 }else{
+//					 ST7735_DrawStr(70, 5 + ((i-19)*8), buffer, 0xFFFF, 0x0000);
+//				 }
 			 }
 //			ST7735_Message(0,0,"y[0] =",y[0]);
 //			ST7735_Message(0,1,"y[1] =",y[1]);

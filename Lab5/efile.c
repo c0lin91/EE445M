@@ -66,7 +66,7 @@ int eFile_WClose(void){
 // Input: file name is a single ASCII letter
 // Output: 0 if successful and 1 on failure (e.g., trouble read to flash)
 int eFile_ROpen( char name[]){
-return 1;
+	return 1;
 }	// open a file for reading 
    
 //---------- eFile_ReadNext-----------------
