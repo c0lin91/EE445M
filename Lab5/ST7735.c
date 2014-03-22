@@ -41,7 +41,7 @@
  */
 
 // Backlight (pin 10) connected to +3.3 V
-// MISO (pin 9) unconnected
+// MISO (pin 9) unconnected  
 // SCK (pin 8) connected to PA2 (SSI0Clk)
 // MOSI (pin 7) connected to PA5 (SSI0Tx)
 // TFT_CS (pin 6) connected to PA3 (SSI0Fss)
