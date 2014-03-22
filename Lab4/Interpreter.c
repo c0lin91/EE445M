@@ -120,6 +120,22 @@ void Interpreter(void){
 
 // ******** Interpreter Functions ***********
 
+
+
+/********format sd_card***********/
+
+
+/******PWD**************/
+
+
+/******LS*************/
+
+/******CAT************/
+
+/********RM*********/
+
+
+
 //************** echo *************** 
 // prints the parameter to the ST7735 screen
 // Inputs: String parameter that will be printed
@@ -155,6 +171,10 @@ void adcToggle(char* paramString){
 	
 	OS_bSignal(&toDisplay);
 }
+
+
+
+
 
 //************** clear *************** 
 // Clears the ST7735 screen

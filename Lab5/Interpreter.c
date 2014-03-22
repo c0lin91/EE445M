@@ -10,12 +10,13 @@
 #include "OS.h"
 #include "lm4f120h5qr.h"
 #include "Filter.h"
-
+#include "math.h"
 
 #define RxFIFOSIZE	64
 #define Equal				0
 
 void fft (void); 
+void cr4_fft_64_stm32(void *pssOUT, void *pssIN, unsigned short Nbin);
 
 const int COMMANDS = 7;
 const int BADCOMMAND = COMMANDS;
@@ -30,15 +31,15 @@ void (*interFunc[COMMANDS])(char* paramString) = {echo, adcToggle, clear, fftTog
 
 
 //int mailboxFull; 		// Put extern back in when ADC file is ready
-extern unsigned long MaxJitter;
-extern unsigned long PIDWork;
-extern unsigned long DataLost;
-extern unsigned long FilterWork;
-extern unsigned long NumSamples;
+//extern unsigned long MaxJitter;
+//extern unsigned long PIDWork;
+//extern unsigned long DataLost;
+//extern unsigned long FilterWork;
+//extern unsigned long NumSamples;
 extern unsigned long NumCreated;
-extern long x[6]; // x and y were static in other file, not sure if that mattters when externing- CH
-extern long y[6];
-extern Sema4Type toDisplay; 
+long x[6]; // x and y were static in other file, not sure if that mattters when externing- CH
+long y[6];
+Sema4Type toDisplay; 
 int idxX = 0, idxY = 0; 
 char buffer [10]; 
 char filterFlag=0;
@@ -194,16 +195,16 @@ void fftToggle(char* paramString){
 // Outputs: none
 
 void performance(char* paramString){
-	OS_bWait(&toDisplay); 
-	OS_DisableInterrupts(); 
-	ST7735_Message(0,0,"# Data Pts  =",NumSamples);
-	ST7735_Message(0,1,"Threads Made=",NumCreated);
-	ST7735_Message(0,2,"Jitter 0.1us=",MaxJitter);
-	ST7735_Message(0,3,"DataLost    =",DataLost);
-	ST7735_Message(1,0,"FilterWork  =",FilterWork);
-	ST7735_Message(1,1,"PIDWork     =",PIDWork);
-	OS_bSignal(&toDisplay); 
-	OS_EnableInterrupts(); 
+//	OS_bWait(&toDisplay); 
+//	OS_DisableInterrupts(); 
+//	ST7735_Message(0,0,"# Data Pts  =",NumSamples);
+//	ST7735_Message(0,1,"Threads Made=",NumCreated);
+//	ST7735_Message(0,2,"Jitter 0.1us=",MaxJitter);
+//	ST7735_Message(0,3,"DataLost    =",DataLost);
+//	ST7735_Message(1,0,"FilterWork  =",FilterWork);
+//	ST7735_Message(1,1,"PIDWork     =",PIDWork);
+//	OS_bSignal(&toDisplay); 
+//	OS_EnableInterrupts(); 
 }
 
 //************** debug *************** 
@@ -251,3 +252,26 @@ void filter(char* paramString){
 	}
 }
 
+void fft (void) {
+	 int DCcomponent, ImComp, i, status, pixelPos; 
+	 while(fftActive){
+		status = StartCritical ();
+		cr4_fft_64_stm32(y,x,64);  // complex FFT of last 64 ADC values
+	  ST7735_PlotClear(0,127);  // clip large magnitudes
+			
+		for (i = 0; i < 64; i++) {  
+			DCcomponent = (y[i]&0xFFFF); // Real part at frequency 0, imaginary part should be zero
+			ImComp = (y[i] & 0xFFFF0000) >> 15; 
+			y[i] = sqrt(DCcomponent*DCcomponent + ImComp*ImComp); 
+			DCcomponent = y[i]; 
+			//DCcomponent = (DCcomponent < 0) ? -DCcomponent : DCcomponent; 
+			//pixelPos = 148 - ((DCcomponent* 366)/10000) ;
+			pixelPos = (DCcomponent/5); 
+			ST7735_PlotBar(pixelPos);  // clip large magnitudes
+			//ST7735_PlotPoint(pixelPos); // called 4 times
+			ST7735_PlotNext();
+	 } 
+	 EndCritical(status); 
+ }
+	OS_Kill();
+ }

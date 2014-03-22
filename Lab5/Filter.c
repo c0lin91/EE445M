@@ -1,7 +1,9 @@
 
 #define N 51
 
- 
+int StartCritical(void); 
+void EndCritical(int); 
+
 int input  [N]; 
 int output [N]; 
 const short transferFunction[N]={4,-1,-8,-14,-16,-10,-1,6,5,-3,-13, 
@@ -44,38 +46,5 @@ short Filter_Calc (short newData) {
 	EndCritical(status);
 	return sum/256; 
 }
-int Filter_FIR(void) 
-{  
-	int tempOutput;
-	int* tempInPtr; 
-	int* tempOutPtr; 
-	int i; 
-	static int count = 0;
 
-//	ADCFifo_Get(newestInput); //may need some sort of semaphore for this ADC FIFO
-//	*newestInput = 2024; 
-	
-	tempOutput = 0; 
-	tempInPtr = newestInput; 
-	tempOutPtr = newestOutput; 
-	
-	/*Fix newestPtrs for next iterations*/
-	if (++newestOutput > &output[N])
-		newestOutput = &output[0]; 
-	if (++newestInput > &input[N]) 
-		newestInput = &input[0]; 
-	
-	for (i = 0; i < N; i++) {
-		tempOutput += *tempInPtr * transferFunction[i]; 
-		tempInPtr--;
-		if (tempInPtr < &input[0])
-				tempInPtr = &input[N]; 
-	}
-	*tempOutPtr = tempOutput/256; 
-	if (*tempOutPtr < 0) { 
-		return -1*(*tempOutPtr); 
-	} else { 
-		return *tempOutPtr; 
-	} 
-}
 

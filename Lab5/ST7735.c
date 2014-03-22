@@ -1402,7 +1402,7 @@ void ST7735_Message (unsigned long device, unsigned long line, char *string, int
 	size = strlen(string) + countDigits(value); 
 	
 	// display error message to LCD screen
-	if((device !=0 && device !=1) || (line > 3  || line < 0) || (size > 32)){
+	if((device !=0 && device !=1) || (line > 3) || (size > 32)){
 		ST7735_DrawStr(50,81, "ERROR", 0xFFFF, 0x0000); 
 	}
 	

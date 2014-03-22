@@ -19,8 +19,10 @@
 unsigned long NumCreated;   // number of foreground threads created
 unsigned long NumSamples;   // incremented every sample
 unsigned long DataLost;     // data sent by Producer, but not received by Consumer
-
 int Running;                // true while robot is running
+
+short IntTerm; 
+short PrevError; 
 
 #define TIMESLICE 2*TIME_1MS  // thread switch time in system time units
 
@@ -56,7 +58,7 @@ unsigned long t=0;
     time=OS_MsTime();            // 10ms resolution in this OS
     data = OS_Fifo_Get();        // 1000 Hz sampling get from producer
     voltage = (300*data)/1024;   // in mV
-    printf("%0u.%02u\t%0u.%03u\n\r",time/100,time%100,voltage/1000,voltage%1000);
+//    printf("%0u.%02u\t%0u.%03u\n\r",time/100,time%100,voltage/1000,voltage%1000);
   }
   while(time < 1000);       // change this to mean 10 seconds
   eFile_EndRedirectToFile();
@@ -140,8 +142,8 @@ int realmain(void){        // lab 5 real main
   ADC_Collect(0, 1000, &Producer); // start ADC sampling, channel 0, 1000 Hz
 
 //*******attach background tasks***********
-  OS_AddButtonTask(&ButtonPush,2);
-  OS_AddButtonTask(&DownPush,3);
+//  OS_AddButtonTask(&ButtonPush,2);
+//  OS_AddButtonTask(&DownPush,3);
   OS_AddPeriodicThread(disk_timerproc,10*TIME_1MS,5);
 
   NumCreated = 0 ;
@@ -155,11 +157,11 @@ int realmain(void){        // lab 5 real main
 
 
 //*****************test programs*************************
-unsigned char buffer[512];
+unsigned char Buffer[512];
 #define MAXBLOCKS 100
 void diskError(char* errtype, unsigned long n){
-  printf(errtype);
-  printf(" disk error %u",n);
+//  printf(errtype);
+//  printf(" disk error %u",n);
   OS_Kill();
 }
 void TestDisk(void){  DSTATUS result;  unsigned short block;  int i; unsigned long n;
@@ -172,22 +174,22 @@ void TestDisk(void){  DSTATUS result;  unsigned short block;  int i; unsigned lo
   for(block = 0; block < MAXBLOCKS; block++){
     for(i=0;i<512;i++){
       n = (16807*n)%2147483647; // pseudo random sequence
-      buffer[i] = 0xFF&n;        
+      Buffer[i] = 0xFF&n;        
     }
     GPIO_PF3 = 0x08;     // PF3 high for 100 block writes
-    if(eDisk_WriteBlock(buffer,block))diskError("eDisk_WriteBlock",block); // save to disk
+    if(eDisk_WriteBlock(Buffer,block))diskError("eDisk_WriteBlock",block); // save to disk
     GPIO_PF3 = 0x00;     
   }  
   printf("Reading blocks\n\r");
   n = 1;  // reseed, start over to get the same sequence
   for(block = 0; block < MAXBLOCKS; block++){
     GPIO_PF2 = 0x04;     // PF2 high for one block read
-    if(eDisk_ReadBlock(buffer,block))diskError("eDisk_ReadBlock",block); // read from disk
+    if(eDisk_ReadBlock(Buffer,block))diskError("eDisk_ReadBlock",block); // read from disk
     GPIO_PF2 = 0x00;
     for(i=0;i<512;i++){
       n = (16807*n)%2147483647; // pseudo random sequence
-      if(buffer[i] != (0xFF&n)){
-        printf("Read data not correct, block=%u, i=%u, expected %u, read %u\n\r",block,i,(0xFF&n),buffer[i]);
+      if(Buffer[i] != (0xFF&n)){
+        printf("Read data not correct, block=%u, i=%u, expected %u, read %u\n\r",block,i,(0xFF&n),Buffer[i]);
         OS_Kill();
       }      
     }
@@ -206,7 +208,7 @@ int main(void){   // testmain1
 
 //*******attach background tasks***********
   OS_AddPeriodicThread(&disk_timerproc,10*TIME_1MS,0);   // time out routines for disk
-  OS_AddButtonTask(&RunTest,2);
+//  OS_AddButtonTask(&RunTest,2);
   
   NumCreated = 0 ;
 // create initial foreground threads
@@ -222,7 +224,7 @@ void TestFile(void){   int i; char data;
   // simple test of eFile
   if(eFile_Init())              diskError("eFile_Init",0); 
   if(eFile_Format())            diskError("eFile_Format",0); 
-  eFile_Directory(&Serial_OutChar);
+//  eFile_Directory(&Serial_OutChar);
   if(eFile_Create("file1"))     diskError("eFile_Create",0);
   if(eFile_WOpen("file1"))      diskError("eFile_WOpen",0);
   for(i=0;i<1000;i++){
@@ -233,14 +235,14 @@ void TestFile(void){   int i; char data;
     }
   }
   if(eFile_WClose())            diskError("eFile_Close",0);
-  eFile_Directory(&Serial_OutChar);
+//  eFile_Directory(&Serial_OutChar);
   if(eFile_ROpen("file1"))      diskError("eFile_ROpen",0);
   for(i=0;i<1000;i++){
     if(eFile_ReadNext(&data))   diskError("eFile_ReadNext",i);
-    Serial_OutChar(data);
+//    Serial_OutChar(data);
   }
   if(eFile_Delete("file1"))     diskError("eFile_Delete",0);
-  eFile_Directory(&Serial_OutChar);
+//  eFile_Directory(&Serial_OutChar);
   printf("Successful test of creating a file\n\r");
   OS_Kill();
 }
@@ -262,3 +264,4 @@ int testmain2(void){
   OS_Launch(10*TIME_1MS); // doesn't return, interrupts enabled in here
   return 0;               // this never executes
 }
+

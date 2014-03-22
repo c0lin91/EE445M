@@ -118,3 +118,4 @@ int eFile_RedirectToFile(char *name){
 int eFile_EndRedirectToFile(void){
 	return 1;
 }
+

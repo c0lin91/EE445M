@@ -64,16 +64,14 @@ void push_OpenThreads (int threadId);
 int pop_OpenThreads (void); 
 void SysClock_Init(int period);
 
-
-extern tcbType tcbs[NUMTHREADS];
-extern long Stacks [NUMTHREADS][STACKSIZE]; 
-extern unsigned long NumCreated;
-extern unsigned long NumSleeping; 
-extern tcbType *RunPt; 
-extern tcbType *SleepPt;
-extern tcbType *StartPt;
+tcbType tcbs[NUMTHREADS];
+long Stacks [NUMTHREADS][STACKSIZE]; 
+unsigned long NumSleeping; 
+tcbType *RunPt; 
+tcbType *SleepPt;
+tcbType *StartPt;
 unsigned long static LastPF4, LastPF0;
-extern tcbType *tempRunPt; 
+tcbType *tempRunPt; 
 int open_threads [NUMTHREADS]; 
 int idxOpenThreads; 
 mailType mail; 
@@ -528,7 +526,7 @@ void GPIOPortF_Handler(void){
 		(*PF4Task)();                // execute user task
 		}
 		GPIO_PORTF_IM_R &= ~0x10; 
-		NumCreated += OS_AddThread (&DebounceTaskPF4, 0, 0); 
+		OS_AddThread (&DebounceTaskPF4, 0, 0); 
 	} 
 	
 	else if (GPIO_PORTF_RIS_R & 0x01) {
@@ -537,7 +535,7 @@ void GPIOPortF_Handler(void){
 		}
 		GPIO_PORTF_IM_R &= ~0x01; 
 	
-		NumCreated += OS_AddThread (&DebounceTaskPF0,0, 0); 
+		OS_AddThread (&DebounceTaskPF0,0, 0); 
 	} 
 }
 
@@ -635,7 +633,6 @@ void OS_Kill(void){
 	if(RunPt == StartPt){ StartPt = RunPt->nextThread;}
 	RunPt->nextThread->prevThread = RunPt->prevThread;
 	RunPt->prevThread->nextThread = RunPt->nextThread;
-	//NumCreated--;
 	push_OpenThreads(RunPt->threadId); 	// Need to make it apparent that this space is now availible in tcbs
 		PE2 ^= 0x04; 
 	OS_EnableInterrupts();

@@ -132,9 +132,9 @@ unsigned long ADC_In(void){
 	  return data; 
 } 
 
-void (*ADCtask) (unsigned long);
+void (*ADCtask) (unsigned short);
 
-void ADC_Collect(unsigned int channelNum, unsigned int fs, void (*task) (unsigned long)){
+void ADC_Collect(unsigned int channelNum, unsigned int fs, void (*task) (unsigned short)){
  volatile unsigned long delay;
 	int status;
 	int period = 80000000/fs; 
@@ -279,8 +279,8 @@ void ADC_Collect(unsigned int channelNum, unsigned int fs, void (*task) (unsigne
 
 void ADC0Seq3_Handler(void){
 	int data = ADC0_SSFIFO3_R&ADC_SSFIFO3_DATA_M; 
-	ADCFifo_Put(data); // we may need semaphore synchronization here!!!
-	(*ADCtask)(data); 
+//	ADCFifo_Put(data); // we may need semaphore synchronization here!!!
+	(*ADCtask); 
   ADC0_ISC_R = ADC_ISC_IN3;                 // acknowledge ADC sequence 3 completion
 }
 

@@ -985,7 +985,7 @@ void switchWork2 (unsigned long data) {
 		if (filterFlag == 0) { 
 			pixelPos = 148 - ((data* 366)/10000) ;  
 		} else {
-				pixelPos = 60 - (((Filter_Calc(data))* 366)/10000)  ;   
+				pixelPos = (((Filter_Calc(data))* 366)/10000)  ;   
 		} 
 		ST7735_PlotBar(127);  // clip large magnitudes
 		ST7735_PlotPoint(pixelPos); // called N times
@@ -1029,7 +1029,7 @@ int main (void) { //Prachi's main
   OS_AddSW2Task(&SW2Push,2);
 	OS_InitSemaphore(&toDisplay, 1);
 	ADC_Init(4); 
-	ADC_Collect(4, 400, &switchWork2);
+	ADC_Collect(4, 12000, &switchWork2);
 	OS_AddThread(&Interpreter, 0, 0);
 	OS_AddThread(&dummyThread3, 0, 7);
 	OS_EnableInterrupts(); 

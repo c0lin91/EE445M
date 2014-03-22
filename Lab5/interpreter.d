@@ -10,3 +10,4 @@
 .\interpreter.o: OS.h
 .\interpreter.o: lm4f120h5qr.h
 .\interpreter.o: Filter.h
+.\interpreter.o: C:\Keil\ARM\ARMCC\bin\..\include\math.h
