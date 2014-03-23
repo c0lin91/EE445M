@@ -33,7 +33,6 @@
         ;EXPORT  StartCritical
         ;EXPORT  EndCritical
         EXPORT  StartOS
-        ;EXPORT  SysTick_Handler
 		EXPORT  PendSV_Handler
 		
 PE1  equ 0x40024008
@@ -49,23 +48,23 @@ OS_EnableInterrupts
         CPSIE   I
         BX      LR
 
-;*********** StartCritical************************
-; make a copy of previous I bit, disable interrupts
-; inputs:  none
-; outputs: previous I bit
-StartCritical
-        MRS     R0, PRIMASK        ; Set prio int mask to mask all (except faults)
-        CPSID   I
-        BX      LR
+;;*********** StartCritical************************
+;; make a copy of previous I bit, disable interrupts
+;; inputs:  none
+;; outputs: previous I bit
+;StartCritical
+        ;MRS     R0, PRIMASK        ; Set prio int mask to mask all (except faults)
+        ;CPSID   I
+        ;BX      LR
 
 
-;*********** EndCritical************************
-; using the copy of previous I bit, restore I bit to previous value
-; inputs:  previous I bit
-; outputs: none
-EndCritical
-        MSR     PRIMASK, R0
-        BX      LR
+;;*********** EndCritical************************
+;; using the copy of previous I bit, restore I bit to previous value
+;; inputs:  previous I bit
+;; outputs: none
+;EndCritical
+        ;MSR     PRIMASK, R0
+        ;BX      LR
 
 PendSV_Handler                ; 1) Saves R0-R3,R12,LR,PC,PSR
    	CPSID   I                  ; 2) Prevent interrupt during switch

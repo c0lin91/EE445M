@@ -1,0 +1,9 @@
+.\sdctestmain.o: SDCTestMain.c
+.\sdctestmain.o: C:\Keil\ARM\ARMCC\bin\..\include\stdio.h
+.\sdctestmain.o: C:\Keil\ARM\ARMCC\bin\..\include\string.h
+.\sdctestmain.o: ..\inc/hw_types.h
+.\sdctestmain.o: adc.h
+.\sdctestmain.o: OS.h
+.\sdctestmain.o: ..\tm4c123gh6pm.h
+.\sdctestmain.o: edisk.h
+.\sdctestmain.o: efile.h

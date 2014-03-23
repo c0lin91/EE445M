@@ -1,0 +1,271 @@
+
+
+
+ARM Macro Assembler    Page 1 
+
+
+    1 00000000         ;/******************************************************
+                       ***********************/
+    2 00000000         ;/* OSasm.s: low-level OS commands, written in assembly 
+                                             */
+    3 00000000         ;// Real Time Operating System 
+    4 00000000         
+    5 00000000         ; This example accompanies the book
+    6 00000000         ;  "Embedded Systems: Real Time Interfacing to the Arm C
+                       ortex M3",
+    7 00000000         ;  ISBN: 978-1463590154, Jonathan Valvano, copyright (c)
+                        2011
+    8 00000000         ;
+    9 00000000         ;  Programs 6.4 through 6.12, section 6.2
+   10 00000000         ;
+   11 00000000         ;Copyright 2011 by Jonathan W. Valvano, valvano@mail.ute
+                       xas.edu
+   12 00000000         ;    You may use, edit, run or distribute this file
+   13 00000000         ;    as long as the above copyright notice remains
+   14 00000000         ; THIS SOFTWARE IS PROVIDED "AS IS".  NO WARRANTIES, WHE
+                       THER EXPRESS, IMPLIED
+   15 00000000         ; OR STATUTORY, INCLUDING, BUT NOT LIMITED TO, IMPLIED W
+                       ARRANTIES OF
+   16 00000000         ; MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE A
+                       PPLY TO THIS SOFTWARE.
+   17 00000000         ; VALVANO SHALL NOT, IN ANY CIRCUMSTANCES, BE LIABLE FOR
+                        SPECIAL, INCIDENTAL,
+   18 00000000         ; OR CONSEQUENTIAL DAMAGES, FOR ANY REASON WHATSOEVER.
+   19 00000000         ; For more information about my classes, my research, an
+                       d my books, see
+   20 00000000         ; http://users.ece.utexas.edu/~valvano/
+   21 00000000         ; */
+   22 00000000         
+   23 00000000                 AREA             |.text|, CODE, READONLY, ALIGN=
+2
+   24 00000000                 THUMB
+   25 00000000                 REQUIRE8
+   26 00000000                 PRESERVE8
+   27 00000000         
+   28 00000000                 EXTERN           RunPt       ; currently running
+                                                             thread
+   29 00000000                 EXTERN           tempRunPt
+   30 00000000         
+   31 00000000                 EXPORT           OS_DisableInterrupts
+   32 00000000                 EXPORT           OS_EnableInterrupts
+   33 00000000         ;EXPORT  StartCritical
+   34 00000000         ;EXPORT  EndCritical
+   35 00000000                 EXPORT           StartOS
+   36 00000000                 EXPORT           PendSV_Handler
+   37 00000000         
+   38 00000000 40024008 
+                       PE1     equ              0x40024008
+   39 00000000 E000ED04 
+                       NVIC_INT_CTRL
+                               EQU              0xE000ED04
+   40 00000000 10000000 
+                       NVIC_PENDSVSET
+                               EQU              0x10000000
+   41 00000000         
+   42 00000000         OS_DisableInterrupts
+
+
+
+ARM Macro Assembler    Page 2 
+
+
+   43 00000000 B672            CPSID            I
+   44 00000002 4770            BX               LR
+   45 00000004         
+   46 00000004         
+   47 00000004         OS_EnableInterrupts
+   48 00000004 B662            CPSIE            I
+   49 00000006 4770            BX               LR
+   50 00000008         
+   51 00000008         ;;*********** StartCritical************************
+   52 00000008         ;; make a copy of previous I bit, disable interrupts
+   53 00000008         ;; inputs:  none
+   54 00000008         ;; outputs: previous I bit
+   55 00000008         ;StartCritical
+   56 00000008         ;MRS     R0, PRIMASK        ; Set prio int mask to mask 
+                       all (except faults)
+   57 00000008         ;CPSID   I
+   58 00000008         ;BX      LR
+   59 00000008         
+   60 00000008         
+   61 00000008         ;;*********** EndCritical************************
+   62 00000008         ;; using the copy of previous I bit, restore I bit to pr
+                       evious value
+   63 00000008         ;; inputs:  previous I bit
+   64 00000008         ;; outputs: none
+   65 00000008         ;EndCritical
+   66 00000008         ;MSR     PRIMASK, R0
+   67 00000008         ;BX      LR
+   68 00000008         
+   69 00000008         PendSV_Handler                       ; 1) Saves R0-R3,R1
+                                                            2,LR,PC,PSR
+   70 00000008 B672            CPSID            I           ; 2) Prevent interr
+                                                            upt during switch
+   71 0000000A         ;LDR  R1,=PE1
+   72 0000000A         ;LDR  R0,[R1]
+   73 0000000A         ;EOR  R0,#0x02
+   74 0000000A 6008            STR              R0,[R1]
+   75 0000000C E92D 0FF0       PUSH             {R4-R11}    ; 3) Save remaining
+                                                             regs r4-11
+   76 00000010 480E            LDR              R0, =RunPt  ; 4) R0=pointer to 
+                                                            RunPt, old thread
+   77 00000012 6801            LDR              R1, [R0]    ;    R1 = RunPt
+   78 00000014 F8C1 D000       STR              SP, [R1]    ; 5) Save SP into T
+                                                            CB
+   79 00000018 490D            LDR              R1, =tempRunPt
+   80 0000001A 6809            LDR              R1, [R1]    ; 6) R1 = RunPt->ne
+                                                            xt
+   81 0000001C 6001            STR              R1, [R0]    ;    RunPt = R1
+   82 0000001E F8D1 D000       LDR              SP, [R1]    ; 7) new thread SP;
+                                                             SP = RunPt->sp;
+   83 00000022 E8BD 0FF0       POP              {R4-R11}    ; 8) restore regs r
+                                                            4-11
+   84 00000026         ;LDR  R1,=PE1
+   85 00000026         ;LDR  R0,[R1]
+   86 00000026         ;EOR  R0,#0x02
+   87 00000026 6008            STR              R0,[R1]
+   88 00000028 B662            CPSIE            I           ; 9) tasks run with
+                                                             interrupts enabled
+                                                             
+   89 0000002A 4770            BX               LR
+
+
+
+ARM Macro Assembler    Page 3 
+
+
+   90 0000002C         
+   91 0000002C         StartOS
+   92 0000002C 4807            LDR              R0, =RunPt  ; currently running
+                                                             thread
+   93 0000002E 6802            LDR              R2, [R0]    ; R2 = value of Run
+                                                            Pt
+   94 00000030 F8D2 D000       LDR              SP, [R2]    ; new thread SP; SP
+                                                             = RunPt->stackPoin
+                                                            ter;
+   95 00000034 E8BD 0FF0       POP              {R4-R11}    ; restore regs r4-1
+                                                            1
+   96 00000038 BC0F            POP              {R0-R3}     ; restore regs r0-3
+                                                            
+   97 0000003A F85D CB04       POP              {R12}
+   98 0000003E F85D EB04       POP              {LR}        ; discard LR from i
+                                                            nitial stack
+   99 00000042 F85D EB04       POP              {LR}        ; start location
+  100 00000046 BC02            POP              {R1}        ; discard PSR
+  101 00000048 B662            CPSIE            I           ; Enable interrupts
+                                                             at processor level
+                                                            
+  102 0000004A 4770            BX               LR          ; start first threa
+                                                            d
+  103 0000004C         
+  104 0000004C                 ALIGN
+  105 0000004C                 END
+              00000000 
+              00000000 
+Command Line: --debug --xref --cpu=Cortex-M4 --apcs=interwork --depend=.\osasm.
+d -o.\osasm.o -IC:\Keil\ARM\RV31\INC -IC:\Keil\ARM\CMSIS\Include -IC:\Keil\ARM\
+Inc\Luminary --predefine="__EVAL SETA 1" --predefine="__MICROLIB SETA 1" --list
+=.\osasm.lst osasm.s
+
+
+
+ARM Macro Assembler    Page 1 Alphabetic symbol ordering
+Relocatable symbols
+
+.text 00000000
+
+Symbol: .text
+   Definitions
+      At line 23 in file osasm.s
+   Uses
+      None
+Comment: .text unused
+OS_DisableInterrupts 00000000
+
+Symbol: OS_DisableInterrupts
+   Definitions
+      At line 42 in file osasm.s
+   Uses
+      At line 31 in file osasm.s
+Comment: OS_DisableInterrupts used once
+OS_EnableInterrupts 00000004
+
+Symbol: OS_EnableInterrupts
+   Definitions
+      At line 47 in file osasm.s
+   Uses
+      At line 32 in file osasm.s
+Comment: OS_EnableInterrupts used once
+PendSV_Handler 00000008
+
+Symbol: PendSV_Handler
+   Definitions
+      At line 69 in file osasm.s
+   Uses
+      At line 36 in file osasm.s
+Comment: PendSV_Handler used once
+StartOS 0000002C
+
+Symbol: StartOS
+   Definitions
+      At line 91 in file osasm.s
+   Uses
+      At line 35 in file osasm.s
+Comment: StartOS used once
+5 symbols
+
+
+
+ARM Macro Assembler    Page 1 Alphabetic symbol ordering
+Absolute symbols
+
+NVIC_INT_CTRL E000ED04
+
+Symbol: NVIC_INT_CTRL
+   Definitions
+      At line 39 in file osasm.s
+   Uses
+      None
+Comment: NVIC_INT_CTRL unused
+NVIC_PENDSVSET 10000000
+
+Symbol: NVIC_PENDSVSET
+   Definitions
+      At line 40 in file osasm.s
+   Uses
+      None
+Comment: NVIC_PENDSVSET unused
+PE1 40024008
+
+Symbol: PE1
+   Definitions
+      At line 38 in file osasm.s
+   Uses
+      None
+Comment: PE1 unused
+3 symbols
+
+
+
+ARM Macro Assembler    Page 1 Alphabetic symbol ordering
+External symbols
+
+RunPt 00000000
+
+Symbol: RunPt
+   Definitions
+      At line 28 in file osasm.s
+   Uses
+      At line 76 in file osasm.s
+      At line 92 in file osasm.s
+
+tempRunPt 00000000
+
+Symbol: tempRunPt
+   Definitions
+      At line 29 in file osasm.s
+   Uses
+      At line 79 in file osasm.s
+Comment: tempRunPt used once
+2 symbols
+344 symbols in table
