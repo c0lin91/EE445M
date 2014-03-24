@@ -9,12 +9,13 @@
 #include <stdio.h>
 #include <string.h>
 #include "inc/hw_types.h"
-//#include "serial.h"
+#include "UART2.h"
 #include "adc.h"
 #include "OS.h"
 #include "tm4c123gh6pm.h"
 #include "edisk.h"
 #include "efile.h"
+
 
 unsigned long NumCreated;   // number of foreground threads created
 unsigned long NumSamples;   // incremented every sample
@@ -159,23 +160,21 @@ int realmain(void){        // lab 5 real main
 
 //*****************test programs*************************
 unsigned char Buffer[512];
-#define MAXBLOCKS 2048
+#define MAXBLOCKS 100
 void diskError(char* errtype, unsigned long n){
-//  printf(errtype);
-//  printf(" disk error %u",n);
+  UART_OutString("Disk error: ");
+	UART_OutUDec(n);
+	UART_OutChar('\r'); UART_OutChar('\n');
   OS_Kill();
 }
 void TestDisk(void){  DSTATUS result;  unsigned short block;  int i; unsigned long n;
   // simple test of eDisk
-//  printf("\n\rEE345M/EE380L, Lab 5 eDisk test\n\r");
-  int status = StartCritical(); 
+  UART_OutString("\n\rEE345M/EE380L, Lab 5 eDisk test\n\r");
   result = eDisk_Init(0);  // initialize disk
-//	OS_EnableInterrupts(); 
-	EndCritical(status); 
   if(result){ 
 		diskError("eDisk_Init",result);
 	} 
-//  printf("Writing blocks\n\r");
+ UART_OutString("Writing blocks\n\r");
   n = 1;    // seed
   for(block = 0; block < MAXBLOCKS; block++){
     for(i=0;i<512;i++){
@@ -183,22 +182,13 @@ void TestDisk(void){  DSTATUS result;  unsigned short block;  int i; unsigned lo
       Buffer[i] = 0xFF&n;        
     }
     GPIO_PF3 = 0x08;     // PF3 high for 100 block writes
-		status = StartCritical();
 		result = eDisk_WriteBlock(Buffer,block);
-		EndCritical(status);
     if(result) { 
 			diskError("eDisk_WriteBlock",block); // save to disk
 		} 
-		if (block == 43) { 
-			block++;
-			block--;
-		} 
-	//	if (block ==46){
-	//		block++;
-	//	}
     GPIO_PF3 = 0x00;     
   }  
-//  printf("Reading blocks\n\r");
+ UART_OutString("Reading blocks\n\r");
   n = 1;  // reseed, start over to get the same sequence
   for(block = 0; block < MAXBLOCKS; block++){
     GPIO_PF2 = 0x04;     // PF2 high for one block read
@@ -209,12 +199,13 @@ void TestDisk(void){  DSTATUS result;  unsigned short block;  int i; unsigned lo
     for(i=0;i<512;i++){
       n = (16807*n)%2147483647; // pseudo random sequence
       if(Buffer[i] != (0xFF&n)){
-//        printf("Read data not correct, block=%u, i=%u, expected %u, read %u\n\r",block,i,(0xFF&n),Buffer[i]);
+				UART_OutString("Error!! Read doesn't match the write"); 
+//        UART_OutString("Read data not correct, block=%u, i=%u, expected %u, read %u\n\r",block,i,(0xFF&n),Buffer[i]);
         OS_Kill();
       }      
     }
   }  
-//  printf("Successful test of %u blocks\n\r",MAXBLOCKS);
+  UART_OutString("Successful test of 100 blocks\n\r");
   OS_Kill();
 }
 void RunTest(void){
@@ -223,11 +214,11 @@ void RunTest(void){
 //******************* test main1 **********
 // SYSTICK interrupts, period established by OS_Launch
 // Timer interrupts, period established by first call to OS_AddPeriodicThread
-int main(void){   // testmain1
+int testmain1 (void){   // testmain1
 	OS_Init(); 
 	
 //*******attach background tasks***********//
-// OS_AddPeriodicThread(&disk_timerproc,10*TIME_1MS,0);   // time out routines for disk
+ OS_AddPeriodicThread(&disk_timerproc,10*TIME_1MS,0);   // time out routines for disk
 //  OS_AddButtonTask(&RunTest,2);
   
   NumCreated = 0 ;
@@ -240,7 +231,7 @@ int main(void){   // testmain1
 }
 
 void TestFile(void){   int i; char data; 
-  printf("\n\rEE345M/EE380L, Lab 5 eFile test\n\r");
+  UART_OutString("EE345M/EE380L, Lab 5 eFile test\r\n"); 
   // simple test of eFile
   if(eFile_Init())              diskError("eFile_Init",0); 
   if(eFile_Format())            diskError("eFile_Format",0); 
@@ -263,14 +254,14 @@ void TestFile(void){   int i; char data;
   }
   if(eFile_Delete("file1"))     diskError("eFile_Delete",0);
 //  eFile_Directory(&Serial_OutChar);
-  printf("Successful test of creating a file\n\r");
+  UART_OutString("Successful test of creating a file\r\n");
   OS_Kill();
 }
 
 //******************* test main2 **********
 // SYSTICK interrupts, period established by OS_Launch
 // Timer interrupts, period established by first call to OS_AddPeriodicThread
-int testmain2(void){ 
+int main (void){ 
   OS_Init();           // initialize, disable interrupts
 
 //*******attach background tasks***********

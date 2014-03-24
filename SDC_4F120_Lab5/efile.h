@@ -1,6 +1,26 @@
 // filename ************** eFile.h *****************************
 // Middle-level routines to implement a solid-state disk 
 // Jonathan W. Valvano 3/16/11
+#define BLOCKSIZE 512
+#define MAX_NUMBER_OF_BLOCKS 2048-2 //-2 because 1 for dir and 1 for free space 
+#define MAXFILES 50 //arbitrary 
+struct blk { 
+	struct blk* nextPtr; 
+	int usedBytes; 
+}; 
+typedef struct blk Block; 
+
+typedef struct blk block; 
+
+struct dir { 
+	int blockNum; 
+	char* Name; 
+}; 
+typedef struct dir Directory; 
+
+
+
+
 
 //---------- eFile_Init-----------------
 // Activate the file system, without formating

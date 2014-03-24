@@ -93,6 +93,18 @@ void PortF_Init(void){ unsigned long volatile delay;
 	
 }
 
+void PortE_Init(void){ unsigned long volatile delay;
+	SYSCTL_RCGC2_R |= SYSCTL_RCGC2_GPIOE;
+  GPIO_PORTE_DIR_R |= 0x0F;    // (c) make PF1-2 out
+  GPIO_PORTE_AFSEL_R &= ~0x0F;  //     disable alt funct on PF1-2
+  GPIO_PORTE_DEN_R |= 0x0F;     //     enable digital I/O on PF1-2   
+  GPIO_PORTE_PCTL_R &= ~0x0000FFFF; // configure PF1-2 as GPIO
+  GPIO_PORTE_AMSEL_R = 0;       //     disable analog functionality on PF
+	PE1 = 0;
+	PE2 = 0;
+	PE3 = 0; 
+	
+}
 // ******** OS_Init ************
 // initialize operating system, disable interrupts until OS_Launch
 // initialize OS controlled I/O: serial, ADC, systick, LaunchPad I/O and timers 
@@ -103,6 +115,7 @@ void OS_Init(void){
 	PLL_Init();					// Incompatable with simulator (I think)
 	UART_Init();
 	PortF_Init(); 
+	PortE_Init(); 
 	SysClock_Init(1000);		// give the system clock 1 us ticks
 //	SysCtClockSet(SYSCTL_SYSDIV_4 | SYSCTL_USE_PLL | SYSCTL_XTAL_6MHZ | SYSCTL_OSC_MAIN);
 	NVIC_ST_CTRL_R = 0; 

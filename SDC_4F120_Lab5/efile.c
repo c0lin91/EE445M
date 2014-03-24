@@ -1,6 +1,12 @@
 
 #include "efile.h"
+#include "eDisk.h" 
+#include "UART2.h" 
+#include "String.h" 
 
+#define NOT_USED 0 
+BYTE freeSpace[MAX_NUMBER_OF_BLOCKS] = {0xFF}; 
+Directory dir [MAXFILES]; 
 //---------- eFile_Init-----------------
 // Activate the file system, without formating
 // Input: none
@@ -8,7 +14,37 @@
 // since this program initializes the disk, it must run with 
 //    the disk periodic task operating
 int eFile_Init(void){
-	return 1;
+	int result = STA_NOINIT;
+  
+	//Try to power up the disk until successfull
+	while (result != 0) { 
+		result = eDisk_Init(0);
+	} 
+	//Error Checks
+	if (result == STA_NOINIT) { 
+		UART_OutString("Can not initialize the disk"); UART_OutChar(CR); UART_OutChar(LF);
+		return 1; 
+	} 
+	if (result == STA_NODISK) {
+			UART_OutString("Please insert a disk"); UART_OutChar(CR); UART_OutChar(LF);
+			return 1; 
+	} 
+	if (result == STA_PROTECT) { 
+		UART_OutString("No Write Permission to the current disk"); UART_OutChar(CR); UART_OutChar(LF);
+		return 1; 
+	} 
+	
+	//Passed all the errors
+	//Read the directory and the free space
+	result = STA_NOINIT; 
+	while (result != 0) { 
+		result = eDisk_ReadBlock ((BYTE*)dir, 0);
+	} 
+	result = STA_NOINIT;
+	while (result != 0) { 
+		result = eDisk_ReadBlock ((BYTE*)freeSpace, 1); 
+	} 
+	return 0;
 }
 
 //---------- eFile_Format-----------------
@@ -16,7 +52,26 @@ int eFile_Init(void){
 // Input: none
 // Output: 0 if successful and 1 on failure (e.g., trouble writing to flash)
 int eFile_Format(void){
-	return 1;
+	int i, result; 
+	for (i =0; i < MAXFILES; i++) { 
+		dir[i].blockNum = 0; 
+		dir[i].Name = 0; 
+	} 
+	
+	for (i = 0; i < MAX_NUMBER_OF_BLOCKS; i++) { 
+		freeSpace[i] = 0xFF; 
+	} 
+	//Write the initailized Directory 
+	result = STA_NOINIT; 
+	while (result != 0) { 
+		result = eDisk_WriteBlock ((BYTE*)dir, 0);
+	} 	
+	result = STA_NOINIT;
+	while (result != 0) { 
+		result = eDisk_WriteBlock ((BYTE*)freeSpace, 1); 
+	} 
+	
+	return 0;
 }	
 
 //---------- eFile_Create-----------------
@@ -24,7 +79,57 @@ int eFile_Format(void){
 // Input: file name is an ASCII string up to seven characters 
 // Output: 0 if successful and 1 on failure (e.g., trouble writing to flash)
 int eFile_Create( char name[]){
-	return 1;
+	int i, k, free_block, result; 
+	Block currBlock; 
+	//Find an open directory entry 
+	for (i = 0; i < MAXFILES; i++) { 
+		if (dir[i].blockNum == 0) 
+			break; 
+	} 
+	if (i == MAXFILES) {
+		return 1; //NO MORE FILES CAN BE MADE
+	}
+	//Make a directory entry
+	if (strlen(name) > 7) { 
+		int j; 
+		for (j = 0; j < 7; j++){
+			dir[i].Name[j] = name[j]; 
+		} 
+		dir[i].Name[j] = 0; 
+	} else 
+			dir[i].Name = name; 
+	
+	//find a free block 
+	for(k = 0; k < MAX_NUMBER_OF_BLOCKS; k++) {
+		if (freeSpace[k] == 0xFF){
+			free_block = k;
+			freeSpace[k] = 0; //make this space occupied. Null because acc to FAT we store the next pointer
+			break; 
+		}
+	}		
+	if (k == MAX_NUMBER_OF_BLOCKS)
+		return 1; //no more space left 
+	dir[i].blockNum = free_block; 
+
+	//assign that block to this file -- initialize the metadata of a file
+	currBlock.nextPtr = 0; 
+	currBlock.usedBytes = NOT_USED;
+	
+	//write that block to the disk 
+	//Write the initailized Directory 
+	result = STA_NOINIT; 
+	while (result != 0) { 
+		result = eDisk_WriteBlock ((BYTE*)dir, 0);
+	} 	
+	result = STA_NOINIT;
+	while (result != 0) { 
+		result = eDisk_WriteBlock ((BYTE*)freeSpace, 1); 
+	}
+	result = STA_NOINIT;
+	while (result != 0) { 
+		result = eDisk_WriteBlock ((BYTE*)&currBlock, free_block); 
+	}
+	return 0;
 }  // create new file, make it empty 
 
 
