@@ -3,7 +3,7 @@
 // Jonathan W. Valvano 3/16/11
 #define BLOCKSIZE 512
 #define MAX_NUMBER_OF_BLOCKS 512 // 2048-2 //-2 because 1 for dir and 1 for free space 
-#define MAXFILES 100 //arbitrary 
+#define MAXFILES 42 //arbitrary 
 #define DATABYTES	512 - 2*sizeof(int)
 struct blk { 
 	int nextPtr; 

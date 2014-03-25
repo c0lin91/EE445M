@@ -18,7 +18,7 @@
 void fft (void); 
 void cr4_fft_64_stm32(void *pssOUT, void *pssIN, unsigned short Nbin);
 
-const int COMMANDS = 12;
+const int COMMANDS = 13;
 const int BADCOMMAND = COMMANDS;
 const char BACKSPACE = 0x7F;
 const char RETURN = 0x0D;
@@ -26,8 +26,8 @@ const char RETURN = 0x0D;
 // Interpreter command strings and their respective function pointers.
 // since sizeof() doesn't work for arrays of char and func pointers I had to create a constant,
 // So be sure to update the const COMMANDS after adding or removing functions
-const char* commands[COMMANDS] = { "echo", "adc", "clear", "fft", "performance", "debug", "filter", "ls", "rm", "cat", "touch", "vi" };
-void (*interFunc[COMMANDS])(char* paramString) = {echo, adcToggle, clear, fftToggle, performance, debug, filter, ls, rm, cat, touch, vi };
+const char* commands[COMMANDS] = { "echo", "adc", "clear", "fft", "performance", "debug", "filter", "ls", "rm", "cat", "touch", "vi", "format" };
+void (*interFunc[COMMANDS])(char* paramString) = {echo, adcToggle, clear, fftToggle, performance, debug, filter, ls, rm, cat, touch, vi, format };
 
 
 //int mailboxFull; 		// Put extern back in when ADC file is ready
@@ -55,13 +55,19 @@ void vi (char* filename) {
 	 } 
 		//open file for writing 
 	 eFile_WOpen(filename); 
-	 while (RxFifo_Get(&data)) { 
-		 if (data == ESC) 
-			 break; 
-		 else { 
-			 eFile_Write(data); 
-		 } 
-	 }
+	 while(1){
+		while (RxFifo_Get(&data)) { 
+			if (data == ESC){
+				UART_OutString("\r\n");
+				eFile_WClose(); 
+				return;
+				break; 
+			}
+			else { 
+				eFile_Write(data); 
+			} 
+		}
+	}
 	 eFile_WClose(); 
 } 
 int skipLeadingSpace(char* string){
@@ -292,10 +298,10 @@ void ls(char* paramString){
 
 void rm(char* paramString){
 	char buffer[40];
-	if(eFile_Delete(paramString) == 1){
-		sprintf(buffer, "%s successfully deleted", paramString);
+	if(eFile_Delete(paramString) == 0){
+		sprintf(buffer, "%s successfully deleted\r\n", paramString);
 	}else{
-		sprintf(buffer, "%s could not be deleted", paramString);
+		sprintf(buffer, "%s could not be delete\r\n", paramString);
 	}
 	UART_OutString(buffer);
 }
@@ -308,6 +314,7 @@ void rm(char* paramString){
 
 void cat(char* paramString){
 	eFile_PrintFileContents(paramString);
+	UART_OutString("\r\n");
 }
 
 //************** touch *************** 
@@ -322,6 +329,14 @@ void touch(char* paramString){
 		UART_OutString("File successfully created\r\n"); 
 }
 
+//************** format *************** 
+// Clears SD card and formats it
+// Inputs: String parameter. Should be null
+// Outputs: none
+void format(char* paramString){
+	
+	eFile_Format();
+}
 // ********** Function definitions to make compiler happy ***********
 void fft (void) {
 	 int DCcomponent, ImComp, i, status, pixelPos; 

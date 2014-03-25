@@ -69,7 +69,7 @@ int eFile_findFile(char* name) {
 	for(i=0; i<MAXFILES ; i++){		
 		if(dir[i].blockNum != 0){
 		 if( strcmp(name, dir[i].Name) == 0){
-			 writeBlockNum = dir[i].blockNum;
+			 blockNum = dir[i].blockNum;
 			 break;
 		 }
 	 }
@@ -78,7 +78,7 @@ int eFile_findFile(char* name) {
 		UART_OutString("File not found");
 		return -1;
 	}else { 
-		return writeBlockNum; 
+		return blockNum; 
 	} 
 } 
 
@@ -175,13 +175,6 @@ int eFile_Create( char name[]){
 	//Block currBlock; 
 	
 	result = STA_NOINIT; 
-	while (result != 0) { 
-		result = eDisk_ReadBlock ((BYTE*)dir, 0);
-	} 	
-	result = STA_NOINIT;
-	while (result != 0) { 
-		result = eDisk_ReadBlock ((BYTE*)FAT, 1); 
-	}
 	//Find an open directory entry 
 	for (i = 0; i < MAXFILES; i++) { 
 		if (dir[i].blockNum == 0) 
@@ -309,6 +302,10 @@ int eFile_Write( char data){
 	while(result != 0){
 		result = eDisk_WriteBlock ((BYTE*)writeBlock, writeBlockNum);
 	}
+	result = STA_NOINIT;
+	while(result != 0){						// Just testing that the write function is working
+		result = eDisk_ReadBlock ((BYTE*)writeBlock, writeBlockNum);
+	}
 	
 	return 0;
 }
@@ -352,7 +349,7 @@ int eFile_WClose(void){
 	}
 	result = STA_NOINIT;
 	while (result != 0) { 
-		result = eDisk_WriteBlock ((BYTE*)&writeBlock, writeBlockNum); 
+		result = eDisk_WriteBlock ((BYTE*)writeBlock, writeBlockNum); 
 	}
 	writeBlockNum = -1;
 	return 0;
@@ -455,6 +452,7 @@ int eFile_Directory(void){
 int eFile_Delete( char name[]){
 	int i;
 	int result = STA_NOINIT;
+	int blockNum, tempBlock;
 	for(i=0; i<MAXFILES ; i++){		
 		if(dir[i].blockNum != 0){
 		 if( strcmp(name, dir[i].Name) == 0){
@@ -467,16 +465,21 @@ int eFile_Delete( char name[]){
 		return 1;
 	}
 	
-	// Pretty sure all we have to update is the
-	// directory and the FAT. The actual blocks
-	// of memory don't need to be wiped
+		// Clear directory entry
+	blockNum = dir[i].blockNum;
 	dir[i].blockNum = 0; 
 	dir[i].Name[0] = 0; 
+
+	do{
+		eDisk_WriteBlock ((BYTE*)format_disk, blockNum);
+		tempBlock = blockNum;
+		blockNum = FAT[blockNum];
+		FAT[tempBlock] = FREE;
+	}while(blockNum !=0);
 	while (result != 0) { 
 		result = eDisk_WriteBlock ((BYTE*)dir, 0);
 	} 
 	
-	FAT[i] = FREE;			// Declare that file is availible
 	result = STA_NOINIT;
 	while (result != 0) { 
 		result = eDisk_WriteBlock ((BYTE*)FAT, 0);

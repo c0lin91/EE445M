@@ -30,5 +30,7 @@ void touch(char* paramString);
 
 void vi(char* paramString);
 
+void format(char* paramString);
+
 #endif
 

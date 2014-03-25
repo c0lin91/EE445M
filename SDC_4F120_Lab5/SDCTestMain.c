@@ -154,7 +154,6 @@ int main (void){        // lab 5 real main
   NumCreated += OS_AddThread(&Interpreter,128,2); 
   NumCreated += OS_AddThread(&IdleTask,128,7);  // runs when nothing useful to do
 	if(eFile_Init())              diskError("eFile_Init",0); 
-  if(eFile_Format())            diskError("eFile_Format",0); 
  
   OS_Launch(TIMESLICE); // doesn't return, interrupts enabled in here
   return 0;             // this never executes
@@ -242,7 +241,7 @@ void TestFile(void){   int i; char data;
 //  eFile_Directory(&Serial_OutChar);
   if(eFile_Create("file1"))     diskError("eFile_Create",0);
   if(eFile_WOpen("file1"))      diskError("eFile_WOpen",0);
-  for(i=0;i<1000;i++){
+  for(i=0;i<1600;i++){
     if(eFile_Write('a'+i%26))   diskError("eFile_Write",i);
     if(i%52==51){
       if(eFile_Write('\n'))     diskError("eFile_Write",i);  
@@ -250,9 +249,14 @@ void TestFile(void){   int i; char data;
     }
   }
   if(eFile_WClose())            diskError("eFile_Close",0);
+	eFile_PrintFileContents("file1");
+ for(i=0; i< 20000; i++){
+	i++;
+	 i--;
+	}
 //  eFile_Directory(&Serial_OutChar);
   if(eFile_ROpen("file1"))      diskError("eFile_ROpen",0);
-  for(i=0;i<1000;i++){
+  for(i=0;i<1600;i++){
     if(eFile_ReadNext(&data))   diskError("eFile_ReadNext",i);
 //    Serial_OutChar(data);
   }
