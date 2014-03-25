@@ -8,7 +8,7 @@
 struct blk { 
 	int nextPtr; 
 	int usedBytes; 
-	char* data; 
+	char data[DATABYTES]; 
 }; 
 typedef struct blk Block; 
 
@@ -17,7 +17,7 @@ typedef struct blk block;
 // Files
 struct dir { 
 	int blockNum; 
-	char* Name; 
+	char Name[8]; 
 }; 
 typedef struct dir Directory; 
 

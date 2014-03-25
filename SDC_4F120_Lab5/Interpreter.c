@@ -96,12 +96,13 @@ void sendCommand(char* cmdString){
 void Interpreter(void){
 	char value [RxFIFOSIZE];
 	char buffer [1];
-	char cmd[RxFIFOSIZE];
+	char* cmd;
 	int cmd_idx = 0;
 	int value_idx = 0; 
 	int newCommand = 0;
 	int i =0;
 	
+	cmd = (char*)malloc(RxFIFOSIZE);
 	while(1){	
 	if (!newCommand) {
 		while (RxFifo_Get(&value[value_idx])){
@@ -316,9 +317,9 @@ void cat(char* paramString){
 
 void touch(char* paramString){
 	if (eFile_Create(paramString)) 
-			UART_OutString ("Error while creating the file"); 
+			UART_OutString ("Error while creating the file\r\n"); 
 	else 
-		UART_OutString("File successfully created"); 
+		UART_OutString("File successfully created\r\n"); 
 }
 
 // ********** Function definitions to make compiler happy ***********

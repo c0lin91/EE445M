@@ -10,8 +10,8 @@
 #define FREE		0xff
 
 
-static BYTE FAT			[MAX_NUMBER_OF_BLOCKS] = {0xFF}; 
-static Directory dir [MAXFILES] ={0}; 
+BYTE FAT			[MAX_NUMBER_OF_BLOCKS] = {0xFF}; 
+Directory dir [MAXFILES] ={0}; 
 
 int writeBlockNum = -1;
 Block* writeBlock; 
@@ -64,6 +64,7 @@ int getFileSize(int blockNum){
 
 int eFile_findFile(char* name) {
 		int i; 
+		int blockNum = 0;
 	//find file by name
 	for(i=0; i<MAXFILES ; i++){		
 		if(dir[i].blockNum != 0){
@@ -134,12 +135,16 @@ int eFile_Format(void){
 	int i, result; 
 //	for (i =0; i < MAXFILES; i++) { 
 //		dir[i].blockNum = 0; 
-//		dir[i].Name = 0; 
+//		dir[i].Name[0] = 0; 
 //	} 
-//	
+	
 	for (i = 0; i < MAX_NUMBER_OF_BLOCKS; i++) { 
 		FAT[i] = FREE; 					
-	} 
+	}
+	
+	for (i = 0; i < MAX_NUMBER_OF_BLOCKS; i++) { 
+		result = eDisk_WriteBlock (format_disk, i);
+	}	
 	//Write the initailized Directory 
 	result = STA_NOINIT; 
 	while (result != 0) { 
@@ -192,8 +197,10 @@ int eFile_Create( char name[]){
 			dir[i].Name[j] = name[j]; 
 		} 
 		dir[i].Name[j] = 0; 
-	} else 
-			dir[i].Name = name; 
+	} else {
+			sprintf(dir[i].Name, "%s", name);
+			//dir[i].Name = name; 
+	}
 	
 	//find a free block 
 	free_block = findOpenBlock();
@@ -233,7 +240,7 @@ int eFile_WOpen(char name[]){
 	int result = STA_NOINIT;
 
 	if(writeBlockNum !=-1){		// different file already open
-		UART_OutString("Another file is already open");
+		UART_OutString("Another file is already open\r\n");
 		return 1;
 	}
 	//find file by name
@@ -246,7 +253,7 @@ int eFile_WOpen(char name[]){
 	 }
 	}
 	if(i== MAXFILES){
-		UART_OutString("File not found");
+		UART_OutString("File not found\r\n");
 		return 1;
 	}
 	//Find the end of the file -- last block 
@@ -464,7 +471,7 @@ int eFile_Delete( char name[]){
 	// directory and the FAT. The actual blocks
 	// of memory don't need to be wiped
 	dir[i].blockNum = 0; 
-	dir[i].Name = 0; 
+	dir[i].Name[0] = 0; 
 	while (result != 0) { 
 		result = eDisk_WriteBlock ((BYTE*)dir, 0);
 	} 

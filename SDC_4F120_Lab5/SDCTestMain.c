@@ -134,7 +134,7 @@ extern void Interpreter(void);
 // execute   eFile_Init();  after periodic interrupts have started
 
 //*******************lab 5 main **********
-int realmain (void){        // lab 5 real main
+int main (void){        // lab 5 real main
   OS_Init();           // initialize, disable interrupts
   Running = 0;         // robot not running
   DataLost = 0;        // lost data between producer and consumer
@@ -265,7 +265,7 @@ void TestFile(void){   int i; char data;
 //******************* test main2 **********
 // SYSTICK interrupts, period established by OS_Launch
 // Timer interrupts, period established by first call to OS_AddPeriodicThread
-int main (void){ 
+int testmain2 (void){ 
   OS_Init();           // initialize, disable interrupts
 
 //*******attach background tasks***********
