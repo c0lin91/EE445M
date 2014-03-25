@@ -3,7 +3,7 @@
 <title>Static Call Graph - [.\SDC.axf]</title></head>
 <body><HR>
 <H1>Static Call Graph for image .\SDC.axf</H1><HR>
-<BR><P>#&#060CALLGRAPH&#062# ARM Linker, 5.03 [Build 76]: Last Updated: Tue Mar 25 13:27:49 2014
+<BR><P>#&#060CALLGRAPH&#062# ARM Linker, 5.03 [Build 76]: Last Updated: Tue Mar 25 14:03:52 2014
 <BR><P>
 <H3>Maximum Stack Usage =        192 bytes + Unknown(Functions without stacksize, Cycles, Untraceable Function Pointers)</H3><H3>
 Call chain for Maximum Stack Depth:</H3>
@@ -1371,11 +1371,11 @@ Global Symbols
 <LI><a href="#[108]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;eFile_Delete
 <LI><a href="#[99]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;Interpreter
 <LI><a href="#[f5]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;diskError
-<LI><a href="#[113]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;eFile_findFile
 <LI><a href="#[109]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;eFile_Directory
 <LI><a href="#[15]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;vi
 <LI><a href="#[14]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;touch
 <LI><a href="#[12]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;rm
+<LI><a href="#[16]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;format
 <LI><a href="#[a]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;echo
 <LI><a href="#[f]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;debug
 <LI><a href="#[13]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;cat
@@ -1547,7 +1547,7 @@ Global Symbols
 <BR>[Called By]<UL><LI><a href="#[12]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;rm
 </UL>
 
-<P><STRONG><a name="[109]"></a>eFile_Directory</STRONG> (Thumb, 76 bytes, Stack size 56 bytes, efile.o(i.eFile_Directory))
+<P><STRONG><a name="[109]"></a>eFile_Directory</STRONG> (Thumb, 88 bytes, Stack size 56 bytes, efile.o(i.eFile_Directory))
 <BR><BR>[Stack]<UL><LI>Max Depth = 176 + Unknown Stack Size
 <LI>Call Chain = eFile_Directory &rArr; __2sprintf &rArr; _printf_char_common &rArr; __printf
 </UL>
@@ -1629,7 +1629,7 @@ Global Symbols
 <BR>[Called By]<UL><LI><a href="#[15]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;vi
 </UL>
 
-<P><STRONG><a name="[112]"></a>eFile_Write</STRONG> (Thumb, 216 bytes, Stack size 16 bytes, efile.o(i.eFile_Write))
+<P><STRONG><a name="[112]"></a>eFile_Write</STRONG> (Thumb, 222 bytes, Stack size 16 bytes, efile.o(i.eFile_Write))
 <BR><BR>[Stack]<UL><LI>Max Depth = 88<LI>Call Chain = eFile_Write &rArr; eDisk_WriteBlock &rArr; eDisk_Write &rArr; xmit_datablock &rArr; xmit_spi
 </UL>
 <BR>[Calls]<UL><LI><a href="#[104]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;eDisk_WriteBlock
@@ -1640,11 +1640,10 @@ Global Symbols
 <BR>[Called By]<UL><LI><a href="#[15]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;vi
 </UL>
 
-<P><STRONG><a name="[113]"></a>eFile_findFile</STRONG> (Thumb, 82 bytes, Stack size 16 bytes, efile.o(i.eFile_findFile))
-<BR><BR>[Stack]<UL><LI>Max Depth = 40<LI>Call Chain = eFile_findFile &rArr; UART_OutString &rArr; UART_OutChar &rArr; copySoftwareToHardware
+<P><STRONG><a name="[113]"></a>eFile_findFile</STRONG> (Thumb, 76 bytes, Stack size 16 bytes, efile.o(i.eFile_findFile))
+<BR><BR>[Stack]<UL><LI>Max Depth = 16<LI>Call Chain = eFile_findFile
 </UL>
-<BR>[Calls]<UL><LI><a href="#[cf]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;UART_OutString
-<LI><a href="#[f0]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;strcmp
+<BR>[Calls]<UL><LI><a href="#[f0]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;strcmp
 </UL>
 <BR>[Called By]<UL><LI><a href="#[15]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;vi
 </UL>
@@ -1701,10 +1700,11 @@ Global Symbols
 <LI><a href="#[105]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;eFile_Create
 </UL>
 
-<P><STRONG><a name="[16]"></a>format</STRONG> (Thumb, 10 bytes, Stack size 8 bytes, interpreter.o(i.format))
+<P><STRONG><a name="[16]"></a>format</STRONG> (Thumb, 16 bytes, Stack size 8 bytes, interpreter.o(i.format))
 <BR><BR>[Stack]<UL><LI>Max Depth = 96<LI>Call Chain = format &rArr; eFile_Format &rArr; eDisk_WriteBlock &rArr; eDisk_Write &rArr; xmit_datablock &rArr; xmit_spi
 </UL>
 <BR>[Calls]<UL><LI><a href="#[10b]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;eFile_Format
+<LI><a href="#[cf]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;UART_OutString
 </UL>
 <BR>[Address Reference Count : 1]<UL><LI> interpreter.o(.data)
 </UL>

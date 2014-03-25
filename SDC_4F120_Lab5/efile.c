@@ -75,7 +75,7 @@ int eFile_findFile(char* name) {
 	 }
 	}
 	if(i== MAXFILES){
-		UART_OutString("File not found");
+//		UART_OutString("File not found");
 		return -1;
 	}else { 
 		return blockNum; 
@@ -142,7 +142,7 @@ int eFile_Format(void){
 		FAT[i] = FREE; 					
 	}
 	
-	for (i = 0; i < MAX_NUMBER_OF_BLOCKS; i++) { 
+	for (i = 0; i < MAX_NUMBER_OF_BLOCKS; i++) {  // +1442 for a MB
 		result = eDisk_WriteBlock (format_disk, i);
 	}	
 	//Write the initailized Directory 
@@ -278,6 +278,7 @@ int eFile_Write( char data){
 			UART_OutString("Insufficient disk space");
 			return 1;
 		}
+		FAT[writeBlockNum] = freeBlock; 
 		FAT[freeBlock] = 0; 
 		writeBlock->nextPtr = freeBlock; 
 		result = STA_NOINIT;
@@ -432,16 +433,19 @@ int eFile_RClose(void){
 //         0 if successful and 1 on failure (e.g., trouble reading from flash)
 //int eFile_Directory(void(*fp)(unsigned char)){
 int eFile_Directory(void){
-	int i, fileSize;
+	int i, fileSize, numFiles = 0;
 	char buffer[40];
 	for(i=0; i<MAXFILES ; i++){		
 		if(dir[i].blockNum != 0){
+			numFiles++; 
 			fileSize = getFileSize(dir[i].blockNum);
 			sprintf(buffer, "%s\tSize of file on disk: %d bytes\r\n", dir[i].Name, fileSize);
 			UART_OutString(buffer);
 		}
 	}
-	
+	if (!numFiles) { 
+		UART_OutString("Disk Empty!! \r\n"); 
+	} 
 	return 1;
 }	
 

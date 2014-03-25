@@ -336,6 +336,7 @@ void touch(char* paramString){
 void format(char* paramString){
 	
 	eFile_Format();
+	UART_OutString("Format Finished\r\n");
 }
 // ********** Function definitions to make compiler happy ***********
 void fft (void) {

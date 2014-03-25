@@ -313,6 +313,7 @@ Section Cross References
     interpreter.o(i.filter) refers to interpreter.o(i.echo) for echo
     interpreter.o(i.filter) refers to interpreter.o(.data) for filterFlag
     interpreter.o(i.format) refers to efile.o(i.eFile_Format) for eFile_Format
+    interpreter.o(i.format) refers to uart2.o(i.UART_OutString) for UART_OutString
     interpreter.o(i.ls) refers to efile.o(i.eFile_Directory) for eFile_Directory
     interpreter.o(i.rm) refers to _printf_percent.o(.ARM.Collect$$_printf_percent$$00000000) for _printf_percent
     interpreter.o(i.rm) refers to _printf_s.o(.ARM.Collect$$_printf_percent$$00000014) for _printf_s
@@ -411,7 +412,6 @@ Section Cross References
     efile.o(i.eFile_Write) refers to edisk.o(i.eDisk_ReadBlock) for eDisk_ReadBlock
     efile.o(i.eFile_Write) refers to efile.o(.data) for writeBlock
     efile.o(i.eFile_findFile) refers to strcmpv7m.o(.text) for strcmp
-    efile.o(i.eFile_findFile) refers to uart2.o(i.UART_OutString) for UART_OutString
     efile.o(i.eFile_findFile) refers to efile.o(.bss) for dir
     efile.o(i.findOpenBlock) refers to efile.o(.data) for FAT
     efile.o(i.getFileSize) refers to efile.o(.data) for FAT
@@ -1187,63 +1187,63 @@ Image Symbol Table
     i.eFile_Create                           0x000024c8   Section        0  efile.o(i.eFile_Create)
     i.eFile_Delete                           0x0000258c   Section        0  efile.o(i.eFile_Delete)
     i.eFile_Directory                        0x00002650   Section        0  efile.o(i.eFile_Directory)
-    i.eFile_Format                           0x000026c4   Section        0  efile.o(i.eFile_Format)
-    i.eFile_Init                             0x00002748   Section        0  efile.o(i.eFile_Init)
-    i.eFile_PrintFileContents                0x00002850   Section        0  efile.o(i.eFile_PrintFileContents)
-    i.eFile_RClose                           0x00002884   Section        0  efile.o(i.eFile_RClose)
-    i.eFile_ROpen                            0x000028a0   Section        0  efile.o(i.eFile_ROpen)
-    i.eFile_ReadNext                         0x00002958   Section        0  efile.o(i.eFile_ReadNext)
-    i.eFile_WClose                           0x000029bc   Section        0  efile.o(i.eFile_WClose)
-    i.eFile_WOpen                            0x00002a14   Section        0  efile.o(i.eFile_WOpen)
-    i.eFile_Write                            0x00002aec   Section        0  efile.o(i.eFile_Write)
-    i.eFile_findFile                         0x00002be8   Section        0  efile.o(i.eFile_findFile)
-    i.echo                                   0x00002c50   Section        0  interpreter.o(i.echo)
-    i.fft                                    0x00002c5c   Section        0  interpreter.o(i.fft)
-    i.fftToggle                              0x00002ce0   Section        0  interpreter.o(i.fftToggle)
-    i.filter                                 0x00002d40   Section        0  interpreter.o(i.filter)
-    i.findOpenBlock                          0x00002da8   Section        0  efile.o(i.findOpenBlock)
-    i.format                                 0x00002ddc   Section        0  interpreter.o(i.format)
-    i.getFileSize                            0x00002de8   Section        0  efile.o(i.getFileSize)
-    i.init_openThreads                       0x00002e08   Section        0  os.o(i.init_openThreads)
-    i.ls                                     0x00002e2c   Section        0  interpreter.o(i.ls)
-    i.main                                   0x00002e38   Section        0  sdctestmain.o(i.main)
-    i.performance                            0x00002ed4   Section        0  interpreter.o(i.performance)
-    i.pop_OpenThreads                        0x00002ed8   Section        0  os.o(i.pop_OpenThreads)
-    i.power_off                              0x00002f04   Section        0  edisk.o(i.power_off)
-    power_off                                0x00002f05   Thumb Code     8  edisk.o(i.power_off)
-    i.power_on                               0x00002f10   Section        0  edisk.o(i.power_on)
-    power_on                                 0x00002f11   Thumb Code    20  edisk.o(i.power_on)
-    i.push_OpenThreads                       0x00002f28   Section        0  os.o(i.push_OpenThreads)
-    i.rcvr_datablock                         0x00002f4c   Section        0  edisk.o(i.rcvr_datablock)
-    rcvr_datablock                           0x00002f4d   Thumb Code    76  edisk.o(i.rcvr_datablock)
-    i.rcvr_spi                               0x00002f9c   Section        0  edisk.o(i.rcvr_spi)
-    rcvr_spi                                 0x00002f9d   Thumb Code    38  edisk.o(i.rcvr_spi)
-    i.rcvr_spi_m                             0x00002fc8   Section        0  edisk.o(i.rcvr_spi_m)
-    rcvr_spi_m                               0x00002fc9   Thumb Code    12  edisk.o(i.rcvr_spi_m)
-    i.rm                                     0x00002fd4   Section        0  interpreter.o(i.rm)
-    i.sendCommand                            0x0000303c   Section        0  interpreter.o(i.sendCommand)
-    i.send_cmd                               0x000030ac   Section        0  edisk.o(i.send_cmd)
-    send_cmd                                 0x000030ad   Thumb Code   112  edisk.o(i.send_cmd)
-    i.send_initial_clock_train               0x0000311c   Section        0  edisk.o(i.send_initial_clock_train)
-    send_initial_clock_train                 0x0000311d   Thumb Code    32  edisk.o(i.send_initial_clock_train)
-    i.set_max_speed                          0x0000313c   Section        0  edisk.o(i.set_max_speed)
-    set_max_speed                            0x0000313d   Thumb Code    10  edisk.o(i.set_max_speed)
-    i.sqrt                                   0x00003146   Section        0  sqrt.o(i.sqrt)
-    i.touch                                  0x00003194   Section        0  interpreter.o(i.touch)
-    i.vi                                     0x000031ec   Section        0  interpreter.o(i.vi)
-    i.wait_ready                             0x0000323c   Section        0  edisk.o(i.wait_ready)
-    wait_ready                               0x0000323d   Thumb Code    36  edisk.o(i.wait_ready)
-    i.xmit_datablock                         0x00003264   Section        0  edisk.o(i.xmit_datablock)
-    xmit_datablock                           0x00003265   Thumb Code    94  edisk.o(i.xmit_datablock)
-    i.xmit_spi                               0x000032c4   Section        0  edisk.o(i.xmit_spi)
-    xmit_spi                                 0x000032c5   Thumb Code    38  edisk.o(i.xmit_spi)
-    x$fpl$dfix                               0x000032f0   Section       94  dfix.o(x$fpl$dfix)
-    x$fpl$dflt                               0x0000334e   Section       46  dflt_clz.o(x$fpl$dflt)
-    x$fpl$dnaninf                            0x0000337c   Section      156  dnaninf.o(x$fpl$dnaninf)
-    x$fpl$dsqrt                              0x00003418   Section      408  dsqrt_umaal.o(x$fpl$dsqrt)
-    .constdata                               0x000035b0   Section      512  efile.o(.constdata)
-    x$fpl$usenofp                            0x000035b0   Section        0  usenofp.o(x$fpl$usenofp)
-    .conststring                             0x000037b0   Section       70  interpreter.o(.conststring)
+    i.eFile_Format                           0x000026e0   Section        0  efile.o(i.eFile_Format)
+    i.eFile_Init                             0x00002764   Section        0  efile.o(i.eFile_Init)
+    i.eFile_PrintFileContents                0x0000286c   Section        0  efile.o(i.eFile_PrintFileContents)
+    i.eFile_RClose                           0x000028a0   Section        0  efile.o(i.eFile_RClose)
+    i.eFile_ROpen                            0x000028bc   Section        0  efile.o(i.eFile_ROpen)
+    i.eFile_ReadNext                         0x00002974   Section        0  efile.o(i.eFile_ReadNext)
+    i.eFile_WClose                           0x000029d8   Section        0  efile.o(i.eFile_WClose)
+    i.eFile_WOpen                            0x00002a30   Section        0  efile.o(i.eFile_WOpen)
+    i.eFile_Write                            0x00002b08   Section        0  efile.o(i.eFile_Write)
+    i.eFile_findFile                         0x00002c0c   Section        0  efile.o(i.eFile_findFile)
+    i.echo                                   0x00002c5c   Section        0  interpreter.o(i.echo)
+    i.fft                                    0x00002c68   Section        0  interpreter.o(i.fft)
+    i.fftToggle                              0x00002cec   Section        0  interpreter.o(i.fftToggle)
+    i.filter                                 0x00002d4c   Section        0  interpreter.o(i.filter)
+    i.findOpenBlock                          0x00002db4   Section        0  efile.o(i.findOpenBlock)
+    i.format                                 0x00002de8   Section        0  interpreter.o(i.format)
+    i.getFileSize                            0x00002e08   Section        0  efile.o(i.getFileSize)
+    i.init_openThreads                       0x00002e28   Section        0  os.o(i.init_openThreads)
+    i.ls                                     0x00002e4c   Section        0  interpreter.o(i.ls)
+    i.main                                   0x00002e58   Section        0  sdctestmain.o(i.main)
+    i.performance                            0x00002ef4   Section        0  interpreter.o(i.performance)
+    i.pop_OpenThreads                        0x00002ef8   Section        0  os.o(i.pop_OpenThreads)
+    i.power_off                              0x00002f24   Section        0  edisk.o(i.power_off)
+    power_off                                0x00002f25   Thumb Code     8  edisk.o(i.power_off)
+    i.power_on                               0x00002f30   Section        0  edisk.o(i.power_on)
+    power_on                                 0x00002f31   Thumb Code    20  edisk.o(i.power_on)
+    i.push_OpenThreads                       0x00002f48   Section        0  os.o(i.push_OpenThreads)
+    i.rcvr_datablock                         0x00002f6c   Section        0  edisk.o(i.rcvr_datablock)
+    rcvr_datablock                           0x00002f6d   Thumb Code    76  edisk.o(i.rcvr_datablock)
+    i.rcvr_spi                               0x00002fbc   Section        0  edisk.o(i.rcvr_spi)
+    rcvr_spi                                 0x00002fbd   Thumb Code    38  edisk.o(i.rcvr_spi)
+    i.rcvr_spi_m                             0x00002fe8   Section        0  edisk.o(i.rcvr_spi_m)
+    rcvr_spi_m                               0x00002fe9   Thumb Code    12  edisk.o(i.rcvr_spi_m)
+    i.rm                                     0x00002ff4   Section        0  interpreter.o(i.rm)
+    i.sendCommand                            0x0000305c   Section        0  interpreter.o(i.sendCommand)
+    i.send_cmd                               0x000030cc   Section        0  edisk.o(i.send_cmd)
+    send_cmd                                 0x000030cd   Thumb Code   112  edisk.o(i.send_cmd)
+    i.send_initial_clock_train               0x0000313c   Section        0  edisk.o(i.send_initial_clock_train)
+    send_initial_clock_train                 0x0000313d   Thumb Code    32  edisk.o(i.send_initial_clock_train)
+    i.set_max_speed                          0x0000315c   Section        0  edisk.o(i.set_max_speed)
+    set_max_speed                            0x0000315d   Thumb Code    10  edisk.o(i.set_max_speed)
+    i.sqrt                                   0x00003166   Section        0  sqrt.o(i.sqrt)
+    i.touch                                  0x000031b4   Section        0  interpreter.o(i.touch)
+    i.vi                                     0x0000320c   Section        0  interpreter.o(i.vi)
+    i.wait_ready                             0x0000325c   Section        0  edisk.o(i.wait_ready)
+    wait_ready                               0x0000325d   Thumb Code    36  edisk.o(i.wait_ready)
+    i.xmit_datablock                         0x00003284   Section        0  edisk.o(i.xmit_datablock)
+    xmit_datablock                           0x00003285   Thumb Code    94  edisk.o(i.xmit_datablock)
+    i.xmit_spi                               0x000032e4   Section        0  edisk.o(i.xmit_spi)
+    xmit_spi                                 0x000032e5   Thumb Code    38  edisk.o(i.xmit_spi)
+    x$fpl$dfix                               0x00003310   Section       94  dfix.o(x$fpl$dfix)
+    x$fpl$dflt                               0x0000336e   Section       46  dflt_clz.o(x$fpl$dflt)
+    x$fpl$dnaninf                            0x0000339c   Section      156  dnaninf.o(x$fpl$dnaninf)
+    x$fpl$dsqrt                              0x00003438   Section      408  dsqrt_umaal.o(x$fpl$dsqrt)
+    .constdata                               0x000035d0   Section      512  efile.o(.constdata)
+    x$fpl$usenofp                            0x000035d0   Section        0  usenofp.o(x$fpl$usenofp)
+    .conststring                             0x000037d0   Section       70  interpreter.o(.conststring)
     .data                                    0x20000000   Section       24  sdctestmain.o(.data)
     .data                                    0x20000018   Section        5  edisk.o(.data)
     Stat                                     0x20000018   Data           1  edisk.o(.data)
@@ -1597,45 +1597,45 @@ Image Symbol Table
     eDisk_WriteBlock                         0x000024b5   Thumb Code    20  edisk.o(i.eDisk_WriteBlock)
     eFile_Create                             0x000024c9   Thumb Code   182  efile.o(i.eFile_Create)
     eFile_Delete                             0x0000258d   Thumb Code   166  efile.o(i.eFile_Delete)
-    eFile_Directory                          0x00002651   Thumb Code    76  efile.o(i.eFile_Directory)
-    eFile_Format                             0x000026c5   Thumb Code   118  efile.o(i.eFile_Format)
-    eFile_Init                               0x00002749   Thumb Code   148  efile.o(i.eFile_Init)
-    eFile_PrintFileContents                  0x00002851   Thumb Code    52  efile.o(i.eFile_PrintFileContents)
-    eFile_RClose                             0x00002885   Thumb Code    18  efile.o(i.eFile_RClose)
-    eFile_ROpen                              0x000028a1   Thumb Code   122  efile.o(i.eFile_ROpen)
-    eFile_ReadNext                           0x00002959   Thumb Code    92  efile.o(i.eFile_ReadNext)
-    eFile_WClose                             0x000029bd   Thumb Code    70  efile.o(i.eFile_WClose)
-    eFile_WOpen                              0x00002a15   Thumb Code   148  efile.o(i.eFile_WOpen)
-    eFile_Write                              0x00002aed   Thumb Code   216  efile.o(i.eFile_Write)
-    eFile_findFile                           0x00002be9   Thumb Code    82  efile.o(i.eFile_findFile)
-    echo                                     0x00002c51   Thumb Code    12  interpreter.o(i.echo)
-    fft                                      0x00002c5d   Thumb Code   118  interpreter.o(i.fft)
-    fftToggle                                0x00002ce1   Thumb Code    58  interpreter.o(i.fftToggle)
-    filter                                   0x00002d41   Thumb Code    52  interpreter.o(i.filter)
-    findOpenBlock                            0x00002da9   Thumb Code    48  efile.o(i.findOpenBlock)
-    format                                   0x00002ddd   Thumb Code    10  interpreter.o(i.format)
-    getFileSize                              0x00002de9   Thumb Code    26  efile.o(i.getFileSize)
-    init_openThreads                         0x00002e09   Thumb Code    28  os.o(i.init_openThreads)
-    ls                                       0x00002e2d   Thumb Code    10  interpreter.o(i.ls)
-    main                                     0x00002e39   Thumb Code   108  sdctestmain.o(i.main)
-    performance                              0x00002ed5   Thumb Code     2  interpreter.o(i.performance)
-    pop_OpenThreads                          0x00002ed9   Thumb Code    34  os.o(i.pop_OpenThreads)
-    push_OpenThreads                         0x00002f29   Thumb Code    26  os.o(i.push_OpenThreads)
-    rm                                       0x00002fd5   Thumb Code    46  interpreter.o(i.rm)
-    sendCommand                              0x0000303d   Thumb Code    74  interpreter.o(i.sendCommand)
-    sqrt                                     0x00003147   Thumb Code    76  sqrt.o(i.sqrt)
-    touch                                    0x00003195   Thumb Code    28  interpreter.o(i.touch)
-    vi                                       0x000031ed   Thumb Code    74  interpreter.o(i.vi)
-    __aeabi_d2iz                             0x000032f1   Thumb Code     0  dfix.o(x$fpl$dfix)
-    _dfix                                    0x000032f1   Thumb Code    94  dfix.o(x$fpl$dfix)
-    __aeabi_i2d                              0x0000334f   Thumb Code     0  dflt_clz.o(x$fpl$dflt)
-    _dflt                                    0x0000334f   Thumb Code    46  dflt_clz.o(x$fpl$dflt)
-    __fpl_dnaninf                            0x0000337d   Thumb Code   156  dnaninf.o(x$fpl$dnaninf)
-    _dsqrt                                   0x00003419   Thumb Code   404  dsqrt_umaal.o(x$fpl$dsqrt)
-    __I$use$fp                               0x000035b0   Number         0  usenofp.o(x$fpl$usenofp)
-    format_disk                              0x000035b0   Data         512  efile.o(.constdata)
-    Region$$Table$$Base                      0x000037f8   Number         0  anon$$obj.o(Region$$Table)
-    Region$$Table$$Limit                     0x00003818   Number         0  anon$$obj.o(Region$$Table)
+    eFile_Directory                          0x00002651   Thumb Code    88  efile.o(i.eFile_Directory)
+    eFile_Format                             0x000026e1   Thumb Code   118  efile.o(i.eFile_Format)
+    eFile_Init                               0x00002765   Thumb Code   148  efile.o(i.eFile_Init)
+    eFile_PrintFileContents                  0x0000286d   Thumb Code    52  efile.o(i.eFile_PrintFileContents)
+    eFile_RClose                             0x000028a1   Thumb Code    18  efile.o(i.eFile_RClose)
+    eFile_ROpen                              0x000028bd   Thumb Code   122  efile.o(i.eFile_ROpen)
+    eFile_ReadNext                           0x00002975   Thumb Code    92  efile.o(i.eFile_ReadNext)
+    eFile_WClose                             0x000029d9   Thumb Code    70  efile.o(i.eFile_WClose)
+    eFile_WOpen                              0x00002a31   Thumb Code   148  efile.o(i.eFile_WOpen)
+    eFile_Write                              0x00002b09   Thumb Code   222  efile.o(i.eFile_Write)
+    eFile_findFile                           0x00002c0d   Thumb Code    76  efile.o(i.eFile_findFile)
+    echo                                     0x00002c5d   Thumb Code    12  interpreter.o(i.echo)
+    fft                                      0x00002c69   Thumb Code   118  interpreter.o(i.fft)
+    fftToggle                                0x00002ced   Thumb Code    58  interpreter.o(i.fftToggle)
+    filter                                   0x00002d4d   Thumb Code    52  interpreter.o(i.filter)
+    findOpenBlock                            0x00002db5   Thumb Code    48  efile.o(i.findOpenBlock)
+    format                                   0x00002de9   Thumb Code    16  interpreter.o(i.format)
+    getFileSize                              0x00002e09   Thumb Code    26  efile.o(i.getFileSize)
+    init_openThreads                         0x00002e29   Thumb Code    28  os.o(i.init_openThreads)
+    ls                                       0x00002e4d   Thumb Code    10  interpreter.o(i.ls)
+    main                                     0x00002e59   Thumb Code   108  sdctestmain.o(i.main)
+    performance                              0x00002ef5   Thumb Code     2  interpreter.o(i.performance)
+    pop_OpenThreads                          0x00002ef9   Thumb Code    34  os.o(i.pop_OpenThreads)
+    push_OpenThreads                         0x00002f49   Thumb Code    26  os.o(i.push_OpenThreads)
+    rm                                       0x00002ff5   Thumb Code    46  interpreter.o(i.rm)
+    sendCommand                              0x0000305d   Thumb Code    74  interpreter.o(i.sendCommand)
+    sqrt                                     0x00003167   Thumb Code    76  sqrt.o(i.sqrt)
+    touch                                    0x000031b5   Thumb Code    28  interpreter.o(i.touch)
+    vi                                       0x0000320d   Thumb Code    74  interpreter.o(i.vi)
+    __aeabi_d2iz                             0x00003311   Thumb Code     0  dfix.o(x$fpl$dfix)
+    _dfix                                    0x00003311   Thumb Code    94  dfix.o(x$fpl$dfix)
+    __aeabi_i2d                              0x0000336f   Thumb Code     0  dflt_clz.o(x$fpl$dflt)
+    _dflt                                    0x0000336f   Thumb Code    46  dflt_clz.o(x$fpl$dflt)
+    __fpl_dnaninf                            0x0000339d   Thumb Code   156  dnaninf.o(x$fpl$dnaninf)
+    _dsqrt                                   0x00003439   Thumb Code   404  dsqrt_umaal.o(x$fpl$dsqrt)
+    __I$use$fp                               0x000035d0   Number         0  usenofp.o(x$fpl$usenofp)
+    format_disk                              0x000035d0   Data         512  efile.o(.constdata)
+    Region$$Table$$Base                      0x00003818   Number         0  anon$$obj.o(Region$$Table)
+    Region$$Table$$Limit                     0x00003838   Number         0  anon$$obj.o(Region$$Table)
     Idlecount                                0x20000000   Data           4  sdctestmain.o(.data)
     NumCreated                               0x20000004   Data           4  sdctestmain.o(.data)
     NumSamples                               0x20000008   Data           4  sdctestmain.o(.data)
@@ -1702,9 +1702,9 @@ Memory Map of the image
 
   Image Entry point : 0x0000026d
 
-  Load Region LR_1 (Base: 0x00000000, Size: 0x00003b28, Max: 0xffffffff, ABSOLUTE, COMPRESSED[0x00003880])
+  Load Region LR_1 (Base: 0x00000000, Size: 0x00003b48, Max: 0xffffffff, ABSOLUTE, COMPRESSED[0x000038a0])
 
-    Execution Region ER_RO (Base: 0x00000000, Size: 0x00003818, Max: 0xffffffff, ABSOLUTE)
+    Execution Region ER_RO (Base: 0x00000000, Size: 0x00003838, Max: 0xffffffff, ABSOLUTE)
 
     Base Addr    Size         Type   Attr      Idx    E Section Name        Object
 
@@ -1860,60 +1860,59 @@ Memory Map of the image
     0x000024b4   0x00000014   Code   RO          137    i.eDisk_WriteBlock  edisk.o
     0x000024c8   0x000000c4   Code   RO          853    i.eFile_Create      efile.o
     0x0000258c   0x000000c4   Code   RO          854    i.eFile_Delete      efile.o
-    0x00002650   0x00000074   Code   RO          855    i.eFile_Directory   efile.o
-    0x000026c4   0x00000084   Code   RO          857    i.eFile_Format      efile.o
-    0x00002748   0x00000108   Code   RO          858    i.eFile_Init        efile.o
-    0x00002850   0x00000034   Code   RO          859    i.eFile_PrintFileContents  efile.o
-    0x00002884   0x0000001c   Code   RO          860    i.eFile_RClose      efile.o
-    0x000028a0   0x000000b8   Code   RO          861    i.eFile_ROpen       efile.o
-    0x00002958   0x00000064   Code   RO          862    i.eFile_ReadNext    efile.o
-    0x000029bc   0x00000058   Code   RO          864    i.eFile_WClose      efile.o
-    0x00002a14   0x000000d8   Code   RO          865    i.eFile_WOpen       efile.o
-    0x00002aec   0x000000fc   Code   RO          866    i.eFile_Write       efile.o
-    0x00002be8   0x00000068   Code   RO          867    i.eFile_findFile    efile.o
-    0x00002c50   0x0000000c   Code   RO          729    i.echo              interpreter.o
-    0x00002c5c   0x00000084   Code   RO          730    i.fft               interpreter.o
-    0x00002ce0   0x00000060   Code   RO          731    i.fftToggle         interpreter.o
-    0x00002d40   0x00000068   Code   RO          732    i.filter            interpreter.o
-    0x00002da8   0x00000034   Code   RO          868    i.findOpenBlock     efile.o
-    0x00002ddc   0x0000000a   Code   RO          733    i.format            interpreter.o
-    0x00002de6   0x00000002   PAD
-    0x00002de8   0x00000020   Code   RO          869    i.getFileSize       efile.o
-    0x00002e08   0x00000024   Code   RO          347    i.init_openThreads  os.o
-    0x00002e2c   0x0000000a   Code   RO          734    i.ls                interpreter.o
-    0x00002e36   0x00000002   PAD
-    0x00002e38   0x0000009c   Code   RO           21    i.main              sdctestmain.o
-    0x00002ed4   0x00000002   Code   RO          735    i.performance       interpreter.o
-    0x00002ed6   0x00000002   PAD
-    0x00002ed8   0x0000002c   Code   RO          348    i.pop_OpenThreads   os.o
-    0x00002f04   0x0000000c   Code   RO          139    i.power_off         edisk.o
-    0x00002f10   0x00000018   Code   RO          140    i.power_on          edisk.o
-    0x00002f28   0x00000024   Code   RO          349    i.push_OpenThreads  os.o
-    0x00002f4c   0x00000050   Code   RO          141    i.rcvr_datablock    edisk.o
-    0x00002f9c   0x0000002c   Code   RO          142    i.rcvr_spi          edisk.o
-    0x00002fc8   0x0000000c   Code   RO          143    i.rcvr_spi_m        edisk.o
-    0x00002fd4   0x00000068   Code   RO          736    i.rm                interpreter.o
-    0x0000303c   0x00000070   Code   RO          737    i.sendCommand       interpreter.o
-    0x000030ac   0x00000070   Code   RO          144    i.send_cmd          edisk.o
-    0x0000311c   0x00000020   Code   RO          145    i.send_initial_clock_train  edisk.o
-    0x0000313c   0x0000000a   Code   RO          146    i.set_max_speed     edisk.o
-    0x00003146   0x0000004c   Code   RO         1177    i.sqrt              m_ws.l(sqrt.o)
-    0x00003192   0x00000002   PAD
-    0x00003194   0x00000058   Code   RO          739    i.touch             interpreter.o
-    0x000031ec   0x00000050   Code   RO          740    i.vi                interpreter.o
-    0x0000323c   0x00000028   Code   RO          147    i.wait_ready        edisk.o
-    0x00003264   0x0000005e   Code   RO          148    i.xmit_datablock    edisk.o
-    0x000032c2   0x00000002   PAD
-    0x000032c4   0x0000002c   Code   RO          149    i.xmit_spi          edisk.o
-    0x000032f0   0x0000005e   Code   RO         1160    x$fpl$dfix          fz_ws.l(dfix.o)
-    0x0000334e   0x0000002e   Code   RO         1169    x$fpl$dflt          fz_ws.l(dflt_clz.o)
-    0x0000337c   0x0000009c   Code   RO         1286    x$fpl$dnaninf       fz_ws.l(dnaninf.o)
-    0x00003418   0x00000198   Code   RO         1290    x$fpl$dsqrt         fz_ws.l(dsqrt_umaal.o)
-    0x000035b0   0x00000000   Code   RO         1292    x$fpl$usenofp       fz_ws.l(usenofp.o)
-    0x000035b0   0x00000200   Data   RO          871    .constdata          efile.o
-    0x000037b0   0x00000046   Data   RO          743    .conststring        interpreter.o
-    0x000037f6   0x00000002   PAD
-    0x000037f8   0x00000020   Data   RO         1487    Region$$Table       anon$$obj.o
+    0x00002650   0x00000090   Code   RO          855    i.eFile_Directory   efile.o
+    0x000026e0   0x00000084   Code   RO          857    i.eFile_Format      efile.o
+    0x00002764   0x00000108   Code   RO          858    i.eFile_Init        efile.o
+    0x0000286c   0x00000034   Code   RO          859    i.eFile_PrintFileContents  efile.o
+    0x000028a0   0x0000001c   Code   RO          860    i.eFile_RClose      efile.o
+    0x000028bc   0x000000b8   Code   RO          861    i.eFile_ROpen       efile.o
+    0x00002974   0x00000064   Code   RO          862    i.eFile_ReadNext    efile.o
+    0x000029d8   0x00000058   Code   RO          864    i.eFile_WClose      efile.o
+    0x00002a30   0x000000d8   Code   RO          865    i.eFile_WOpen       efile.o
+    0x00002b08   0x00000104   Code   RO          866    i.eFile_Write       efile.o
+    0x00002c0c   0x00000050   Code   RO          867    i.eFile_findFile    efile.o
+    0x00002c5c   0x0000000c   Code   RO          729    i.echo              interpreter.o
+    0x00002c68   0x00000084   Code   RO          730    i.fft               interpreter.o
+    0x00002cec   0x00000060   Code   RO          731    i.fftToggle         interpreter.o
+    0x00002d4c   0x00000068   Code   RO          732    i.filter            interpreter.o
+    0x00002db4   0x00000034   Code   RO          868    i.findOpenBlock     efile.o
+    0x00002de8   0x00000020   Code   RO          733    i.format            interpreter.o
+    0x00002e08   0x00000020   Code   RO          869    i.getFileSize       efile.o
+    0x00002e28   0x00000024   Code   RO          347    i.init_openThreads  os.o
+    0x00002e4c   0x0000000a   Code   RO          734    i.ls                interpreter.o
+    0x00002e56   0x00000002   PAD
+    0x00002e58   0x0000009c   Code   RO           21    i.main              sdctestmain.o
+    0x00002ef4   0x00000002   Code   RO          735    i.performance       interpreter.o
+    0x00002ef6   0x00000002   PAD
+    0x00002ef8   0x0000002c   Code   RO          348    i.pop_OpenThreads   os.o
+    0x00002f24   0x0000000c   Code   RO          139    i.power_off         edisk.o
+    0x00002f30   0x00000018   Code   RO          140    i.power_on          edisk.o
+    0x00002f48   0x00000024   Code   RO          349    i.push_OpenThreads  os.o
+    0x00002f6c   0x00000050   Code   RO          141    i.rcvr_datablock    edisk.o
+    0x00002fbc   0x0000002c   Code   RO          142    i.rcvr_spi          edisk.o
+    0x00002fe8   0x0000000c   Code   RO          143    i.rcvr_spi_m        edisk.o
+    0x00002ff4   0x00000068   Code   RO          736    i.rm                interpreter.o
+    0x0000305c   0x00000070   Code   RO          737    i.sendCommand       interpreter.o
+    0x000030cc   0x00000070   Code   RO          144    i.send_cmd          edisk.o
+    0x0000313c   0x00000020   Code   RO          145    i.send_initial_clock_train  edisk.o
+    0x0000315c   0x0000000a   Code   RO          146    i.set_max_speed     edisk.o
+    0x00003166   0x0000004c   Code   RO         1177    i.sqrt              m_ws.l(sqrt.o)
+    0x000031b2   0x00000002   PAD
+    0x000031b4   0x00000058   Code   RO          739    i.touch             interpreter.o
+    0x0000320c   0x00000050   Code   RO          740    i.vi                interpreter.o
+    0x0000325c   0x00000028   Code   RO          147    i.wait_ready        edisk.o
+    0x00003284   0x0000005e   Code   RO          148    i.xmit_datablock    edisk.o
+    0x000032e2   0x00000002   PAD
+    0x000032e4   0x0000002c   Code   RO          149    i.xmit_spi          edisk.o
+    0x00003310   0x0000005e   Code   RO         1160    x$fpl$dfix          fz_ws.l(dfix.o)
+    0x0000336e   0x0000002e   Code   RO         1169    x$fpl$dflt          fz_ws.l(dflt_clz.o)
+    0x0000339c   0x0000009c   Code   RO         1286    x$fpl$dnaninf       fz_ws.l(dnaninf.o)
+    0x00003438   0x00000198   Code   RO         1290    x$fpl$dsqrt         fz_ws.l(dsqrt_umaal.o)
+    0x000035d0   0x00000000   Code   RO         1292    x$fpl$usenofp       fz_ws.l(usenofp.o)
+    0x000035d0   0x00000200   Data   RO          871    .constdata          efile.o
+    0x000037d0   0x00000046   Data   RO          743    .conststring        interpreter.o
+    0x00003816   0x00000002   PAD
+    0x00003818   0x00000020   Data   RO         1487    Region$$Table       anon$$obj.o
 
 
     Execution Region ER_RW (Base: 0x20000000, Size: 0x00000310, Max: 0xffffffff, ABSOLUTE, COMPRESSED[0x00000068])
@@ -1956,9 +1955,9 @@ Image component sizes
         36          8          0          4          0        921   adc.o
        718        240          0          0          0        240   cr4_fft_64_stm32.o
       1944        180          0          5          0      12246   edisk.o
-      2012        448        512        532       1528      10436   efile.o
+      2024        448        512        532       1528      10468   efile.o
         16          8          0         12        612       1015   filter.o
-      1298        464         70        120         70       8921   interpreter.o
+      1320        480         70        120         70       8925   interpreter.o
       2536        350          0         68       5636      12459   os.o
         84          8          0          0          0        208   osasm.o
        124          6          0          0          0        383   pll.o
@@ -1968,9 +1967,9 @@ Image component sizes
        860        144          0         16        128       8565   uart2.o
 
     ----------------------------------------------------------------------
-     11036       2596        616        784       9128      63299   Object Totals
+     11068       2612        616        784       9128      63335   Object Totals
          0          0         32          0          0          0   (incl. Generated)
-         8          0          2          3          2          0   (incl. Padding)
+         6          0          2          3          2          0   (incl. Padding)
 
     ----------------------------------------------------------------------
 
@@ -2056,15 +2055,15 @@ Image component sizes
 
       Code (inc. data)   RO Data    RW Data    ZI Data      Debug   
 
-     13744       2772        616        784       9224      59527   Grand Totals
-     13744       2772        616        104       9224      59527   ELF Image Totals (compressed)
-     13744       2772        616        104          0          0   ROM Totals
+     13776       2788        616        784       9224      59563   Grand Totals
+     13776       2788        616        104       9224      59563   ELF Image Totals (compressed)
+     13776       2788        616        104          0          0   ROM Totals
 
 ==============================================================================
 
-    Total RO  Size (Code + RO Data)                14360 (  14.02kB)
+    Total RO  Size (Code + RO Data)                14392 (  14.05kB)
     Total RW  Size (RW Data + ZI Data)             10008 (   9.77kB)
-    Total ROM Size (Code + RO Data + RW Data)      14464 (  14.13kB)
+    Total ROM Size (Code + RO Data + RW Data)      14496 (  14.16kB)
 
 ==============================================================================
 

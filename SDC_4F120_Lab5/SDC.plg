@@ -8,327 +8,110 @@ Project File Date:  03/24/2014
 
 <h2>Output:</h2>
 Build target 'SDC'
-compiling efile.c...
-efile.c(54): warning:  #177-D: variable "fileBlock" was declared but never referenced
-efile.c(55): warning:  #177-D: variable "result" was declared but never referenced
-efile.c(174): warning:  #177-D: variable "k" was declared but never referenced
-linking...
-Program Size: Code=13700 RO-data=608 RW-data=776 ZI-data=9920  
-".\SDC.axf" - 0 Errors, 3 Warning(s).
-Load "C:\\Users\\Colin\\Documents\\GitHub\\EE445M\\SDC_4F120_Lab5\\SDC.axf" 
-Connecting: Mode=JTAG, Speed=1000000Hz
-Erase Done.
-Programming Done.
-Verify OK.
-Build target 'SDC'
-compiling SDCTestMain.c...
-SDCTestMain.c(51): warning:  #550-D: variable "voltage" was set but never used
-linking...
-Program Size: Code=9620 RO-data=544 RW-data=652 ZI-data=9236  
-".\SDC.axf" - 0 Errors, 1 Warning(s).
-Load "C:\\Users\\Colin\\Documents\\GitHub\\EE445M\\SDC_4F120_Lab5\\SDC.axf" 
-Connecting: Mode=JTAG, Speed=1000000Hz
-Erase Done.
-Programming Done.
-Verify OK.
-Build target 'SDC'
-compiling SDCTestMain.c...
-SDCTestMain.c(51): warning:  #550-D: variable "voltage" was set but never used
-linking...
-Program Size: Code=13700 RO-data=608 RW-data=776 ZI-data=9920  
-".\SDC.axf" - 0 Errors, 1 Warning(s).
-Load "C:\\Users\\Colin\\Documents\\GitHub\\EE445M\\SDC_4F120_Lab5\\SDC.axf" 
-Connecting: Mode=JTAG, Speed=1000000Hz
-Erase Done.
-Programming Done.
-Verify OK.
-Build target 'SDC'
 compiling Interpreter.c...
-Interpreter.c(63): warning:  #111-D: statement is unreachable
-Interpreter.c(70): warning:  #111-D: statement is unreachable
-Interpreter.c(108): warning:  #177-D: variable "i" was declared but never referenced
-Interpreter.c(332): warning:  #550-D: variable "pixelPos" was set but never used
+Interpreter.c(64): warning:  #111-D: statement is unreachable
+Interpreter.c(71): warning:  #111-D: statement is unreachable
+Interpreter.c(109): warning:  #177-D: variable "i" was declared but never referenced
+Interpreter.c(343): warning:  #550-D: variable "pixelPos" was set but never used
 linking...
-Program Size: Code=13700 RO-data=608 RW-data=776 ZI-data=9920  
+Program Size: Code=13764 RO-data=616 RW-data=784 ZI-data=9224  
 ".\SDC.axf" - 0 Errors, 4 Warning(s).
 Load "C:\\Users\\Colin\\Documents\\GitHub\\EE445M\\SDC_4F120_Lab5\\SDC.axf" 
 Connecting: Mode=JTAG, Speed=1000000Hz
 Erase Done.
 Programming Done.
 Verify OK.
-Build target 'SDC'
+Rebuild target 'SDC'
+assembling startup.s...
+compiling SDCTestMain.c...
+SDCTestMain.c(51): warning:  #550-D: variable "voltage" was set but never used
+compiling eDisk.c...
+compiling PLL.c...
+compiling OS.c...
+OS.c(462): warning:  #61-D: integer operation result is out of range
+OS.c(872): warning:  #61-D: integer operation result is out of range
+assembling osasm.s...
+compiling UART2.c...
+compiling adc.c...
 compiling Interpreter.c...
 Interpreter.c(64): warning:  #111-D: statement is unreachable
 Interpreter.c(71): warning:  #111-D: statement is unreachable
 Interpreter.c(109): warning:  #177-D: variable "i" was declared but never referenced
-Interpreter.c(333): warning:  #550-D: variable "pixelPos" was set but never used
-linking...
-Program Size: Code=13712 RO-data=608 RW-data=776 ZI-data=9920  
-".\SDC.axf" - 0 Errors, 4 Warning(s).
-Load "C:\\Users\\Colin\\Documents\\GitHub\\EE445M\\SDC_4F120_Lab5\\SDC.axf" 
-Connecting: Mode=JTAG, Speed=1000000Hz
-Erase Done.
-Programming Done.
-Verify OK.
-Build target 'SDC'
-compiling SDCTestMain.c...
-SDCTestMain.c(51): warning:  #550-D: variable "voltage" was set but never used
-linking...
-Program Size: Code=9704 RO-data=544 RW-data=652 ZI-data=9236  
-".\SDC.axf" - 0 Errors, 1 Warning(s).
-Load "C:\\Users\\Colin\\Documents\\GitHub\\EE445M\\SDC_4F120_Lab5\\SDC.axf" 
-Connecting: Mode=JTAG, Speed=1000000Hz
-Erase Done.
-Programming Done.
-Verify OK.
-Build target 'SDC'
-compiling SDCTestMain.c...
-SDCTestMain.c(51): warning:  #550-D: variable "voltage" was set but never used
-linking...
-Program Size: Code=13712 RO-data=608 RW-data=776 ZI-data=9920  
-".\SDC.axf" - 0 Errors, 1 Warning(s).
-Load "C:\\Users\\Colin\\Documents\\GitHub\\EE445M\\SDC_4F120_Lab5\\SDC.axf" 
-Connecting: Mode=JTAG, Speed=1000000Hz
-Erase Done.
-Programming Done.
-Verify OK.
-Build target 'SDC'
+Interpreter.c(343): warning:  #550-D: variable "pixelPos" was set but never used
 compiling efile.c...
 efile.c(54): warning:  #177-D: variable "fileBlock" was declared but never referenced
 efile.c(55): warning:  #177-D: variable "result" was declared but never referenced
 efile.c(174): warning:  #177-D: variable "k" was declared but never referenced
+compiling Filter.c...
+assembling cr4_fft_64_stm32.s...
+compiling SysTick.c...
 linking...
-Program Size: Code=13760 RO-data=608 RW-data=776 ZI-data=9920  
-".\SDC.axf" - 0 Errors, 3 Warning(s).
+Program Size: Code=13772 RO-data=616 RW-data=784 ZI-data=9224  
+".\SDC.axf" - 0 Errors, 10 Warning(s).
 Load "C:\\Users\\Colin\\Documents\\GitHub\\EE445M\\SDC_4F120_Lab5\\SDC.axf" 
 Connecting: Mode=JTAG, Speed=1000000Hz
 Erase Done.
 Programming Done.
 Verify OK.
-Build target 'SDC'
+Rebuild target 'SDC'
+assembling startup.s...
+compiling SDCTestMain.c...
+SDCTestMain.c(51): warning:  #550-D: variable "voltage" was set but never used
+compiling eDisk.c...
+compiling PLL.c...
+compiling OS.c...
+OS.c(462): warning:  #61-D: integer operation result is out of range
+OS.c(872): warning:  #61-D: integer operation result is out of range
+assembling osasm.s...
+compiling UART2.c...
+compiling adc.c...
 compiling Interpreter.c...
 Interpreter.c(64): warning:  #111-D: statement is unreachable
 Interpreter.c(71): warning:  #111-D: statement is unreachable
 Interpreter.c(109): warning:  #177-D: variable "i" was declared but never referenced
-Interpreter.c(333): warning:  #550-D: variable "pixelPos" was set but never used
-linking...
-Program Size: Code=13768 RO-data=608 RW-data=776 ZI-data=9920  
-".\SDC.axf" - 0 Errors, 4 Warning(s).
-Load "C:\\Users\\Colin\\Documents\\GitHub\\EE445M\\SDC_4F120_Lab5\\SDC.axf" 
-Connecting: Mode=JTAG, Speed=1000000Hz
-Erase Done.
-Programming Done.
-Verify OK.
-Build target 'SDC'
+Interpreter.c(343): warning:  #550-D: variable "pixelPos" was set but never used
 compiling efile.c...
 efile.c(54): warning:  #177-D: variable "fileBlock" was declared but never referenced
 efile.c(55): warning:  #177-D: variable "result" was declared but never referenced
 efile.c(174): warning:  #177-D: variable "k" was declared but never referenced
+compiling Filter.c...
+assembling cr4_fft_64_stm32.s...
+compiling SysTick.c...
 linking...
-Program Size: Code=13768 RO-data=608 RW-data=776 ZI-data=9920  
-".\SDC.axf" - 0 Errors, 3 Warning(s).
+Program Size: Code=13748 RO-data=616 RW-data=784 ZI-data=9224  
+".\SDC.axf" - 0 Errors, 10 Warning(s).
 Load "C:\\Users\\Colin\\Documents\\GitHub\\EE445M\\SDC_4F120_Lab5\\SDC.axf" 
 Connecting: Mode=JTAG, Speed=1000000Hz
 Erase Done.
 Programming Done.
 Verify OK.
-Build target 'SDC'
-compiling efile.c...
-efile.c(54): warning:  #177-D: variable "fileBlock" was declared but never referenced
-efile.c(55): warning:  #177-D: variable "result" was declared but never referenced
-efile.c(174): warning:  #177-D: variable "k" was declared but never referenced
-efile.c(479): error:  #65: expected a ";"
-".\SDC.axf" - 1 Errors, 3 Warning(s).
-Target not created
-Build target 'SDC'
-compiling efile.c...
-efile.c(54): warning:  #177-D: variable "fileBlock" was declared but never referenced
-efile.c(55): warning:  #177-D: variable "result" was declared but never referenced
-efile.c(174): warning:  #177-D: variable "k" was declared but never referenced
-linking...
-Program Size: Code=13768 RO-data=608 RW-data=776 ZI-data=9920  
-".\SDC.axf" - 0 Errors, 3 Warning(s).
-Load "C:\\Users\\Colin\\Documents\\GitHub\\EE445M\\SDC_4F120_Lab5\\SDC.axf" 
-Connecting: Mode=JTAG, Speed=1000000Hz
-Erase Done.
-Programming Done.
-Verify OK.
-Build target 'SDC'
-compiling efile.c...
-efile.c(54): warning:  #177-D: variable "fileBlock" was declared but never referenced
-efile.c(55): warning:  #177-D: variable "result" was declared but never referenced
-efile.c(174): warning:  #177-D: variable "k" was declared but never referenced
-linking...
-Program Size: Code=13764 RO-data=608 RW-data=776 ZI-data=9920  
-".\SDC.axf" - 0 Errors, 3 Warning(s).
-Load "C:\\Users\\Colin\\Documents\\GitHub\\EE445M\\SDC_4F120_Lab5\\SDC.axf" 
-Connecting: Mode=JTAG, Speed=1000000Hz
-Erase Done.
-Programming Done.
-Verify OK.
-Build target 'SDC'
-compiling efile.c...
-efile.c(54): warning:  #177-D: variable "fileBlock" was declared but never referenced
-efile.c(55): warning:  #177-D: variable "result" was declared but never referenced
-efile.c(174): warning:  #177-D: variable "k" was declared but never referenced
-linking...
-Program Size: Code=13728 RO-data=608 RW-data=776 ZI-data=9920  
-".\SDC.axf" - 0 Errors, 3 Warning(s).
-Load "C:\\Users\\Colin\\Documents\\GitHub\\EE445M\\SDC_4F120_Lab5\\SDC.axf" 
-Connecting: Mode=JTAG, Speed=1000000Hz
-Erase Done.
-Programming Done.
-Verify OK.
-Build target 'SDC'
+Rebuild target 'SDC'
+assembling startup.s...
 compiling SDCTestMain.c...
 SDCTestMain.c(51): warning:  #550-D: variable "voltage" was set but never used
-linking...
-Program Size: Code=13728 RO-data=608 RW-data=776 ZI-data=9920  
-".\SDC.axf" - 0 Errors, 1 Warning(s).
-Build target 'SDC'
-compiling SDCTestMain.c...
-SDCTestMain.c(51): warning:  #550-D: variable "voltage" was set but never used
-linking...
-Program Size: Code=9712 RO-data=544 RW-data=652 ZI-data=9236  
-".\SDC.axf" - 0 Errors, 1 Warning(s).
-Load "C:\\Users\\Colin\\Documents\\GitHub\\EE445M\\SDC_4F120_Lab5\\SDC.axf" 
-Connecting: Mode=JTAG, Speed=1000000Hz
-Erase Done.
-Programming Done.
-Verify OK.
-Build target 'SDC'
-compiling SDCTestMain.c...
-SDCTestMain.c(51): warning:  #550-D: variable "voltage" was set but never used
-linking...
-Program Size: Code=9712 RO-data=544 RW-data=652 ZI-data=9236  
-".\SDC.axf" - 0 Errors, 1 Warning(s).
-Load "C:\\Users\\Colin\\Documents\\GitHub\\EE445M\\SDC_4F120_Lab5\\SDC.axf" 
-Connecting: Mode=JTAG, Speed=1000000Hz
-Erase Done.
-Programming Done.
-Verify OK.
-Build target 'SDC'
-compiling SDCTestMain.c...
-SDCTestMain.c(51): warning:  #550-D: variable "voltage" was set but never used
-linking...
-Program Size: Code=9732 RO-data=544 RW-data=652 ZI-data=9236  
-".\SDC.axf" - 0 Errors, 1 Warning(s).
-Load "C:\\Users\\Colin\\Documents\\GitHub\\EE445M\\SDC_4F120_Lab5\\SDC.axf" 
-Connecting: Mode=JTAG, Speed=1000000Hz
-Erase Done.
-Programming Done.
-Verify OK.
-Build target 'SDC'
-compiling SDCTestMain.c...
-SDCTestMain.c(51): warning:  #550-D: variable "voltage" was set but never used
-linking...
-Program Size: Code=13728 RO-data=608 RW-data=776 ZI-data=9920  
-".\SDC.axf" - 0 Errors, 1 Warning(s).
-Load "C:\\Users\\Colin\\Documents\\GitHub\\EE445M\\SDC_4F120_Lab5\\SDC.axf" 
-Connecting: Mode=JTAG, Speed=1000000Hz
-Erase Done.
-Programming Done.
-Verify OK.
-Build target 'SDC'
+compiling eDisk.c...
+compiling PLL.c...
+compiling OS.c...
+OS.c(462): warning:  #61-D: integer operation result is out of range
+OS.c(872): warning:  #61-D: integer operation result is out of range
+assembling osasm.s...
+compiling UART2.c...
+compiling adc.c...
 compiling Interpreter.c...
 Interpreter.c(64): warning:  #111-D: statement is unreachable
 Interpreter.c(71): warning:  #111-D: statement is unreachable
 Interpreter.c(109): warning:  #177-D: variable "i" was declared but never referenced
-Interpreter.c(333): warning:  #550-D: variable "pixelPos" was set but never used
-linking...
-Program Size: Code=13728 RO-data=608 RW-data=776 ZI-data=9920  
-".\SDC.axf" - 0 Errors, 4 Warning(s).
-Load "C:\\Users\\Colin\\Documents\\GitHub\\EE445M\\SDC_4F120_Lab5\\SDC.axf" 
-Connecting: Mode=JTAG, Speed=1000000Hz
-Erase Done.
-Programming Done.
-Verify OK.
-Build target 'SDC'
-compiling SDCTestMain.c...
-SDCTestMain.c(51): warning:  #550-D: variable "voltage" was set but never used
-compiling Interpreter.c...
-Interpreter.c(64): warning:  #111-D: statement is unreachable
-Interpreter.c(71): warning:  #111-D: statement is unreachable
-Interpreter.c(109): warning:  #177-D: variable "i" was declared but never referenced
-Interpreter.c(333): warning:  #550-D: variable "pixelPos" was set but never used
+Interpreter.c(343): warning:  #550-D: variable "pixelPos" was set but never used
 compiling efile.c...
 efile.c(54): warning:  #177-D: variable "fileBlock" was declared but never referenced
 efile.c(55): warning:  #177-D: variable "result" was declared but never referenced
 efile.c(174): warning:  #177-D: variable "k" was declared but never referenced
+compiling Filter.c...
+assembling cr4_fft_64_stm32.s...
+compiling SysTick.c...
 linking...
-Program Size: Code=13728 RO-data=608 RW-data=776 ZI-data=9224  
-".\SDC.axf" - 0 Errors, 8 Warning(s).
-Load "C:\\Users\\Colin\\Documents\\GitHub\\EE445M\\SDC_4F120_Lab5\\SDC.axf" 
-Connecting: Mode=JTAG, Speed=1000000Hz
-Erase Done.
-Programming Done.
-Verify OK.
-Build target 'SDC'
-compiling efile.c...
-efile.c(54): warning:  #177-D: variable "fileBlock" was declared but never referenced
-efile.c(55): warning:  #177-D: variable "result" was declared but never referenced
-efile.c(174): warning:  #177-D: variable "k" was declared but never referenced
-linking...
-Program Size: Code=13748 RO-data=608 RW-data=776 ZI-data=9224  
-".\SDC.axf" - 0 Errors, 3 Warning(s).
-Load "C:\\Users\\Colin\\Documents\\GitHub\\EE445M\\SDC_4F120_Lab5\\SDC.axf" 
-Connecting: Mode=JTAG, Speed=1000000Hz
-Erase Done.
-Programming Done.
-Verify OK.
-Build target 'SDC'
-compiling efile.c...
-efile.c(54): warning:  #177-D: variable "fileBlock" was declared but never referenced
-efile.c(55): warning:  #177-D: variable "result" was declared but never referenced
-efile.c(174): warning:  #177-D: variable "k" was declared but never referenced
-linking...
-Program Size: Code=13752 RO-data=608 RW-data=776 ZI-data=9224  
-".\SDC.axf" - 0 Errors, 3 Warning(s).
-Load "C:\\Users\\Colin\\Documents\\GitHub\\EE445M\\SDC_4F120_Lab5\\SDC.axf" 
-Connecting: Mode=JTAG, Speed=1000000Hz
-Erase Done.
-Programming Done.
-Verify OK.
-Build target 'SDC'
-compiling Interpreter.c...
-Interpreter.c(64): warning:  #111-D: statement is unreachable
-Interpreter.c(71): warning:  #111-D: statement is unreachable
-Interpreter.c(109): warning:  #177-D: variable "i" was declared but never referenced
-Interpreter.c(334): warning:  #550-D: variable "pixelPos" was set but never used
-linking...
-Program Size: Code=13764 RO-data=608 RW-data=776 ZI-data=9224  
-".\SDC.axf" - 0 Errors, 4 Warning(s).
-Load "C:\\Users\\Colin\\Documents\\GitHub\\EE445M\\SDC_4F120_Lab5\\SDC.axf" 
-Connecting: Mode=JTAG, Speed=1000000Hz
-Erase Done.
-Programming Done.
-Verify OK.
-Build target 'SDC'
-compiling SDCTestMain.c...
-SDCTestMain.c(51): warning:  #550-D: variable "voltage" was set but never used
-compiling Interpreter.c...
-Interpreter.c(64): warning:  #111-D: statement is unreachable
-Interpreter.c(71): warning:  #111-D: statement is unreachable
-Interpreter.c(109): warning:  #177-D: variable "i" was declared but never referenced
-Interpreter.c(338): warning:  #223-D: function "diskError" declared implicitly
-Interpreter.c(342): warning:  #550-D: variable "pixelPos" was set but never used
-linking...
-Program Size: Code=13768 RO-data=616 RW-data=784 ZI-data=9224  
-".\SDC.axf" - 0 Errors, 6 Warning(s).
-Load "C:\\Users\\Colin\\Documents\\GitHub\\EE445M\\SDC_4F120_Lab5\\SDC.axf" 
-Connecting: Mode=JTAG, Speed=1000000Hz
-Erase Done.
-Programming Done.
-Verify OK.
-Build target 'SDC'
-compiling Interpreter.c...
-Interpreter.c(64): warning:  #111-D: statement is unreachable
-Interpreter.c(71): warning:  #111-D: statement is unreachable
-Interpreter.c(109): warning:  #177-D: variable "i" was declared but never referenced
-Interpreter.c(342): warning:  #550-D: variable "pixelPos" was set but never used
-linking...
-Program Size: Code=13744 RO-data=616 RW-data=784 ZI-data=9224  
-".\SDC.axf" - 0 Errors, 4 Warning(s).
+Program Size: Code=13776 RO-data=616 RW-data=784 ZI-data=9224  
+".\SDC.axf" - 0 Errors, 10 Warning(s).
 Load "C:\\Users\\Colin\\Documents\\GitHub\\EE445M\\SDC_4F120_Lab5\\SDC.axf" 
 Connecting: Mode=JTAG, Speed=1000000Hz
 Erase Done.
