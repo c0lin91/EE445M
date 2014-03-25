@@ -20,5 +20,15 @@ void debug(char* paramString);
 
 void filter(char* paramString);
 
+void ls(char* paramString);
+
+void rm(char* paramString);
+
+void cat(char* paramString);
+
+void touch(char* paramString);
+
+void vi(char* paramString);
+
 #endif
 

@@ -2,16 +2,19 @@
 // Middle-level routines to implement a solid-state disk 
 // Jonathan W. Valvano 3/16/11
 #define BLOCKSIZE 512
-#define MAX_NUMBER_OF_BLOCKS 2048-2 //-2 because 1 for dir and 1 for free space 
-#define MAXFILES 50 //arbitrary 
+#define MAX_NUMBER_OF_BLOCKS 512 // 2048-2 //-2 because 1 for dir and 1 for free space 
+#define MAXFILES 100 //arbitrary 
+#define DATABYTES	512 - 2*sizeof(int)
 struct blk { 
-	struct blk* nextPtr; 
+	int nextPtr; 
 	int usedBytes; 
+	char* data; 
 }; 
 typedef struct blk Block; 
 
 typedef struct blk block; 
 
+// Files
 struct dir { 
 	int blockNum; 
 	char* Name; 
@@ -19,7 +22,7 @@ struct dir {
 typedef struct dir Directory; 
 
 
-
+int eFile_findFile(char* name);
 
 
 //---------- eFile_Init-----------------
@@ -92,7 +95,8 @@ int eFile_RClose(void); // close the file for writing
 // Input: pointer to a function that outputs ASCII characters to display
 // Output: characters returned by reference
 //         0 if successful and 1 on failure (e.g., trouble reading from flash)
-int eFile_Directory(void(*fp)(unsigned char));   
+//int eFile_Directory(void(*fp)(unsigned char));   
+int eFile_Directory(void);
 
 //---------- eFile_Delete-----------------
 // delete this file
@@ -112,4 +116,10 @@ int eFile_RedirectToFile(char *name);
 // redirect printf data back to UART
 // Output: 0 if successful and 1 on failure (e.g., wasn't open)
 int eFile_EndRedirectToFile(void);
+
+//---------- eFile_PrintFileContents-----------------
+// Print the contents of this file
+// Input: file name is a single ASCII letter
+// Output: 0 if successful and 1 on failure (e.g., File doesn't exist)
+int eFile_PrintFileContents(char *name);
 

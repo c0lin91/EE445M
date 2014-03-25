@@ -25,6 +25,8 @@ int Running;                // true while robot is running
 short IntTerm; 
 short PrevError; 
 
+void diskError(char* errtype, unsigned long n);
+
 #define TIMESLICE 2*TIME_1MS  // thread switch time in system time units
 
 #define GPIO_PF0  (*((volatile unsigned long *)0x40025004))
@@ -132,7 +134,7 @@ extern void Interpreter(void);
 // execute   eFile_Init();  after periodic interrupts have started
 
 //*******************lab 5 main **********
-int realmain(void){        // lab 5 real main
+int realmain (void){        // lab 5 real main
   OS_Init();           // initialize, disable interrupts
   Running = 0;         // robot not running
   DataLost = 0;        // lost data between producer and consumer
@@ -140,7 +142,7 @@ int realmain(void){        // lab 5 real main
 
 //********initialize communication channels
   OS_Fifo_Init(512);    // ***note*** 4 is not big enough*****
-  ADC_Collect(0, 1000, &Producer); // start ADC sampling, channel 0, 1000 Hz
+  //ADC_Collect(0, 1000, &Producer); // start ADC sampling, channel 0, 1000 Hz
 
 //*******attach background tasks***********
 //  OS_AddButtonTask(&ButtonPush,2);
@@ -151,6 +153,8 @@ int realmain(void){        // lab 5 real main
 // create initial foreground threads
   NumCreated += OS_AddThread(&Interpreter,128,2); 
   NumCreated += OS_AddThread(&IdleTask,128,7);  // runs when nothing useful to do
+	if(eFile_Init())              diskError("eFile_Init",0); 
+  if(eFile_Format())            diskError("eFile_Format",0); 
  
   OS_Launch(TIMESLICE); // doesn't return, interrupts enabled in here
   return 0;             // this never executes

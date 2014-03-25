@@ -10,3 +10,4 @@
 .\interpreter.o: C:\Keil\ARM\Inc\Luminary\lm4f120h5qr.h
 .\interpreter.o: Filter.h
 .\interpreter.o: C:\Keil\ARM\ARMCC\bin\..\include\math.h
+.\interpreter.o: efile.h

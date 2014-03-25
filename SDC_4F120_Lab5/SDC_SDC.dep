@@ -1,60 +1,66 @@
 Dependencies for Project 'SDC', Target 'SDC': (DO NOT MODIFY !)
-F (.\startup.s)(0x532F625B)(--cpu Cortex-M4 --pd "__EVAL SETA 1" -g --apcs=interwork --pd "__MICROLIB SETA 1"-I C:\Keil\ARM\RV31\INC-I C:\Keil\ARM\CMSIS\Include-I C:\Keil\ARM\Inc\Luminary--list .\startup.lst --xref -o .\startup.o --depend .\startup.d)
-F (.\SDCTestMain.c)(0x532F6AE5)(-c --cpu Cortex-M4 -D__EVAL -D__MICROLIB -g -O0 --apcs=interwork --split_sections --signed_chars -I.. -I..\..\..-I C:\Keil\ARM\RV31\INC-I C:\Keil\ARM\CMSIS\Include-I C:\Keil\ARM\Inc\Luminary-Drvmdk -DPART_LM4F120H5QR -o .\sdctestmain.o --omf_browse .\sdctestmain.crf --depend .\sdctestmain.d)
+F (.\startup.s)(0x53305679)(--cpu Cortex-M4 --pd "__EVAL SETA 1" -g --apcs=interwork --pd "__MICROLIB SETA 1"-I C:\Keil\ARM\RV31\INC-I C:\Keil\ARM\CMSIS\Include-I C:\Keil\ARM\Inc\Luminary--list .\startup.lst --xref -o .\startup.o --depend .\startup.d)
+F (.\SDCTestMain.c)(0x5330E4E1)(-c --cpu Cortex-M4 -D__EVAL -D__MICROLIB -g -O0 --apcs=interwork --split_sections --signed_chars -I.. -I..\..\..-I C:\Keil\ARM\RV31\INC-I C:\Keil\ARM\CMSIS\Include-I C:\Keil\ARM\Inc\Luminary-Drvmdk -DPART_LM4F120H5QR -o .\sdctestmain.o --omf_browse .\sdctestmain.crf --depend .\sdctestmain.d)
 I (C:\Keil\ARM\ARMCC\include\stdio.h)(0x51C86E14)
 I (C:\Keil\ARM\ARMCC\include\string.h)(0x51C86E14)
-I (\\vmware-host\Shared Folders\Desktop\git\EE445M\inc\hw_types.h)(0x530D1D85)
-I (\\vmware-host\Shared Folders\Desktop\git\EE445M\SDC_4F120_Lab5\adc.h)(0x532DF912)
-I (\\vmware-host\Shared Folders\Desktop\git\EE445M\SDC_4F120_Lab5\OS.h)(0x532DF4C5)
-I (\\vmware-host\Shared Folders\Desktop\git\EE445M\tm4c123gh6pm.h)(0x530D1D85)
-I (\\vmware-host\Shared Folders\Desktop\git\EE445M\SDC_4F120_Lab5\edisk.h)(0x532DFD4C)
-I (\\vmware-host\Shared Folders\Desktop\git\EE445M\SDC_4F120_Lab5\efile.h)(0x532DF9A4)
-F (.\eDisk.c)(0x532E038F)(-c --cpu Cortex-M4 -D__EVAL -D__MICROLIB -g -O0 --apcs=interwork --split_sections --signed_chars -I.. -I..\..\..-I C:\Keil\ARM\RV31\INC-I C:\Keil\ARM\CMSIS\Include-I C:\Keil\ARM\Inc\Luminary-Drvmdk -DPART_LM4F120H5QR -o .\edisk.o --omf_browse .\edisk.crf --depend .\edisk.d)
-I (\\vmware-host\Shared Folders\Desktop\git\EE445M\inc\tm4c123gh6pm.h)(0x530D1D85)
-I (\\vmware-host\Shared Folders\Desktop\git\EE445M\SDC_4F120_Lab5\edisk.h)(0x532DFD4C)
-F (.\PLL.c)(0x5287AF14)(-c --cpu Cortex-M4 -D__EVAL -D__MICROLIB -g -O0 --apcs=interwork --split_sections --signed_chars -I.. -I..\..\..-I C:\Keil\ARM\RV31\INC-I C:\Keil\ARM\CMSIS\Include-I C:\Keil\ARM\Inc\Luminary-Drvmdk -DPART_LM4F120H5QR -o .\pll.o --omf_browse .\pll.crf --depend .\pll.d)
-I (\\vmware-host\Shared Folders\Desktop\git\EE445M\SDC_4F120_Lab5\PLL.h)(0x5230E8D4)
-F (.\OS.c)(0x532E085B)(-c --cpu Cortex-M4 -D__EVAL -D__MICROLIB -g -O0 --apcs=interwork --split_sections --signed_chars -I.. -I..\..\..-I C:\Keil\ARM\RV31\INC-I C:\Keil\ARM\CMSIS\Include-I C:\Keil\ARM\Inc\Luminary-Drvmdk -DPART_LM4F120H5QR -o .\os.o --omf_browse .\os.crf --depend .\os.d)
-I (\\vmware-host\Shared Folders\Desktop\git\EE445M\SDC_4F120_Lab5\OS.h)(0x532DF4C5)
-I (\\vmware-host\Shared Folders\Desktop\git\EE445M\inc\hw_types.h)(0x530D1D85)
-I (\\vmware-host\Shared Folders\Desktop\git\EE445M\driverlib\sysctl.h)(0x530D1D85)
-I (\\vmware-host\Shared Folders\Desktop\git\EE445M\inc\tm4c123gh6pm.h)(0x530D1D85)
-I (\\vmware-host\Shared Folders\Desktop\git\EE445M\SDC_4F120_Lab5\PLL.h)(0x5230E8D4)
-I (\\vmware-host\Shared Folders\Desktop\git\EE445M\SDC_4F120_Lab5\UART2.h)(0x532DF552)
-F (.\osasm.s)(0x532F6AB2)(--cpu Cortex-M4 --pd "__EVAL SETA 1" -g --apcs=interwork --pd "__MICROLIB SETA 1"-I C:\Keil\ARM\RV31\INC-I C:\Keil\ARM\CMSIS\Include-I C:\Keil\ARM\Inc\Luminary--list .\osasm.lst --xref -o .\osasm.o --depend .\osasm.d)
-F (.\UART2.c)(0x532DF672)(-c --cpu Cortex-M4 -D__EVAL -D__MICROLIB -g -O0 --apcs=interwork --split_sections --signed_chars -I.. -I..\..\..-I C:\Keil\ARM\RV31\INC-I C:\Keil\ARM\CMSIS\Include-I C:\Keil\ARM\Inc\Luminary-Drvmdk -DPART_LM4F120H5QR -o .\uart2.o --omf_browse .\uart2.crf --depend .\uart2.d)
-I (\\vmware-host\Shared Folders\Desktop\git\EE445M\SDC_4F120_Lab5\FIFO.h)(0x532DF6FF)
-I (\\vmware-host\Shared Folders\Desktop\git\EE445M\SDC_4F120_Lab5\UART2.h)(0x532DF552)
-F (.\adc.c)(0x532DFD2E)(-c --cpu Cortex-M4 -D__EVAL -D__MICROLIB -g -O0 --apcs=interwork --split_sections --signed_chars -I.. -I..\..\..-I C:\Keil\ARM\RV31\INC-I C:\Keil\ARM\CMSIS\Include-I C:\Keil\ARM\Inc\Luminary-Drvmdk -DPART_LM4F120H5QR -o .\adc.o --omf_browse .\adc.crf --depend .\adc.d)
-I (\\vmware-host\Shared Folders\Desktop\git\EE445M\SDC_4F120_Lab5\ADC.h)(0x532DF912)
+I (C:\Users\Colin\Documents\GitHub\EE445M\inc\hw_types.h)(0x5223A90E)
+I (C:\Users\Colin\Documents\GitHub\EE445M\SDC_4F120_Lab5\UART2.h)(0x53305679)
+I (C:\Users\Colin\Documents\GitHub\EE445M\SDC_4F120_Lab5\adc.h)(0x53305679)
+I (C:\Users\Colin\Documents\GitHub\EE445M\SDC_4F120_Lab5\OS.h)(0x53305679)
+I (C:\Users\Colin\Documents\GitHub\EE445M\tm4c123gh6pm.h)(0x52F84F1C)
+I (C:\Users\Colin\Documents\GitHub\EE445M\SDC_4F120_Lab5\edisk.h)(0x53305679)
+I (C:\Users\Colin\Documents\GitHub\EE445M\SDC_4F120_Lab5\efile.h)(0x5330F8B8)
+F (.\eDisk.c)(0x53305679)(-c --cpu Cortex-M4 -D__EVAL -D__MICROLIB -g -O0 --apcs=interwork --split_sections --signed_chars -I.. -I..\..\..-I C:\Keil\ARM\RV31\INC-I C:\Keil\ARM\CMSIS\Include-I C:\Keil\ARM\Inc\Luminary-Drvmdk -DPART_LM4F120H5QR -o .\edisk.o --omf_browse .\edisk.crf --depend .\edisk.d)
+I (C:\Users\Colin\Documents\GitHub\EE445M\inc\tm4c123gh6pm.h)(0x5223A90F)
+I (C:\Users\Colin\Documents\GitHub\EE445M\SDC_4F120_Lab5\edisk.h)(0x53305679)
+F (.\PLL.c)(0x53305679)(-c --cpu Cortex-M4 -D__EVAL -D__MICROLIB -g -O0 --apcs=interwork --split_sections --signed_chars -I.. -I..\..\..-I C:\Keil\ARM\RV31\INC-I C:\Keil\ARM\CMSIS\Include-I C:\Keil\ARM\Inc\Luminary-Drvmdk -DPART_LM4F120H5QR -o .\pll.o --omf_browse .\pll.crf --depend .\pll.d)
+I (C:\Users\Colin\Documents\GitHub\EE445M\SDC_4F120_Lab5\PLL.h)(0x53305679)
+F (.\OS.c)(0x53305679)(-c --cpu Cortex-M4 -D__EVAL -D__MICROLIB -g -O0 --apcs=interwork --split_sections --signed_chars -I.. -I..\..\..-I C:\Keil\ARM\RV31\INC-I C:\Keil\ARM\CMSIS\Include-I C:\Keil\ARM\Inc\Luminary-Drvmdk -DPART_LM4F120H5QR -o .\os.o --omf_browse .\os.crf --depend .\os.d)
+I (C:\Users\Colin\Documents\GitHub\EE445M\SDC_4F120_Lab5\OS.h)(0x53305679)
+I (C:\Users\Colin\Documents\GitHub\EE445M\inc\hw_types.h)(0x5223A90E)
+I (C:\Users\Colin\Documents\GitHub\EE445M\driverlib\sysctl.h)(0x52F84373)
+I (C:\Users\Colin\Documents\GitHub\EE445M\inc\tm4c123gh6pm.h)(0x5223A90F)
+I (C:\Users\Colin\Documents\GitHub\EE445M\SDC_4F120_Lab5\PLL.h)(0x53305679)
+I (C:\Users\Colin\Documents\GitHub\EE445M\SDC_4F120_Lab5\UART2.h)(0x53305679)
+F (.\osasm.s)(0x53305679)(--cpu Cortex-M4 --pd "__EVAL SETA 1" -g --apcs=interwork --pd "__MICROLIB SETA 1"-I C:\Keil\ARM\RV31\INC-I C:\Keil\ARM\CMSIS\Include-I C:\Keil\ARM\Inc\Luminary--list .\osasm.lst --xref -o .\osasm.o --depend .\osasm.d)
+F (.\UART2.c)(0x53305679)(-c --cpu Cortex-M4 -D__EVAL -D__MICROLIB -g -O0 --apcs=interwork --split_sections --signed_chars -I.. -I..\..\..-I C:\Keil\ARM\RV31\INC-I C:\Keil\ARM\CMSIS\Include-I C:\Keil\ARM\Inc\Luminary-Drvmdk -DPART_LM4F120H5QR -o .\uart2.o --omf_browse .\uart2.crf --depend .\uart2.d)
+I (C:\Users\Colin\Documents\GitHub\EE445M\SDC_4F120_Lab5\FIFO.h)(0x53305679)
+I (C:\Users\Colin\Documents\GitHub\EE445M\SDC_4F120_Lab5\UART2.h)(0x53305679)
+F (.\adc.c)(0x53305679)(-c --cpu Cortex-M4 -D__EVAL -D__MICROLIB -g -O0 --apcs=interwork --split_sections --signed_chars -I.. -I..\..\..-I C:\Keil\ARM\RV31\INC-I C:\Keil\ARM\CMSIS\Include-I C:\Keil\ARM\Inc\Luminary-Drvmdk -DPART_LM4F120H5QR -o .\adc.o --omf_browse .\adc.crf --depend .\adc.d)
+I (C:\Users\Colin\Documents\GitHub\EE445M\SDC_4F120_Lab5\ADC.h)(0x53305679)
 I (C:\Keil\ARM\Inc\Luminary\lm4f120h5qr.h)(0x51C86746)
-I (\\vmware-host\Shared Folders\Desktop\git\EE445M\SDC_4F120_Lab5\OS.h)(0x532DF4C5)
-I (\\vmware-host\Shared Folders\Desktop\git\EE445M\SDC_4F120_Lab5\FIFO.h)(0x532DF6FF)
-F (.\Interpreter.c)(0x532E0C30)(-c --cpu Cortex-M4 -D__EVAL -D__MICROLIB -g -O0 --apcs=interwork --split_sections --signed_chars -I.. -I..\..\..-I C:\Keil\ARM\RV31\INC-I C:\Keil\ARM\CMSIS\Include-I C:\Keil\ARM\Inc\Luminary-Drvmdk -DPART_LM4F120H5QR -o .\interpreter.o --omf_browse .\interpreter.crf --depend .\interpreter.d)
+I (C:\Users\Colin\Documents\GitHub\EE445M\SDC_4F120_Lab5\OS.h)(0x53305679)
+I (C:\Users\Colin\Documents\GitHub\EE445M\SDC_4F120_Lab5\FIFO.h)(0x53305679)
+F (.\Interpreter.c)(0x5330F9B8)(-c --cpu Cortex-M4 -D__EVAL -D__MICROLIB -g -O0 --apcs=interwork --split_sections --signed_chars -I.. -I..\..\..-I C:\Keil\ARM\RV31\INC-I C:\Keil\ARM\CMSIS\Include-I C:\Keil\ARM\Inc\Luminary-Drvmdk -DPART_LM4F120H5QR -o .\interpreter.o --omf_browse .\interpreter.crf --depend .\interpreter.d)
 I (C:\Keil\ARM\ARMCC\include\stdio.h)(0x51C86E14)
 I (C:\Keil\ARM\ARMCC\include\string.h)(0x51C86E14)
 I (C:\Keil\ARM\ARMCC\include\stdlib.h)(0x51C86E14)
-I (\\vmware-host\Shared Folders\Desktop\git\EE445M\SDC_4F120_Lab5\Interpreter.h)(0x532DF96A)
-I (\\vmware-host\Shared Folders\Desktop\git\EE445M\SDC_4F120_Lab5\ADC.h)(0x532DF912)
-I (\\vmware-host\Shared Folders\Desktop\git\EE445M\SDC_4F120_Lab5\UART2.h)(0x532DF552)
-I (\\vmware-host\Shared Folders\Desktop\git\EE445M\SDC_4F120_Lab5\FIFO.h)(0x532DF6FF)
-I (\\vmware-host\Shared Folders\Desktop\git\EE445M\SDC_4F120_Lab5\OS.h)(0x532DF4C5)
+I (C:\Users\Colin\Documents\GitHub\EE445M\SDC_4F120_Lab5\Interpreter.h)(0x5330E3AD)
+I (C:\Users\Colin\Documents\GitHub\EE445M\SDC_4F120_Lab5\ADC.h)(0x53305679)
+I (C:\Users\Colin\Documents\GitHub\EE445M\SDC_4F120_Lab5\UART2.h)(0x53305679)
+I (C:\Users\Colin\Documents\GitHub\EE445M\SDC_4F120_Lab5\FIFO.h)(0x53305679)
+I (C:\Users\Colin\Documents\GitHub\EE445M\SDC_4F120_Lab5\OS.h)(0x53305679)
 I (C:\Keil\ARM\Inc\Luminary\lm4f120h5qr.h)(0x51C86746)
-I (\\vmware-host\Shared Folders\Desktop\git\EE445M\SDC_4F120_Lab5\Filter.h)(0x532DFAC1)
+I (C:\Users\Colin\Documents\GitHub\EE445M\SDC_4F120_Lab5\Filter.h)(0x53305679)
 I (C:\Keil\ARM\ARMCC\include\math.h)(0x51C86E14)
-F (.\efile.c)(0x532DF985)(-c --cpu Cortex-M4 -D__EVAL -D__MICROLIB -g -O0 --apcs=interwork --split_sections --signed_chars -I.. -I..\..\..-I C:\Keil\ARM\RV31\INC-I C:\Keil\ARM\CMSIS\Include-I C:\Keil\ARM\Inc\Luminary-Drvmdk -DPART_LM4F120H5QR -o .\efile.o --omf_browse .\efile.crf --depend .\efile.d)
-I (\\vmware-host\Shared Folders\Desktop\git\EE445M\SDC_4F120_Lab5\efile.h)(0x532DF9A4)
-F (.\Filter.c)(0x532DFACA)(-c --cpu Cortex-M4 -D__EVAL -D__MICROLIB -g -O0 --apcs=interwork --split_sections --signed_chars -I.. -I..\..\..-I C:\Keil\ARM\RV31\INC-I C:\Keil\ARM\CMSIS\Include-I C:\Keil\ARM\Inc\Luminary-Drvmdk -DPART_LM4F120H5QR -o .\filter.o --omf_browse .\filter.crf --depend .\filter.d)
-I (\\vmware-host\Shared Folders\Desktop\git\EE445M\SDC_4F120_Lab5\Filter.h)(0x532DFAC1)
-F (.\cr4_fft_64_stm32.s)(0x532DFB33)(--cpu Cortex-M4 --pd "__EVAL SETA 1" -g --apcs=interwork --pd "__MICROLIB SETA 1"-I C:\Keil\ARM\RV31\INC-I C:\Keil\ARM\CMSIS\Include-I C:\Keil\ARM\Inc\Luminary--list .\cr4_fft_64_stm32.lst --xref -o .\cr4_fft_64_stm32.o --depend .\cr4_fft_64_stm32.d)
-F (.\SysTick.c)(0x532E06E2)(-c --cpu Cortex-M4 -D__EVAL -D__MICROLIB -g -O0 --apcs=interwork --split_sections --signed_chars -I.. -I..\..\..-I C:\Keil\ARM\RV31\INC-I C:\Keil\ARM\CMSIS\Include-I C:\Keil\ARM\Inc\Luminary-Drvmdk -DPART_LM4F120H5QR -o .\systick.o --omf_browse .\systick.crf --depend .\systick.d)
-I (\\vmware-host\Shared Folders\Desktop\git\EE445M\SDC_4F120_Lab5\OS.h)(0x532DF4C5)
-F (.\OS.h)(0x532DF4C5)()
-F (.\edisk.h)(0x532DFD4C)()
-F (.\PLL.h)(0x5230E8D4)()
-F (.\UART2.h)(0x532DF552)()
-F (.\FIFO.h)(0x532DF6FF)()
-F (.\adc.h)(0x532DF912)()
-F (.\efile.h)(0x532DF9A4)()
-F (.\Filter.h)(0x532DFAC1)()
-F (.\SysTick.h)(0x532DFAFC)()
+I (C:\Users\Colin\Documents\GitHub\EE445M\SDC_4F120_Lab5\efile.h)(0x5330F8B8)
+F (.\efile.c)(0x5330F25E)(-c --cpu Cortex-M4 -D__EVAL -D__MICROLIB -g -O0 --apcs=interwork --split_sections --signed_chars -I.. -I..\..\..-I C:\Keil\ARM\RV31\INC-I C:\Keil\ARM\CMSIS\Include-I C:\Keil\ARM\Inc\Luminary-Drvmdk -DPART_LM4F120H5QR -o .\efile.o --omf_browse .\efile.crf --depend .\efile.d)
+I (C:\Users\Colin\Documents\GitHub\EE445M\SDC_4F120_Lab5\efile.h)(0x5330F8B8)
+I (C:\Users\Colin\Documents\GitHub\EE445M\SDC_4F120_Lab5\eDisk.h)(0x53305679)
+I (C:\Users\Colin\Documents\GitHub\EE445M\SDC_4F120_Lab5\UART2.h)(0x53305679)
+I (C:\Keil\ARM\ARMCC\include\String.h)(0x51C86E14)
+I (C:\Keil\ARM\ARMCC\include\stdio.h)(0x51C86E14)
+F (.\Filter.c)(0x53305679)(-c --cpu Cortex-M4 -D__EVAL -D__MICROLIB -g -O0 --apcs=interwork --split_sections --signed_chars -I.. -I..\..\..-I C:\Keil\ARM\RV31\INC-I C:\Keil\ARM\CMSIS\Include-I C:\Keil\ARM\Inc\Luminary-Drvmdk -DPART_LM4F120H5QR -o .\filter.o --omf_browse .\filter.crf --depend .\filter.d)
+I (C:\Users\Colin\Documents\GitHub\EE445M\SDC_4F120_Lab5\Filter.h)(0x53305679)
+F (.\cr4_fft_64_stm32.s)(0x53305679)(--cpu Cortex-M4 --pd "__EVAL SETA 1" -g --apcs=interwork --pd "__MICROLIB SETA 1"-I C:\Keil\ARM\RV31\INC-I C:\Keil\ARM\CMSIS\Include-I C:\Keil\ARM\Inc\Luminary--list .\cr4_fft_64_stm32.lst --xref -o .\cr4_fft_64_stm32.o --depend .\cr4_fft_64_stm32.d)
+F (.\SysTick.c)(0x53305679)(-c --cpu Cortex-M4 -D__EVAL -D__MICROLIB -g -O0 --apcs=interwork --split_sections --signed_chars -I.. -I..\..\..-I C:\Keil\ARM\RV31\INC-I C:\Keil\ARM\CMSIS\Include-I C:\Keil\ARM\Inc\Luminary-Drvmdk -DPART_LM4F120H5QR -o .\systick.o --omf_browse .\systick.crf --depend .\systick.d)
+I (C:\Users\Colin\Documents\GitHub\EE445M\SDC_4F120_Lab5\OS.h)(0x53305679)
+F (.\OS.h)(0x53305679)()
+F (.\edisk.h)(0x53305679)()
+F (.\PLL.h)(0x53305679)()
+F (.\UART2.h)(0x53305679)()
+F (.\FIFO.h)(0x53305679)()
+F (.\adc.h)(0x53305679)()
+F (.\efile.h)(0x5330F8B8)()
+F (.\Filter.h)(0x53305679)()
+F (.\SysTick.h)(0x53305679)()

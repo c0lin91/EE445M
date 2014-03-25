@@ -10,6 +10,7 @@
 #include "lm4f120h5qr.h"
 #include "Filter.h" 
 #include "math.h"
+#include "efile.h"
 
 #define RxFIFOSIZE	64
 #define Equal				0
@@ -17,7 +18,7 @@
 void fft (void); 
 void cr4_fft_64_stm32(void *pssOUT, void *pssIN, unsigned short Nbin);
 
-const int COMMANDS = 7;
+const int COMMANDS = 12;
 const int BADCOMMAND = COMMANDS;
 const char BACKSPACE = 0x7F;
 const char RETURN = 0x0D;
@@ -25,8 +26,8 @@ const char RETURN = 0x0D;
 // Interpreter command strings and their respective function pointers.
 // since sizeof() doesn't work for arrays of char and func pointers I had to create a constant,
 // So be sure to update the const COMMANDS after adding or removing functions
-const char* commands[COMMANDS] = { "echo", "adc", "clear", "fft", "performance", "debug", "filter" };
-void (*interFunc[COMMANDS])(char* paramString) = {echo, adcToggle, clear, fftToggle, performance, debug, filter };
+const char* commands[COMMANDS] = { "echo", "adc", "clear", "fft", "performance", "debug", "filter", "ls", "rm", "cat", "touch", "vi" };
+void (*interFunc[COMMANDS])(char* paramString) = {echo, adcToggle, clear, fftToggle, performance, debug, filter, ls, rm, cat, touch, vi };
 
 
 //int mailboxFull; 		// Put extern back in when ADC file is ready
@@ -45,6 +46,24 @@ char filterFlag=0;
 char fftActive =0;
 int printHeight = 0;
 
+void vi (char* filename) {
+	  char data; 
+		int fileIdx = eFile_findFile( filename);
+	 if (fileIdx == -1) {
+		 //create the file
+		 eFile_Create(filename); 
+	 } 
+		//open file for writing 
+	 eFile_WOpen(filename); 
+	 while (RxFifo_Get(&data)) { 
+		 if (data == ESC) 
+			 break; 
+		 else { 
+			 eFile_Write(data); 
+		 } 
+	 }
+	 eFile_WClose(); 
+} 
 int skipLeadingSpace(char* string){
 	int index =0;
 	while(string[index] != 0 && (string[index] == ' ' || string[index] == '\t')){
@@ -70,27 +89,31 @@ void sendCommand(char* cmdString){
 		interFunc[i](cmdString+strSize);
 	}
 	else{
-		echo("ERROR: Command not found.");
+		echo("ERROR: Command not found\r\n");
 	}
 }
 
 void Interpreter(void){
 	char value [RxFIFOSIZE];
-	char buffer [RxFIFOSIZE];
-	char command[RxFIFOSIZE];
+	char buffer [1];
+	char cmd[RxFIFOSIZE];
 	int cmd_idx = 0;
 	int value_idx = 0; 
 	int newCommand = 0;
+	int i =0;
 	
 	while(1){	
 	if (!newCommand) {
 		while (RxFifo_Get(&value[value_idx])){
+//			for(i = 0; i<RxFIFOSIZE; i++){
+//				cmd[i] = 'd';
+//			}
 			sprintf (buffer, "%c", value[value_idx]); 
 			
 			if(buffer[0] == BACKSPACE){	
 				if(cmd_idx!=0){
 					cmd_idx --;
-					command[cmd_idx] = 0;
+					cmd[cmd_idx] = 0;
 				}
 			}
 			else if(cmd_idx == RxFIFOSIZE){		// Max character limit met
@@ -99,11 +122,11 @@ void Interpreter(void){
 				cmd_idx = 0;
 			}
 			else if (buffer[0] == RETURN) { 	// Command sent
-				command[cmd_idx] = 0;				// Terminate command with null char
+				cmd[cmd_idx] = 0;				// Terminate command with null char
 				newCommand = 1; 
 				cmd_idx = 0;
 			}else{									
-				command[cmd_idx] = buffer[0];
+				cmd[cmd_idx] = buffer[0];
 				cmd_idx++; 
 			}
 			
@@ -111,7 +134,7 @@ void Interpreter(void){
 		}
 		}else{
 			newCommand = 0; 
-			sendCommand(command);
+			sendCommand(cmd);
 		}
 	}	
 	
@@ -233,7 +256,7 @@ void debug(char* paramString){
 		OS_bSignal(&toDisplay); 
 }
 
-//************** clear *************** 
+//************** filter *************** 
 // Turns the filter on or off
 // Inputs: String parameter that defies wheter 
 //	 			 the filter will be turned on or off 
@@ -252,6 +275,53 @@ void filter(char* paramString){
 	}
 }
 
+//************** ls *************** 
+// Lists all the files in the directory with file size
+// Inputs: String parameter. Should be null
+// Outputs: none
+
+void ls(char* paramString){
+	eFile_Directory();
+}
+
+//************** rm *************** 
+// Removes a file from directory
+// Inputs: String parameter that specifies the name of the file
+// Outputs: none
+
+void rm(char* paramString){
+	char buffer[40];
+	if(eFile_Delete(paramString) == 1){
+		sprintf(buffer, "%s successfully deleted", paramString);
+	}else{
+		sprintf(buffer, "%s could not be deleted", paramString);
+	}
+	UART_OutString(buffer);
+}
+
+
+//************** cat *************** 
+// Prints the contents of the directory
+// Inputs: String parameter that specifies the name of the file
+// Outputs: none
+
+void cat(char* paramString){
+	eFile_PrintFileContents(paramString);
+}
+
+//************** touch *************** 
+// Prints the contents of the directory
+// Inputs: String parameter that specifies the name of the file
+// Outputs: none
+
+void touch(char* paramString){
+	if (eFile_Create(paramString)) 
+			UART_OutString ("Error while creating the file"); 
+	else 
+		UART_OutString("File successfully created"); 
+}
+
+// ********** Function definitions to make compiler happy ***********
 void fft (void) {
 	 int DCcomponent, ImComp, i, status, pixelPos; 
 	 while(fftActive){
