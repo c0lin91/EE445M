@@ -1,11 +1,11 @@
 Dependencies for Project 'SDC', Target 'SDC': (DO NOT MODIFY !)
-F (.\startup.s)(0x519AE1AA)(--cpu Cortex-M4 --pd "__EVAL SETA 1" -g --apcs=interwork -I C:\Keil\ARM\RV31\INC-I C:\Keil\ARM\CMSIS\Include-I C:\Keil\ARM\Inc\Luminary--list .\startup.lst --xref -o .\startup.o --depend .\startup.d)
-F (.\SDCTestMain.c)(0x53276DF6)(-c --cpu Cortex-M4 -D__EVAL -g -O0 --apcs=interwork --split_sections --signed_chars -I.. -I..\..\..-I C:\Keil\ARM\RV31\INC-I C:\Keil\ARM\CMSIS\Include-I C:\Keil\ARM\Inc\Luminary-Drvmdk -DPART_LM4F120H5QR -o .\sdctestmain.o --omf_browse .\sdctestmain.crf --depend .\sdctestmain.d)
-I (\\vmware-host\Shared Folders\Desktop\git\EE445M\inc\tm4c123gh6pm.h)(0x530D1D85)
-I (\\vmware-host\Shared Folders\Desktop\git\EE445M\SDC_4F120\PLL.h)(0x5230E8D4)
-I (\\vmware-host\Shared Folders\Desktop\git\EE445M\SDC_4F120\edisk.h)(0x5327798E)
-F (.\eDisk.c)(0x5327798E)(-c --cpu Cortex-M4 -D__EVAL -g -O0 --apcs=interwork --split_sections --signed_chars -I.. -I..\..\..-I C:\Keil\ARM\RV31\INC-I C:\Keil\ARM\CMSIS\Include-I C:\Keil\ARM\Inc\Luminary-Drvmdk -DPART_LM4F120H5QR -o .\edisk.o --omf_browse .\edisk.crf --depend .\edisk.d)
-I (\\vmware-host\Shared Folders\Desktop\git\EE445M\inc\tm4c123gh6pm.h)(0x530D1D85)
-I (\\vmware-host\Shared Folders\Desktop\git\EE445M\SDC_4F120\edisk.h)(0x5327798E)
-F (.\PLL.c)(0x5287AF14)(-c --cpu Cortex-M4 -D__EVAL -g -O0 --apcs=interwork --split_sections --signed_chars -I.. -I..\..\..-I C:\Keil\ARM\RV31\INC-I C:\Keil\ARM\CMSIS\Include-I C:\Keil\ARM\Inc\Luminary-Drvmdk -DPART_LM4F120H5QR -o .\pll.o --omf_browse .\pll.crf --depend .\pll.d)
-I (\\vmware-host\Shared Folders\Desktop\git\EE445M\SDC_4F120\PLL.h)(0x5230E8D4)
+F (.\startup.s)(0x532B8D33)(--cpu Cortex-M4 --pd "__EVAL SETA 1" -g --apcs=interwork -I C:\Keil\ARM\RV31\INC-I C:\Keil\ARM\CMSIS\Include-I C:\Keil\ARM\Inc\Luminary--list .\startup.lst --xref -o .\startup.o --depend .\startup.d)
+F (.\SDCTestMain.c)(0x532B8D33)(-c --cpu Cortex-M4 -D__EVAL -g -O0 --apcs=interwork --split_sections --signed_chars -I.. -I..\..\..-I C:\Keil\ARM\RV31\INC-I C:\Keil\ARM\CMSIS\Include-I C:\Keil\ARM\Inc\Luminary-Drvmdk -DPART_LM4F120H5QR -o .\sdctestmain.o --omf_browse .\sdctestmain.crf --depend .\sdctestmain.d)
+I (C:\Users\Colin\Documents\GitHub\EE445M\inc\tm4c123gh6pm.h)(0x5223A90F)
+I (C:\Users\Colin\Documents\GitHub\EE445M\SDC_4F120\PLL.h)(0x532B8D33)
+I (C:\Users\Colin\Documents\GitHub\EE445M\SDC_4F120\edisk.h)(0x532B8D33)
+F (.\eDisk.c)(0x532B8D33)(-c --cpu Cortex-M4 -D__EVAL -g -O0 --apcs=interwork --split_sections --signed_chars -I.. -I..\..\..-I C:\Keil\ARM\RV31\INC-I C:\Keil\ARM\CMSIS\Include-I C:\Keil\ARM\Inc\Luminary-Drvmdk -DPART_LM4F120H5QR -o .\edisk.o --omf_browse .\edisk.crf --depend .\edisk.d)
+I (C:\Users\Colin\Documents\GitHub\EE445M\inc\tm4c123gh6pm.h)(0x5223A90F)
+I (C:\Users\Colin\Documents\GitHub\EE445M\SDC_4F120\edisk.h)(0x532B8D33)
+F (.\PLL.c)(0x532B8D33)(-c --cpu Cortex-M4 -D__EVAL -g -O0 --apcs=interwork --split_sections --signed_chars -I.. -I..\..\..-I C:\Keil\ARM\RV31\INC-I C:\Keil\ARM\CMSIS\Include-I C:\Keil\ARM\Inc\Luminary-Drvmdk -DPART_LM4F120H5QR -o .\pll.o --omf_browse .\pll.crf --depend .\pll.d)
+I (C:\Users\Colin\Documents\GitHub\EE445M\SDC_4F120\PLL.h)(0x532B8D33)
