@@ -15,6 +15,11 @@
 ".\uart.o"
 ".\adc.o"
 ".\gpio.o"
+".\can.o"
+".\can0.o"
+".\timer3.o"
+".\interrupt.o"
+".\ping.o"
 ".\cr4_fft_64_stm32.o"
 --strict --scatter ".\Lab03.sct"
 --summary_stderr --info summarysizes --map --xref --callgraph --symbols

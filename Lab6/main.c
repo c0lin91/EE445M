@@ -2,18 +2,39 @@
 #include "ADC.h"
 #include "GPIO.h"
 #include "MACQ.h"
-
+#include "can0.h"
+#include "inc/tm4c123gh6pm.h"
+#include "PING.h"
 
 #define NUMPIXELS 51
 #define FIRLENGTH 51
+
+#define SPEED_OF_SOUND_IN 13397.2441 //in/s
+#define SPEED_OF_SOUND_CM 34029 //cm/s
+//#define SPEED_OF_SOUND_MM 340290 //mm/s
+
+#define NANO 50000000 
+
+#define PF0       (*((volatile unsigned long *)0x40025004))
+#define PF1       (*((volatile unsigned long *)0x40025008))
+#define PF2       (*((volatile unsigned long *)0x40025010))
+#define PF3       (*((volatile unsigned long *)0x40025020))
+#define PF4       (*((volatile unsigned long *)0x40025040))
 
 unsigned long dataLost = 0;
 unsigned long numberOfSamplesTaken = 0;
 unsigned long DoDigitalFilter = 0;
 unsigned long ScopeDisplay = 0;
+unsigned long RcvCount=0;
+unsigned char sequenceNum=0;  
+unsigned char XmtData[8];
+unsigned char RcvData[8];
 long samples[64];
 long results[FIRLENGTH];
 long buffer[64];
+
+
+
 
 void cr4_fft_64_stm32(void *pssOUT, void *pssIN, unsigned short Nbin);
 
@@ -84,32 +105,6 @@ void Producer(unsigned long ADCdata){
 \
 //--- Consumer
 void Display(void); 
-void Consumer(void){ 
-	unsigned long consumerData, displayData;
-	int i = 0;
-	
-  ADC_Collect(0, 2, 0x5, 1, 12800, &Producer); // start ADC sampling, channel 5, PD2, 12800 Hz
-  //OS_AddThread(&Display,128,1); 
-
-	while(1){
-		for(i = 0;i < 64; i++){
-			samples[i] = OS_Fifo_Get();
-			consumerData = samples[50];    // get from producer				
-		}
-
-		filter();
-		FFT();
-		if(DoDigitalFilter == 1){
-			displayData = results[0];
-		}
-		else{
-			displayData = consumerData;
-		}
-		if(ScopeDisplay == 0){
-			OS_MailBox_Send(displayData); // called every 2.5ms*64 = 160ms
-		}
-	}
-}
 
 //--- Display 
 void Display(void){
@@ -184,7 +179,56 @@ void Oscilloscope(void){
 	}
 }
 
+void CAN_Rx(void){
+	 while(1){
+    if(CAN0_GetMailNonBlock(RcvData)){
+      RcvCount++;
+      PF1 = RcvData[0];
+      PF2 = RcvData[1];
+      PF3 = RcvCount;   // heartbeat
+    }
+		OS_Suspend();
+	//	OS_Sleep(TIME_1MS);
+  }
+	OS_Kill();
+}	
 
+void CAN_Tx(void){
+  XmtData[0] = PF0<<1;  // 0 or 2
+  XmtData[1] = PF4>>2;  // 0 or 4
+  XmtData[2] = 0;       // ununsigned field
+  XmtData[3] = sequenceNum;  // sequence count
+  CAN0_SendData(XmtData);
+  sequenceNum++;
+}
+
+void PortF_Init(void){
+	int delay;
+ SYSCTL_RCGC2_R |= 0x00000020;          // activate port F
+  delay = SYSCTL_RCGCGPIO_R;          // allow time to finish activating
+  GPIO_PORTF_LOCK_R = 0x4C4F434B;  // unlock GPIO Port F
+  GPIO_PORTF_CR_R = 0xFF;          // allow changes to PF4-0
+  GPIO_PORTF_DIR_R = 0x0E;         // make PF3-1 output (PF3-1 built-in LEDs)
+  GPIO_PORTF_AFSEL_R = 0;          // disable alt funct 
+  GPIO_PORTF_DEN_R = 0x1F;         // enable pullup on inputs
+  GPIO_PORTF_PUR_R = 0x11;         // enable digital I/O on PF4-0
+  GPIO_PORTF_PCTL_R = 0x00000000;
+  GPIO_PORTF_AMSEL_R = 0;          // disable analog functionality on PF
+}
+
+void PingProcessTime(void){
+	double time1, time2, time3;
+	OS_DisplayMessage(0, 0,"time (20ns): ", PING_Time);
+	time1 = ((PING_Time*SPEED_OF_SOUND_IN)/NANO)/2;
+	time2 = ((PING_Time*SPEED_OF_SOUND_CM)/NANO)/2;
+//	time3 = ((PING_Time*SPEED_OF_SOUND_MM)/NANO)/2;
+
+	OS_DisplayMessage(0, 1,"distance (in): ",time1);
+  OS_DisplayMessage(0, 2,"distance (cm): ",time2);
+//	OS_DisplayMessage(0, 3,"distance (mm): ",time3);	
+
+	OS_Kill();
+}
 // ---------------------------- main ---------------------------------
 int main(void){
 /*
@@ -195,12 +239,16 @@ int main(void){
 	OS_Init();
 	OS_MailBox_Init();
   OS_Fifo_Init(16);
+	PortF_Init();
 	
-	OS_AddThread(&Consumer,128,2);
-  OS_AddSWTask(&SW1Push,2,1); //thread,priority,button#
-	OS_AddSWTask(&SW2Push,2,2); //thread,priority,button#
-  OS_AddThread(&Oscilloscope,128,2);
+	PING_Init(&PingProcessTime);
+	OS_AddPeriodicThread(&PING_Start, 200, 1);
 	
+	CAN0_Open();
+	
+	
+	OS_AddThread(&CAN_Rx,128,1);
+	OS_AddPeriodicThread(&CAN_Tx, 200, 2); // Transmit data over can every 100ms
   OS_Launch(TIME_2MS);
 	return 0;
 }

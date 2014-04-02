@@ -351,7 +351,7 @@
               <MiscControls></MiscControls>
               <Define></Define>
               <Undefine></Undefine>
-              <IncludePath></IncludePath>
+              <IncludePath>../driverlib/..</IncludePath>
             </VariousControls>
           </Cads>
           <Aads>
@@ -481,6 +481,31 @@
               <FileName>GPIO.c</FileName>
               <FileType>1</FileType>
               <FilePath>.\GPIO.c</FilePath>
+            </File>
+            <File>
+              <FileName>can.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>.\can.c</FilePath>
+            </File>
+            <File>
+              <FileName>can0.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>.\can0.c</FilePath>
+            </File>
+            <File>
+              <FileName>Timer3.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>.\Timer3.c</FilePath>
+            </File>
+            <File>
+              <FileName>interrupt.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>.\interrupt.c</FilePath>
+            </File>
+            <File>
+              <FileName>PING.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>.\PING.c</FilePath>
             </File>
           </Files>
         </Group>

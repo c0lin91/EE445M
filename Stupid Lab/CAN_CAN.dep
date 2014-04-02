@@ -1,0 +1,28 @@
+Dependencies for Project 'CAN', Target 'CAN': (DO NOT MODIFY !)
+F (.\startup.s)(0x533355BB)(--cpu Cortex-M4 --pd "__EVAL SETA 1" -g --apcs=interwork -I C:\Keil\ARM\RV31\INC-I C:\Keil\ARM\CMSIS\Include-I C:\Keil\ARM\Inc\Luminary--list .\startup.lst --xref -o .\startup.o --depend .\startup.d)
+F (.\PLL.c)(0x533355BB)(-c --cpu Cortex-M4 -D__EVAL -g -O0 --apcs=interwork --split_sections --signed_chars -I.. -I..\..\..-I C:\Keil\ARM\RV31\INC-I C:\Keil\ARM\CMSIS\Include-I C:\Keil\ARM\Inc\Luminary-Drvmdk -DPART_LM4F120H5QR -o .\pll.o --omf_browse .\pll.crf --depend .\pll.d)
+I (C:\Users\Colin\Documents\GitHub\EE445M\Stupid Lab\PLL.h)(0x533355BB)
+F (.\main.c)(0x533355BB)(-c --cpu Cortex-M4 -D__EVAL -g -O0 --apcs=interwork --split_sections --signed_chars -I.. -I..\..\..-I C:\Keil\ARM\RV31\INC-I C:\Keil\ARM\CMSIS\Include-I C:\Keil\ARM\Inc\Luminary-Drvmdk -DPART_LM4F120H5QR -o .\main.o --omf_browse .\main.crf --depend .\main.d)
+I (C:\Users\Colin\Documents\GitHub\EE445M\Stupid Lab\PLL.h)(0x533355BB)
+I (C:\Users\Colin\Documents\GitHub\EE445M\Stupid Lab\Timer3.h)(0x533355BB)
+I (C:\Users\Colin\Documents\GitHub\EE445M\Stupid Lab\can0.h)(0x533B04F0)
+F (.\Timer3.c)(0x533355BB)(-c --cpu Cortex-M4 -D__EVAL -g -O0 --apcs=interwork --split_sections --signed_chars -I.. -I..\..\..-I C:\Keil\ARM\RV31\INC-I C:\Keil\ARM\CMSIS\Include-I C:\Keil\ARM\Inc\Luminary-Drvmdk -DPART_LM4F120H5QR -o .\timer3.o --omf_browse .\timer3.crf --depend .\timer3.d)
+F (.\can.c)(0x533355B8)(-c --cpu Cortex-M4 -D__EVAL -g -O0 --apcs=interwork --split_sections --signed_chars -I.. -I..\..\..-I C:\Keil\ARM\RV31\INC-I C:\Keil\ARM\CMSIS\Include-I C:\Keil\ARM\Inc\Luminary-Drvmdk -DPART_LM4F120H5QR -o .\can.o --omf_browse .\can.crf --depend .\can.d)
+I (C:\Users\Colin\Documents\GitHub\EE445M\Stupid Lab\hw_can.h)(0x533355BA)
+I (C:\Users\Colin\Documents\GitHub\EE445M\Stupid Lab\hw_ints.h)(0x533355BA)
+I (C:\Users\Colin\Documents\GitHub\EE445M\Stupid Lab\hw_nvic.h)(0x533355BA)
+I (C:\Users\Colin\Documents\GitHub\EE445M\Stupid Lab\hw_memmap.h)(0x533355BA)
+I (C:\Users\Colin\Documents\GitHub\EE445M\Stupid Lab\hw_types.h)(0x533355BA)
+I (C:\Users\Colin\Documents\GitHub\EE445M\Stupid Lab\can.h)(0x533355B8)
+I (C:\Users\Colin\Documents\GitHub\EE445M\Stupid Lab\debug.h)(0x533355B9)
+I (C:\Users\Colin\Documents\GitHub\EE445M\Stupid Lab\interrupt.h)(0x533355BA)
+F (.\can0.c)(0x533355B9)(-c --cpu Cortex-M4 -D__EVAL -g -O0 --apcs=interwork --split_sections --signed_chars -I.. -I..\..\..-I C:\Keil\ARM\RV31\INC-I C:\Keil\ARM\CMSIS\Include-I C:\Keil\ARM\Inc\Luminary-Drvmdk -DPART_LM4F120H5QR -o .\can0.o --omf_browse .\can0.crf --depend .\can0.d)
+I (C:\Users\Colin\Documents\GitHub\EE445M\Stupid Lab\hw_can.h)(0x533355BA)
+I (C:\Users\Colin\Documents\GitHub\EE445M\Stupid Lab\hw_ints.h)(0x533355BA)
+I (C:\Users\Colin\Documents\GitHub\EE445M\Stupid Lab\hw_memmap.h)(0x533355BA)
+I (C:\Users\Colin\Documents\GitHub\EE445M\Stupid Lab\hw_types.h)(0x533355BA)
+I (C:\Users\Colin\Documents\GitHub\EE445M\Stupid Lab\can.h)(0x533355B8)
+I (C:\Users\Colin\Documents\GitHub\EE445M\Stupid Lab\debug.h)(0x533355B9)
+I (C:\Users\Colin\Documents\GitHub\EE445M\Stupid Lab\interrupt.h)(0x533355BA)
+I (C:\Users\Colin\Documents\GitHub\EE445M\Stupid Lab\can0.h)(0x533B04F0)
+F (.\interrupt.c)(0x533355BA)(-c --cpu Cortex-M4 -D__EVAL -g -O0 --apcs=interwork --split_sections --signed_chars -I.. -I..\..\..-I C:\Keil\ARM\RV31\INC-I C:\Keil\ARM\CMSIS\Include-I C:\Keil\ARM\Inc\Luminary-Drvmdk -DPART_LM4F120H5QR -o .\interrupt.o --omf_browse .\interrupt.crf --depend .\interrupt.d)

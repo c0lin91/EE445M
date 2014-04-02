@@ -316,7 +316,7 @@ void OS_Sleep(unsigned long sleepTime){
   EnableInterrupts();
 }
 
-// -------- DecrementSleep
+// -------- DecrementSleep --------------------------
 void DecrementSleep(void){
 	int i = 0;
 	int j = 0;
@@ -361,7 +361,7 @@ void OS_Init(void){
 	OS_Display_Init();
 	OS_Interpreter_Init();
   
-	ADC_EnableTimer(20000); // ADC timer running at 10000 MHz
+	//ADC_EnableTimer(20000); // ADC timer running at 10000 MHz
 
   RunPt = 0;
 	Actives = 0;
