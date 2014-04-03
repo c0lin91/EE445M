@@ -5,6 +5,7 @@
 #include "can0.h"
 #include "inc/tm4c123gh6pm.h"
 #include "PING.h"
+#include "PWM.h"
 
 #define NUMPIXELS 51
 #define FIRLENGTH 51
@@ -102,6 +103,34 @@ void Producer(unsigned long ADCdata){
 		dataLost++;
 	}	
 }
+
+void Consumer(void){ 
+	unsigned long consumerData, displayData;
+	int i = 0;
+	
+  ADC_Collect(0, 2, 0x5, 1, 12800, &Producer); // start ADC sampling, channel 5, PD2, 12800 Hz
+  //OS_AddThread(&Display,128,1); 
+
+	while(1){
+		for(i = 0;i < 64; i++){
+			samples[i] = OS_Fifo_Get();
+			consumerData = samples[50];    // get from producer				
+		}
+
+		filter();
+		FFT();
+		//if(DoDigitalFilter == 1){
+			displayData = results[0];
+		//}
+//		else{
+//			displayData = consumerData;
+//		}
+		//if(ScopeDisplay == 0){
+			OS_MailBox_Send(displayData); // called every 2.5ms*64 = 160ms
+		//}
+	}
+}
+
 \
 //--- Consumer
 void Display(void); 
@@ -122,7 +151,7 @@ void ButtonWork(void){
 	count++;
 	DoDigitalFilter = ~(DoDigitalFilter)&0x01;
 	OS_DisplayMessage(0,0,"Button Pushes  = ",count); 
-	OS_DisplayMessage(0,1,"Digital Filter = ",DoDigitalFilter);
+	OS_DisplayMessage(0,1,"Dig ital Filter = ",DoDigitalFilter);
 	OS_Kill();  // done, OS does not return from a Kill
 }
 
@@ -205,7 +234,7 @@ void CAN_Tx(void){
 void PortF_Init(void){
 	int delay;
  SYSCTL_RCGC2_R |= 0x00000020;          // activate port F
-  delay = SYSCTL_RCGCGPIO_R;          // allow time to finish activating
+  delay = SYSCTL_RCGC2_R;          // allow time to finish activating
   GPIO_PORTF_LOCK_R = 0x4C4F434B;  // unlock GPIO Port F
   GPIO_PORTF_CR_R = 0xFF;          // allow changes to PF4-0
   GPIO_PORTF_DIR_R = 0x0E;         // make PF3-1 output (PF3-1 built-in LEDs)
@@ -229,6 +258,24 @@ void PingProcessTime(void){
 
 	OS_Kill();
 }
+
+void PWM_Work(void){
+	static int duty = 1;
+	while(1){
+		duty = (duty +1) % 99;
+		Motor_Left_Duty(duty);
+//		if (duty == 1){
+//			Motor_Left_Duty(1);
+//			duty = 2;
+//		} else {
+//			Motor_Left_Duty(99);
+//			duty = 1;
+//		}
+		
+		OS_Sleep(20);
+	}
+}
+
 // ---------------------------- main ---------------------------------
 int main(void){
 /*
@@ -244,11 +291,15 @@ int main(void){
 	PING_Init(&PingProcessTime);
 	OS_AddPeriodicThread(&PING_Start, 200, 1);
 	
-	CAN0_Open();
-	
-	
+	CAN0_Open();	
 	OS_AddThread(&CAN_Rx,128,1);
 	OS_AddPeriodicThread(&CAN_Tx, 200, 2); // Transmit data over can every 100ms
+	
+	OS_AddThread(&Consumer,128,1);
+  OS_AddThread(&Oscilloscope,128,1);
+	
+	OS_AddThread(&PWM_Work, 128, 1);
+	Motor_Init(100, 20);		// Causing problems
   OS_Launch(TIME_2MS);
 	return 0;
 }

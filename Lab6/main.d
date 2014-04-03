@@ -6,3 +6,4 @@
 .\main.o: can0.h
 .\main.o: ../driverlib/../inc/tm4c123gh6pm.h
 .\main.o: PING.h
+.\main.o: PWM.h

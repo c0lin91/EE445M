@@ -1,32 +1,33 @@
 Dependencies for Project 'Lab04', Target 'Lab04': (DO NOT MODIFY !)
-F (.\main.c)(0x533B1682)(-c --cpu Cortex-M4 -D__EVAL -g -O0 --apcs=interwork -I../driverlib/..-I C:\Keil\ARM\RV31\INC-I C:\Keil\ARM\CMSIS\Include-I C:\Keil\ARM\Inc\TI\TM4C123-DTM4C123GH6PM-o .\main.o --omf_browse .\main.crf --depend .\main.d)
-I (C:\Users\Colin\Documents\GitHub\EE445M\Lab6\OS.h)(0x5327F5BD)
+F (.\main.c)(0x533B8315)(-c --cpu Cortex-M4 -D__EVAL -g -O0 --apcs=interwork -I../driverlib/..-I C:\Keil\ARM\RV31\INC-I C:\Keil\ARM\CMSIS\Include-I C:\Keil\ARM\Inc\TI\TM4C123-DTM4C123GH6PM-o .\main.o --omf_browse .\main.crf --depend .\main.d)
+I (C:\Users\Colin\Documents\GitHub\EE445M\Lab6\OS.h)(0x533B653D)
 I (C:\Users\Colin\Documents\GitHub\EE445M\Lab6\ADC.h)(0x530C03C6)
 I (C:\Users\Colin\Documents\GitHub\EE445M\Lab6\GPIO.h)(0x53158EAB)
 I (C:\Users\Colin\Documents\GitHub\EE445M\Lab6\MACQ.h)(0x53290AD8)
-I (C:\Users\Colin\Documents\GitHub\EE445M\Lab6\can0.h)(0x533B16C9)
+I (C:\Users\Colin\Documents\GitHub\EE445M\Lab6\can0.h)(0x533B7FAB)
 I (C:\Users\Colin\Documents\GitHub\EE445M\inc\tm4c123gh6pm.h)(0x5223A90F)
-F (.\OS.c)(0x53343E04)(-c --cpu Cortex-M4 -D__EVAL -g -O0 --apcs=interwork -I../driverlib/..-I C:\Keil\ARM\RV31\INC-I C:\Keil\ARM\CMSIS\Include-I C:\Keil\ARM\Inc\TI\TM4C123-DTM4C123GH6PM-o .\os.o --omf_browse .\os.crf --depend .\os.d)
-I (PLL.h)(0x52F08B58)
-I (OS.h)(0x5327F5BD)
-I (SysTick.h)(0x5306F365)
-I (GPIO.h)(0x53158EAB)
-I (ADC.h)(0x530C03C6)
+I (C:\Users\Colin\Documents\GitHub\EE445M\Lab6\PING.h)(0x53379CEC)
+F (.\OS.c)(0x533B828B)(-c --cpu Cortex-M4 -D__EVAL -g -O0 --apcs=interwork -I../driverlib/..-I C:\Keil\ARM\RV31\INC-I C:\Keil\ARM\CMSIS\Include-I C:\Keil\ARM\Inc\TI\TM4C123-DTM4C123GH6PM-o .\os.o --omf_browse .\os.crf --depend .\os.d)
+I (C:\Users\Colin\Documents\GitHub\EE445M\Lab6\PLL.h)(0x52F08B58)
+I (C:\Users\Colin\Documents\GitHub\EE445M\Lab6\OS.h)(0x533B653D)
+I (C:\Users\Colin\Documents\GitHub\EE445M\Lab6\SysTick.h)(0x5306F365)
+I (C:\Users\Colin\Documents\GitHub\EE445M\Lab6\GPIO.h)(0x53158EAB)
+I (C:\Users\Colin\Documents\GitHub\EE445M\Lab6\ADC.h)(0x530C03C6)
 F (.\TCB.c)(0x530CFE9E)(-c --cpu Cortex-M4 -D__EVAL -g -O0 --apcs=interwork -I../driverlib/..-I C:\Keil\ARM\RV31\INC-I C:\Keil\ARM\CMSIS\Include-I C:\Keil\ARM\Inc\TI\TM4C123-DTM4C123GH6PM-o .\tcb.o --omf_browse .\tcb.crf --depend .\tcb.d)
 F (.\SysTick.c)(0x531F15BF)(-c --cpu Cortex-M4 -D__EVAL -g -O0 --apcs=interwork -I../driverlib/..-I C:\Keil\ARM\RV31\INC-I C:\Keil\ARM\CMSIS\Include-I C:\Keil\ARM\Inc\TI\TM4C123-DTM4C123GH6PM-o .\systick.o --omf_browse .\systick.crf --depend .\systick.d)
-I (OS.h)(0x5327F5BD)
+I (C:\Users\Colin\Documents\GitHub\EE445M\Lab6\OS.h)(0x533B653D)
 F (.\OS_Time.c)(0x531D8212)(-c --cpu Cortex-M4 -D__EVAL -g -O0 --apcs=interwork -I../driverlib/..-I C:\Keil\ARM\RV31\INC-I C:\Keil\ARM\CMSIS\Include-I C:\Keil\ARM\Inc\TI\TM4C123-DTM4C123GH6PM-o .\os_time.o --omf_browse .\os_time.crf --depend .\os_time.d)
-I (OS.h)(0x5327F5BD)
+I (C:\Users\Colin\Documents\GitHub\EE445M\Lab6\OS.h)(0x533B653D)
 F (.\OS_Fifo.c)(0x531D835D)(-c --cpu Cortex-M4 -D__EVAL -g -O0 --apcs=interwork -I../driverlib/..-I C:\Keil\ARM\RV31\INC-I C:\Keil\ARM\CMSIS\Include-I C:\Keil\ARM\Inc\TI\TM4C123-DTM4C123GH6PM-o .\os_fifo.o --omf_browse .\os_fifo.crf --depend .\os_fifo.d)
-I (OS.h)(0x5327F5BD)
-I (fifo.h)(0x53290B15)
+I (C:\Users\Colin\Documents\GitHub\EE445M\Lab6\OS.h)(0x533B653D)
+I (C:\Users\Colin\Documents\GitHub\EE445M\Lab6\fifo.h)(0x53290B15)
 F (.\OS_Mailbox.c)(0x531D835D)(-c --cpu Cortex-M4 -D__EVAL -g -O0 --apcs=interwork -I../driverlib/..-I C:\Keil\ARM\RV31\INC-I C:\Keil\ARM\CMSIS\Include-I C:\Keil\ARM\Inc\TI\TM4C123-DTM4C123GH6PM-o .\os_mailbox.o --omf_browse .\os_mailbox.crf --depend .\os_mailbox.d)
-I (OS.h)(0x5327F5BD)
+I (C:\Users\Colin\Documents\GitHub\EE445M\Lab6\OS.h)(0x533B653D)
 F (.\OS_Display.c)(0x5327F5BD)(-c --cpu Cortex-M4 -D__EVAL -g -O0 --apcs=interwork -I../driverlib/..-I C:\Keil\ARM\RV31\INC-I C:\Keil\ARM\CMSIS\Include-I C:\Keil\ARM\Inc\TI\TM4C123-DTM4C123GH6PM-o .\os_display.o --omf_browse .\os_display.crf --depend .\os_display.d)
-I (OS.h)(0x5327F5BD)
-I (ST7735.h)(0x53279250)
+I (C:\Users\Colin\Documents\GitHub\EE445M\Lab6\OS.h)(0x533B653D)
+I (C:\Users\Colin\Documents\GitHub\EE445M\Lab6\ST7735.h)(0x53279250)
 F (.\OS_Interpreter.c)(0x53224E0B)(-c --cpu Cortex-M4 -D__EVAL -g -O0 --apcs=interwork -I../driverlib/..-I C:\Keil\ARM\RV31\INC-I C:\Keil\ARM\CMSIS\Include-I C:\Keil\ARM\Inc\TI\TM4C123-DTM4C123GH6PM-o .\os_interpreter.o --omf_browse .\os_interpreter.crf --depend .\os_interpreter.d)
-I (C:\Users\Colin\Documents\GitHub\EE445M\Lab6\OS.h)(0x5327F5BD)
+I (C:\Users\Colin\Documents\GitHub\EE445M\Lab6\OS.h)(0x533B653D)
 I (C:\Users\Colin\Documents\GitHub\EE445M\Lab6\UART.h)(0x5313E16F)
 I (C:\Keil\ARM\ARMCC\include\string.h)(0x51C86E14)
 F (.\OSasm.s)(0x53156390)(--cpu Cortex-M4 --pd "__EVAL SETA 1" -g --apcs=interwork -I C:\Keil\ARM\RV31\INC-I C:\Keil\ARM\CMSIS\Include-I C:\Keil\ARM\Inc\TI\TM4C123--list .\osasm.lst --xref -o .\osasm.o --depend .\osasm.d)
@@ -44,8 +45,8 @@ I (UART.h)(0x5313E16F)
 F (.\ADC.c)(0x5315B56A)(-c --cpu Cortex-M4 -D__EVAL -g -O0 --apcs=interwork -I../driverlib/..-I C:\Keil\ARM\RV31\INC-I C:\Keil\ARM\CMSIS\Include-I C:\Keil\ARM\Inc\TI\TM4C123-DTM4C123GH6PM-o .\adc.o --omf_browse .\adc.crf --depend .\adc.d)
 I (ADC.h)(0x530C03C6)
 F (.\GPIO.c)(0x5315D539)(-c --cpu Cortex-M4 -D__EVAL -g -O0 --apcs=interwork -I../driverlib/..-I C:\Keil\ARM\RV31\INC-I C:\Keil\ARM\CMSIS\Include-I C:\Keil\ARM\Inc\TI\TM4C123-DTM4C123GH6PM-o .\gpio.o --omf_browse .\gpio.crf --depend .\gpio.d)
-I (SysTick.h)(0x5306F365)
-I (OS.h)(0x5327F5BD)
+I (C:\Users\Colin\Documents\GitHub\EE445M\Lab6\SysTick.h)(0x5306F365)
+I (C:\Users\Colin\Documents\GitHub\EE445M\Lab6\OS.h)(0x533B653D)
 F (.\can.c)(0x533355B8)(-c --cpu Cortex-M4 -D__EVAL -g -O0 --apcs=interwork -I../driverlib/..-I C:\Keil\ARM\RV31\INC-I C:\Keil\ARM\CMSIS\Include-I C:\Keil\ARM\Inc\TI\TM4C123-DTM4C123GH6PM-o .\can.o --omf_browse .\can.crf --depend .\can.d)
 I (C:\Users\Colin\Documents\GitHub\EE445M\Lab6\hw_can.h)(0x533355BA)
 I (C:\Users\Colin\Documents\GitHub\EE445M\Lab6\hw_ints.h)(0x533355BA)
@@ -55,7 +56,7 @@ I (C:\Users\Colin\Documents\GitHub\EE445M\Lab6\hw_types.h)(0x533355BA)
 I (C:\Users\Colin\Documents\GitHub\EE445M\Lab6\can.h)(0x533355B8)
 I (C:\Users\Colin\Documents\GitHub\EE445M\Lab6\debug.h)(0x533355B9)
 I (C:\Users\Colin\Documents\GitHub\EE445M\Lab6\interrupt.h)(0x533355BA)
-F (.\can0.c)(0x53344F48)(-c --cpu Cortex-M4 -D__EVAL -g -O0 --apcs=interwork -I../driverlib/..-I C:\Keil\ARM\RV31\INC-I C:\Keil\ARM\CMSIS\Include-I C:\Keil\ARM\Inc\TI\TM4C123-DTM4C123GH6PM-o .\can0.o --omf_browse .\can0.crf --depend .\can0.d)
+F (.\can0.c)(0x533B5B30)(-c --cpu Cortex-M4 -D__EVAL -g -O0 --apcs=interwork -I../driverlib/..-I C:\Keil\ARM\RV31\INC-I C:\Keil\ARM\CMSIS\Include-I C:\Keil\ARM\Inc\TI\TM4C123-DTM4C123GH6PM-o .\can0.o --omf_browse .\can0.crf --depend .\can0.d)
 I (C:\Users\Colin\Documents\GitHub\EE445M\Lab6\hw_can.h)(0x533355BA)
 I (C:\Users\Colin\Documents\GitHub\EE445M\Lab6\hw_ints.h)(0x533355BA)
 I (C:\Users\Colin\Documents\GitHub\EE445M\Lab6\hw_memmap.h)(0x533355BA)
@@ -63,7 +64,7 @@ I (C:\Users\Colin\Documents\GitHub\EE445M\Lab6\hw_types.h)(0x533355BA)
 I (C:\Users\Colin\Documents\GitHub\EE445M\Lab6\can.h)(0x533355B8)
 I (C:\Users\Colin\Documents\GitHub\EE445M\Lab6\debug.h)(0x533355B9)
 I (C:\Users\Colin\Documents\GitHub\EE445M\Lab6\interrupt.h)(0x533355BA)
-I (C:\Users\Colin\Documents\GitHub\EE445M\Lab6\can0.h)(0x533B16C9)
+I (C:\Users\Colin\Documents\GitHub\EE445M\Lab6\can0.h)(0x533B7FAB)
 I (C:\Users\Colin\Documents\GitHub\EE445M\tm4c123gh6pm.h)(0x52F84F1C)
 F (.\Timer3.c)(0x533355BB)(-c --cpu Cortex-M4 -D__EVAL -g -O0 --apcs=interwork -I../driverlib/..-I C:\Keil\ARM\RV31\INC-I C:\Keil\ARM\CMSIS\Include-I C:\Keil\ARM\Inc\TI\TM4C123-DTM4C123GH6PM-o .\timer3.o --omf_browse .\timer3.crf --depend .\timer3.d)
 I (C:\Users\Colin\Documents\GitHub\EE445M\inc\tm4c123gh6pm.h)(0x5223A90F)
@@ -74,5 +75,7 @@ I (C:\Users\Colin\Documents\GitHub\EE445M\inc\hw_nvic.h)(0x5223A90D)
 I (C:\Users\Colin\Documents\GitHub\EE445M\driverlib\cpu.h)(0x5223A903)
 I (C:\Users\Colin\Documents\GitHub\EE445M\driverlib\debug.h)(0x5223A903)
 I (C:\Users\Colin\Documents\GitHub\EE445M\driverlib\interrupt.h)(0x5223A905)
-F (.\PING.c)(0x5337ACC6)()
+F (.\PING.c)(0x533B6EEC)(-c --cpu Cortex-M4 -D__EVAL -g -O0 --apcs=interwork -I../driverlib/..-I C:\Keil\ARM\RV31\INC-I C:\Keil\ARM\CMSIS\Include-I C:\Keil\ARM\Inc\TI\TM4C123-DTM4C123GH6PM-o .\ping.o --omf_browse .\ping.crf --depend .\ping.d)
+I (C:\Users\Colin\Documents\GitHub\EE445M\Lab6\OS.h)(0x533B653D)
+F (.\PWM.c)(0x533B8623)()
 F (.\cr4_fft_64_stm32.s)(0x52F2E4D2)(--cpu Cortex-M4 --pd "__EVAL SETA 1" -g --apcs=interwork -I C:\Keil\ARM\RV31\INC-I C:\Keil\ARM\CMSIS\Include-I C:\Keil\ARM\Inc\TI\TM4C123--list .\cr4_fft_64_stm32.lst --xref -o .\cr4_fft_64_stm32.o --depend .\cr4_fft_64_stm32.d)

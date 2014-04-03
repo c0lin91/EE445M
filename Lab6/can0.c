@@ -107,7 +107,9 @@ void CAN0_Open(void){unsigned long volatile delay;
   MailFlag = false;
 
   SYSCTL_RCGCCAN_R |= 0x00000001;  // CAN0 enable bit 0
-  SYSCTL_RCGCGPIO_R |= 0x00000010;  // RCGC2 portE bit 4
+  //SYSCTL_RCGCGPIO_R |= 0x00000010;  // RCGC2 portE bit 4
+	SYSCTL_RCGCGPIO_R |= 0x00000010;  // RCGC2 portE bit 4
+	//SYSCTL_RCGC2_R |= 0x00000010;  // RCGC2 portE bit 4
   for(delay=0; delay<10; delay++){};
   GPIO_PORTE_AFSEL_R |= 0x30; //PORTE AFSEL bits 5,4
 // PORTE PCTL 88 into fields for pins 5,4

@@ -1,0 +1,5 @@
+Dependencies for Project 'SDC', Target 'SDC': (DO NOT MODIFY !)
+F (.\startup.s)(0x5315C306)(--cpu Cortex-M4 --pd "__EVAL SETA 1" -g --apcs=interwork -I C:\Keil\ARM\RV31\INC-I C:\Keil\ARM\CMSIS\Include-I C:\Keil\ARM\Inc\TI\TM4C123--list .\startup.lst --xref -o .\startup.o --depend .\startup.d)
+F (.\PWM.c)(0x533B8541)(-c --cpu Cortex-M4 -D__EVAL -g -O0 --apcs=interwork -I.. -I..\..\..-I C:\Keil\ARM\RV31\INC-I C:\Keil\ARM\CMSIS\Include-I C:\Keil\ARM\Inc\TI\TM4C123-Drvmdk -DPART_LM4F120H5QR -DTM4C1231H6PM-o .\pwm.o --omf_browse .\pwm.crf --depend .\pwm.d)
+F (.\main.c)(0x533B8355)(-c --cpu Cortex-M4 -D__EVAL -g -O0 --apcs=interwork -I.. -I..\..\..-I C:\Keil\ARM\RV31\INC-I C:\Keil\ARM\CMSIS\Include-I C:\Keil\ARM\Inc\TI\TM4C123-Drvmdk -DPART_LM4F120H5QR -DTM4C1231H6PM-o .\main.o --omf_browse .\main.crf --depend .\main.d)
+I (PWM.h)(0x533B81A8)

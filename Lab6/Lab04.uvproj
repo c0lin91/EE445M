@@ -507,6 +507,11 @@
               <FileType>1</FileType>
               <FilePath>.\PING.c</FilePath>
             </File>
+            <File>
+              <FileName>PWM.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>.\PWM.c</FilePath>
+            </File>
           </Files>
         </Group>
         <Group>

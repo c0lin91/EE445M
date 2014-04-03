@@ -1,0 +1,8 @@
+--cpu Cortex-M4
+".\startup.o"
+".\pwm.o"
+".\main.o"
+--strict --scatter ".\SDC.sct"
+--summary_stderr --info summarysizes --map --xref --callgraph --symbols
+--info sizes --info totals --info unused --info veneers
+--list ".\SDC.map" -o .\SDC.axf

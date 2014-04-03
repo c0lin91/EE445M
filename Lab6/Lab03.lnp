@@ -20,6 +20,7 @@
 ".\timer3.o"
 ".\interrupt.o"
 ".\ping.o"
+".\pwm.o"
 ".\cr4_fft_64_stm32.o"
 --strict --scatter ".\Lab03.sct"
 --summary_stderr --info summarysizes --map --xref --callgraph --symbols
