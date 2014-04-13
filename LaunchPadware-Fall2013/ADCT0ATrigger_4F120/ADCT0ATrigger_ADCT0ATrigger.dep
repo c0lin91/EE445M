@@ -1,8 +1,8 @@
 Dependencies for Project 'ADCT0ATrigger', Target 'ADCT0ATrigger': (DO NOT MODIFY !)
-F (.\startup.s)(0x52239A9B)(--cpu Cortex-M4.fp --pd "__EVAL SETA 1" -g --apcs=interwork --pd "__MICROLIB SETA 1"-I C:\Keil\ARM\RV31\INC-I C:\Keil\ARM\CMSIS\Include-I C:\Keil\ARM\Inc\Luminary--list .\startup.lst --xref -o .\startup.o --depend .\startup.d)
-F (.\ADCT0ATrigger.c)(0x52239A99)(-c --cpu Cortex-M4.fp -D__EVAL -D__MICROLIB -g -O0 --apcs=interwork --split_sections -I.. -I..\..\..-I C:\Keil\ARM\RV31\INC-I C:\Keil\ARM\CMSIS\Include-I C:\Keil\ARM\Inc\Luminary-Drvmdk -DPART_LM4F120H5QR -o .\adct0atrigger.o --omf_browse .\adct0atrigger.crf --depend .\adct0atrigger.d)
-F (.\ADCTestmain.c)(0x52239A9A)(-c --cpu Cortex-M4.fp -D__EVAL -D__MICROLIB -g -O0 --apcs=interwork --split_sections -I.. -I..\..\..-I C:\Keil\ARM\RV31\INC-I C:\Keil\ARM\CMSIS\Include-I C:\Keil\ARM\Inc\Luminary-Drvmdk -DPART_LM4F120H5QR -o .\adctestmain.o --omf_browse .\adctestmain.crf --depend .\adctestmain.d)
-I (C:\Users\Prachi Gupta\Dropbox\445M\LaunchPadware-Fall2013\ADCT0ATrigger_4F120\ADCT0ATrigger.h)(0x52239A99)
-I (C:\Users\Prachi Gupta\Dropbox\445M\LaunchPadware-Fall2013\ADCT0ATrigger_4F120\PLL.h)(0x52239A9A)
-F (.\PLL.c)(0x52239A9A)(-c --cpu Cortex-M4.fp -D__EVAL -D__MICROLIB -g -O0 --apcs=interwork --split_sections -I.. -I..\..\..-I C:\Keil\ARM\RV31\INC-I C:\Keil\ARM\CMSIS\Include-I C:\Keil\ARM\Inc\Luminary-Drvmdk -DPART_LM4F120H5QR -o .\pll.o --omf_browse .\pll.crf --depend .\pll.d)
-I (C:\Users\Prachi Gupta\Dropbox\445M\LaunchPadware-Fall2013\ADCT0ATrigger_4F120\PLL.h)(0x52239A9A)
+F (.\startup.s)(0x5223A8AB)(--cpu Cortex-M4.fp --pd "__EVAL SETA 1" -g --apcs=interwork --pd "__MICROLIB SETA 1"-I C:\Keil\ARM\RV31\INC-I C:\Keil\ARM\CMSIS\Include-I C:\Keil\ARM\Inc\Luminary--list .\startup.lst --xref -o .\startup.o --depend .\startup.d)
+F (.\ADCT0ATrigger.c)(0x5223A8A9)(-c --cpu Cortex-M4.fp -D__EVAL -D__MICROLIB -g -O0 --apcs=interwork --split_sections -I.. -I..\..\..-I C:\Keil\ARM\RV31\INC-I C:\Keil\ARM\CMSIS\Include-I C:\Keil\ARM\Inc\Luminary-Drvmdk -DPART_LM4F120H5QR -o .\adct0atrigger.o --omf_browse .\adct0atrigger.crf --depend .\adct0atrigger.d)
+F (.\ADCTestmain.c)(0x5223A8AA)(-c --cpu Cortex-M4.fp -D__EVAL -D__MICROLIB -g -O0 --apcs=interwork --split_sections -I.. -I..\..\..-I C:\Keil\ARM\RV31\INC-I C:\Keil\ARM\CMSIS\Include-I C:\Keil\ARM\Inc\Luminary-Drvmdk -DPART_LM4F120H5QR -o .\adctestmain.o --omf_browse .\adctestmain.crf --depend .\adctestmain.d)
+I (C:\Users\Colin\Documents\GitHub\EE445M\LaunchPadware-Fall2013\ADCT0ATrigger_4F120\ADCT0ATrigger.h)(0x5223A8A9)
+I (C:\Users\Colin\Documents\GitHub\EE445M\LaunchPadware-Fall2013\ADCT0ATrigger_4F120\PLL.h)(0x5223A8AA)
+F (.\PLL.c)(0x5223A8AA)(-c --cpu Cortex-M4.fp -D__EVAL -D__MICROLIB -g -O0 --apcs=interwork --split_sections -I.. -I..\..\..-I C:\Keil\ARM\RV31\INC-I C:\Keil\ARM\CMSIS\Include-I C:\Keil\ARM\Inc\Luminary-Drvmdk -DPART_LM4F120H5QR -o .\pll.o --omf_browse .\pll.crf --depend .\pll.d)
+I (C:\Users\Colin\Documents\GitHub\EE445M\LaunchPadware-Fall2013\ADCT0ATrigger_4F120\PLL.h)(0x5223A8AA)

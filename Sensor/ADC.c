@@ -568,6 +568,9 @@ void ADC0Seq0_Handler(void){
     return;
 	
   (*callbacks[ADC0SEQ0])(ADC0_SSFIFO0_R&ADC_SSFIFO_DATA_M);
+	(*callbacks[ADC0SEQ0])(ADC0_SSFIFO0_R&ADC_SSFIFO_DATA_M);
+	(*callbacks[ADC0SEQ0])(ADC0_SSFIFO0_R&ADC_SSFIFO_DATA_M);
+	(*callbacks[ADC0SEQ0])(ADC0_SSFIFO0_R&ADC_SSFIFO_DATA_M);
   spinCurrent[ADC0SEQ0] = 0;
 }
 
@@ -624,7 +627,7 @@ void ADC1Seq1_Handler(void){
 
 void ADC1Seq2_Handler(void){
   ADC1_ISC_R = ADC_ISC_IN2;                 // acknowledge ADC1 sequence 2 completion
-  
+
   if (spinCurrent[ADC1SEQ2]++ < spinTarget[ADC1SEQ2])
     return;
 

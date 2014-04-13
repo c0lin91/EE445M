@@ -7,4 +7,4 @@
 .\can0.o: debug.h
 .\can0.o: interrupt.h
 .\can0.o: can0.h
-.\can0.o: ../driverlib/../tm4c123gh6pm.h
+.\can0.o: ..\inc/tm4c123gh6pm.h

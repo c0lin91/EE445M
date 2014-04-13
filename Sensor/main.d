@@ -4,7 +4,7 @@
 .\main.o: GPIO.h
 .\main.o: MACQ.h
 .\main.o: can0.h
-.\main.o: ../driverlib/../inc/tm4c123gh6pm.h
+.\main.o: ..\inc/tm4c123gh6pm.h
 .\main.o: PING.h
 .\main.o: PWM.h
 .\main.o: C:\Keil\ARM\ARMCC\bin\..\include\Math.h

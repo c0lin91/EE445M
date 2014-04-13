@@ -6,7 +6,7 @@
 #include "inc/tm4c123gh6pm.h"
 #include "PING.h"
 #include "PWM.h"
-#include <Math.h>
+#include "Math.h"
 
 #define NUMPIXELS 51
 #define FIRLENGTH 51
@@ -31,10 +31,15 @@ unsigned long RcvCount=0;
 unsigned char sequenceNum=0;  
 unsigned char XmtData[8];
 unsigned char RcvData[8];
-long samples[64];
-long results[FIRLENGTH];
+long samples0[FIRLENGTH];
+long samples1[FIRLENGTH];
+long samples2[FIRLENGTH];
+long samples3[FIRLENGTH];
+long results0[FIRLENGTH];
+long results1[FIRLENGTH];
+long results2[FIRLENGTH];
+long results3[FIRLENGTH];
 long buffer[64];
-
 
 
 
@@ -74,7 +79,7 @@ const long h[51]={5,5,5,5,5,5,5,5,5,5,5,
      5,5,5,5,5,5,5,5,5,5,5,5};
 
 //--- filter 
-void filter(void){
+void filter(long* samples, long* results){
 	int i, n;
 	long result;
 	result = 0;
@@ -90,10 +95,11 @@ void filter(void){
 	
 	results[0] = result;
 	
-	for (i = 0; i < 63; i++){
-		buffer[i + 1] = buffer[i];
-	}
-	buffer[0] = result;
+	// Used for FFT
+//	for (i = 0; i < 63; i++){		
+//		buffer[i + 1] = buffer[i];
+//	}
+//	buffer[0] = result;
 }
 
 
@@ -102,26 +108,43 @@ void filter(void){
 void Producer(unsigned long ADCdata){  
 	if(OS_Fifo_Put(ADCdata) == 0){ // send to consumer
 		dataLost++;
-	}	
+	}
 }
 
 void Consumer(void){ 
-	unsigned long consumerData;
-	double displayData;
+	unsigned long consumerData, ir_sensor0, ir_sensor1, ir_sensor2, ir_sensor3;
 	int i = 0;
 	
-  ADC_Collect(0, 2, 0x5, 1, 12800, &Producer); // start ADC sampling, channel 5, PD2, 12800 Hz
+ // ADC_Collect(0, 2, 0x5, 1, 12800, &Producer); // start ADC sampling, channel 5, PD2, 12800 Hz
+		ADC_Collect(0, 0, 0x0123, 4, 500, &Producer); // start ADC sampling, channel 0,1,2,3, PE0 - PE3,  100Hz
+  //OS_AddThread(&Display,128,1); 
+
 	while(1){
-		for(i = 0;i < 64; i++){
-			samples[i] = OS_Fifo_Get();
-			consumerData = samples[50];    // get from producer				
+		for(i = 0;i < 51; i++){
+			samples0[i] = OS_Fifo_Get();
+			samples1[i] = OS_Fifo_Get();
+			samples2[i] = OS_Fifo_Get();
+			samples3[i] = OS_Fifo_Get();
+			//consumerData = samples[50];    // get from producer				
 		}
 
-		filter();
-		FFT();
-		displayData = results[0];
-		displayData = (pow(displayData, -1.181)) * (120760);
-		OS_MailBox_Send(displayData); // called every 2.5ms*64 = 160ms
+		
+		filter(samples0, results0);
+		filter(samples1, results1);
+		filter(samples2, results2);
+		filter(samples3, results3);
+
+		XmtData[0] = ir_sensor0 = pow(results0[0], -1.81)*120760;
+		XmtData[1] = ir_sensor1 = pow(results0[0], -1.81)*120760;
+		XmtData[2] = ir_sensor2 = pow(results0[0], -1.81)*120760;
+		XmtData[3] = ir_sensor3 = pow(results0[0], -1.81)*120760;
+		
+		
+//   FIGURE SOMETHING OUT ABOUT DISPLAYING THIS DATA ON THE STUPID LCD		
+//		OS_MailBox_Send(ir_sensor0); // called every 2.5ms*64 = 160ms
+//		OS_MailBox_Send(ir_sensor1);
+//		OS_MailBox_Send(ir_sensor2);
+//		OS_MailBox_Send(ir_sensor3);
 	}
 }
 
@@ -135,7 +158,7 @@ void Display(void){
 
 	while(1){
     	data = OS_MailBox_Recv();
-    	OS_DisplayMessage(0,4,"Distance Sensor =",data); 
+    	OS_DisplayMessage(0,0,"Distance Sensor =",data); 
     }    
 } 
 
@@ -155,6 +178,15 @@ void ButtonWork2(void){
 	OS_Kill();  // done, OS does not return from a Kill
 }
 
+//--- SW1Push
+void SW1Push(void){
+	OS_AddThread(&ButtonWork,100,2);
+}
+//--- SW2Push
+void SW2Push(void){
+	OS_AddThread(&ButtonWork2,100,2);
+}
+
 #define PlotSize 128
 typedef unsigned long PlotMacqType;
 AddMacq(Plot, PlotSize, PlotMacqType)
@@ -167,10 +199,10 @@ void Oscilloscope(void){
 	while(1){	
 		
 		if(ScopeDisplay == 0){
-			data = OS_MailBox_Recv();	
+			data  = OS_MailBox_Recv();	
 			OS_PlotPoint(data);
 			OS_PlotNext();
-			OS_DisplayMessage(0,3, "IR: ", data); 
+		
 			xCount++;
 			if(xCount > 127){
 				xCount = 0; 
@@ -208,12 +240,7 @@ void CAN_Rx(void){
 }	
 
 void CAN_Tx(void){
-  XmtData[0] = PF0<<1;  // 0 or 2
-  XmtData[1] = PF4>>2;  // 0 or 4
-  XmtData[2] = 0;       // ununsigned field
-  XmtData[3] = sequenceNum;  // sequence count
   CAN0_SendData(XmtData);
-  sequenceNum++;
 }
 
 void PortF_Init(void){
@@ -231,19 +258,40 @@ void PortF_Init(void){
 }
 
 void PingProcessTime(void){
-	double time1, time2, time3;
-	OS_DisplayMessage(0, 0,"time (20ns): ", PING_Time);
-	time1 = ((PING_Time*SPEED_OF_SOUND_IN)/NANO)/2;
-	time2 = ((PING_Time*SPEED_OF_SOUND_CM)/NANO)/2;
-//	time3 = ((PING_Time*SPEED_OF_SOUND_MM)/NANO)/2;
-
-	OS_DisplayMessage(0, 1,"distance (in): ",time1);
-  OS_DisplayMessage(0, 2,"distance (cm): ",time2);
-//	OS_DisplayMessage(0, 3,"distance (mm): ",time3);	
-
+	double time1, time2, time3, time4;
+	
+	//OS_DisplayMessage(0, 0,"time (20ns): ", PING_Time1);
+	//OS_DisplayMessage(1, 0,"time (20ns): ", PING_Time2);
+	XmtData[4] = time1 = ((PING_Time1*SPEED_OF_SOUND_CM)/NANO)/2;
+	XmtData[5] = time2 = ((PING_Time2*SPEED_OF_SOUND_CM)/NANO)/2;
+	XmtData[6] = time3 = ((PING_Time3*SPEED_OF_SOUND_CM)/NANO)/2;
+	XmtData[7] = time4 = ((PING_Time4*SPEED_OF_SOUND_CM)/NANO)/2;
+	
+	
+	OS_DisplayMessage(0, 0,"distance (cm): ",time1);
+  OS_DisplayMessage(0, 1,"distance (cm): ",time2);
+	OS_DisplayMessage(0, 2,"distance (cm): ",time3);
+	OS_DisplayMessage(0, 3,"distance (cm): ",time4);
+	
 	OS_Kill();
 }
 
+void PWM_Work(void){
+	static int duty = 1;
+	while(1){
+		duty = (duty +1) % 99;
+		Motor_Left_Duty(duty);
+//		if (duty == 1){
+//			Motor_Left_Duty(1);
+//			duty = 2;
+//		} else {
+//			Motor_Left_Duty(99);
+//			duty = 1;
+//		}
+		
+		OS_Sleep(20);
+	}
+}
 
 // ---------------------------- main ---------------------------------
 int main(void){
@@ -258,15 +306,18 @@ int main(void){
 	PortF_Init();
 	
 	PING_Init(&PingProcessTime);
-	OS_AddPeriodicThread(&PING_Start, 200, 1);
+	OS_AddPeriodicThread(&PING_Start, 100, 1); //200 is 10Hz
+	//OS_AddPeriodicThread(&PingProcessTime,500,1);
 	
 	CAN0_Open();	
 	OS_AddThread(&CAN_Rx,128,1);
-	OS_AddPeriodicThread(&CAN_Tx, 200, 2); // Transmit data over can every 100ms
+	OS_AddPeriodicThread(&CAN_Tx, 200, 2); // Transmit data over can every 100ms (units of 500 us)
 	
 	OS_AddThread(&Consumer,128,1);
   OS_AddThread(&Oscilloscope,128,1);
 	
+	//OS_AddThread(&PWM_Work, 128, 1);
+	Motor_Init(100, 20);		// Causing problems
   OS_Launch(TIME_2MS);
 	return 0;
 }

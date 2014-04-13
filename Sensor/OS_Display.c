@@ -10,7 +10,6 @@ Sema4Type Sema4_LCD;
 
 void OS_Display_Init(){
   ST7735_InitR(INITR_REDTAB);
-	ST7735_SetRotation(2);
   ST7735_ResetMessage();
   OS_InitSemaphore(&Sema4_LCD, 1);
 }
